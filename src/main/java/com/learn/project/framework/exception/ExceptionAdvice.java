@@ -43,13 +43,14 @@ public class ExceptionAdvice {
         return Result.error(ErrorState.SEND_SMS_ERROR);
     }
 
+    
     /**
      * shiro权限异常处理
      * @return result
      */
     @ExceptionHandler(AuthorizationException.class)
-    public Result handleShiroException() {
-        return Result.error(ErrorState.NOT_AUTH);
+    public ResponseEntity<String> handleShiroException() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorState.NOT_AUTH.getMsg());
     }
 
 
