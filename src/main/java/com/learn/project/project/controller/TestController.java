@@ -19,7 +19,7 @@ public class TestController {
     @GetMapping
     @RequiresRoles("role1")
     public Result test(){
-        return Result.success();
+        return Result.success("ok", "ok");
     }
 
 }
