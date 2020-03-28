@@ -1,65 +1,62 @@
 package com.learn.project.project.pojo;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
-import lombok.AllArgsConstructor;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
  * <p>
- *  用户
+ * 
  * </p>
  *
  * @author knight
- * @since 2019-12-17
+ * @since 2020-03-28
  */
-@TableName("project_user")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@TableName("project_user")
+@ApiModel(value="User对象", description="")
 public class User implements Serializable {
 
     private static final long serialVersionUID=1L;
 
-    /**
-     * 用户id
-     */
+    @ApiModelProperty(value = "用户id")
     @TableId(value = "user_id", type = IdType.AUTO)
     private Integer userId;
 
-    /**
-     * 手机号
-     */
+    @ApiModelProperty(value = "手机号")
     private String phone;
 
-    /**
-     * 密码
-     */
+    @ApiModelProperty(value = "盐值")
+    private String salt;
+
+    @ApiModelProperty(value = "密码")
     private String password;
 
-    /**
-     * 用户名
-     */
+    @ApiModelProperty(value = "用户名")
     private String name;
 
-    /**
-     * 性别
-     */
+    @ApiModelProperty(value = "性别")
     private Integer sex;
 
-    /**
-     * 出生日期
-     */
+    @ApiModelProperty(value = "出生日期")
     private LocalDate birth;
 
-    /**
-     * 注册日期
-     */
+    @ApiModelProperty(value = "注册时间")
     private LocalDateTime registerTime;
+
+    @ApiModelProperty(value = "更新时间")
+    private LocalDateTime updateTime;
+
+
 }

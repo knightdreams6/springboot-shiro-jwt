@@ -24,7 +24,7 @@ import javax.validation.constraints.NotEmpty;
  * @author knight
  * @since 2019-12-17
  */
-@Api(description = "登录")
+@Api(tags = "【user】登录")
 @RestController
 @RequestMapping("/user")
 @Validated
@@ -47,30 +47,38 @@ public class UserController {
         return userService.sendModifyPasswordCode(phone);
     }
 
-    @ApiOperation("修改手机号")
-    @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query")
+    @ApiOperation("通过手机验证码修改密码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "code", value = "验证码", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query", dataType = "string")
+    })
     @PutMapping("/modifyPassword")
-    public Result modifyPassword(@Valid @PhoneNumber String phone, @NotEmpty(message = "验证码不能为空") String code, @NotEmpty(message = "密码不能为空") String password){
+    public Result modifyPassword(@Valid @PhoneNumber String phone,
+                                 @NotEmpty(message = "验证码不能为空") String code,
+                                 @NotEmpty(message = "密码不能为空") String password){
         return userService.modifyPassword(phone, code, password);
     }
 
     @ApiOperation("密码登录")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query")
+            @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query", dataType = "string")
     })
     @PostMapping("/login/password")
-    public Result loginByPassword(@Valid @PhoneNumber String phone, @NotEmpty(message = "密码不能为空") String password){
+    public Result loginByPassword(@Valid @PhoneNumber String phone,
+                                  @NotEmpty(message = "密码不能为空") String password){
         return userService.loginByPassword(phone, password);
     }
 
     @ApiOperation("验证码登录")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query"),
-            @ApiImplicitParam(name = "code", value = "验证码", required = true, paramType = "query")
+            @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "code", value = "验证码", required = true, paramType = "query", dataType = "string"),
     })
     @PostMapping("/login/code")
-    public Result loginByCode(@Valid @PhoneNumber String phone, @NotEmpty(message = "验证码不能为空") String code){
+    public Result loginByCode(@Valid @PhoneNumber String phone,
+                              @NotEmpty(message = "验证码不能为空") String code){
         return userService.loginByCode(phone, code);
     }
 

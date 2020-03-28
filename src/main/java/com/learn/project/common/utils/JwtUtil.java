@@ -73,7 +73,7 @@ public class JwtUtil {
      * @param secret   用户的密码
      * @return 加密的token
      */
-    public static String sign(String phone,Integer userId, String secret) {
+    public static String sign(String phone, Integer userId, String secret) {
         Date date = new Date(System.currentTimeMillis() + Constant.TOKEN_EXPIRE_TIME);
         Algorithm algorithm = Algorithm.HMAC256(secret);
         return JWT.create()

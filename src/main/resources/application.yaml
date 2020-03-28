@@ -3,14 +3,13 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql:/xxx/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
-    username: xxx
-    password: xxx
+    url: jdbc:mysql://192.168.0.113/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123
   redis:
-    host: xxx
+    host: 192.168.0.113
     database: 0
-    port: xxx
-    password: xxx
+    port: 6379
     ## 连接超时时间（毫秒）
     timeout: 5000
     lettuce:
@@ -33,15 +32,10 @@ mybatis-plus:
   type-aliases-package: com.learn.project.project.pojo
   global-config:
     # 主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
-    id-type: 0
-    # 字段策略 0:"忽略判断",1:"非 NULL 判断",2:"非空判断"
-    field-strategy: 1
-    # 驼峰下划线转换
-    db-column-underline: true
-    # 刷新mapper 调试神器
-    #    refresh-mapper: true
-    # 数据库大写下划线转换
-  #    capital-mode: true
+    db-config:
+      id-type: auto
+      table-underline: true
+
 
   configuration:
     # 配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）

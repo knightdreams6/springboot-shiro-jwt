@@ -120,7 +120,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             this.register(phone, password);
             return Result.success(this.returnLoginInitParam(phone));
         }
-        String encryptPassword = CommonsUtils.encryptPassword(password, phone);
+        String salt = CommonsUtils.uuid();
+        String encryptPassword = CommonsUtils.encryptPassword(password, salt);
+        user.setSalt(salt);
         user.setPassword(encryptPassword);
         this.updateById(user);
         return Result.success(this.returnLoginInitParam(phone));
@@ -151,13 +153,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         user.setPhone(phone);
         user.setRegisterTime(LocalDateTime.now());
         // 如果有密码，则使用用户输入的密码
+        String salt = CommonsUtils.uuid();
         if(args.length > 0){
-            String encryptPassword = CommonsUtils.encryptPassword(args[0], phone);
+            String encryptPassword = CommonsUtils.encryptPassword(args[0], salt);
             user.setPassword(encryptPassword);
+            user.setSalt(salt);
             this.save(user);
             conUserRoleService.connectUserRole(user.getUserId(), RoleEnums.ROLE1.getCode());
         }else{
-            String encryptPassword = CommonsUtils.encryptPassword(phone.substring(5, 11), phone);
+            String encryptPassword = CommonsUtils.encryptPassword(phone.substring(5, 11), salt);
+            user.setSalt(salt);
             user.setPassword(encryptPassword);
             this.save(user);
             conUserRoleService.connectUserRole(user.getUserId(), RoleEnums.ROLE1.getCode());
