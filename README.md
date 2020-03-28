@@ -7,17 +7,12 @@ Springboot+Shrio+Jwt前后端分离
 Springboot+Shiro+Jwt+MybatisPlus3
 项目构建工具：maven
 数据库：mysql
+Nosql：redis
 
 #### 使用说明
 
-使用问题请联系：
+使用遇到问题可以加QQ群：689932210
 
-qq:       1766376716
-
-email:    knightdreams6@163.com
-
-wx:       li1766376716 
-
-如果此项目帮到您的话，欢迎star
+如果此项目帮到您的话，欢迎star，您的star就是对我最大的鼓励
 
 可以关注一下我的博客，不定期更新技术文章 https://knightdreams.gitee.io/
