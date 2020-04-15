@@ -39,8 +39,8 @@ public class ExceptionAdvice {
      * @return result
      */
     @ExceptionHandler(ClientException.class)
-    public Result handleClientException(){
-        return Result.error(ErrorState.SEND_SMS_ERROR);
+    public ResponseEntity<String> handleClientException(){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorState.SEND_SMS_ERROR.getMsg());
     }
 
     
@@ -58,28 +58,19 @@ public class ExceptionAdvice {
      * token无效异常
      */
     @ExceptionHandler(IncorrectCredentialsException.class)
-    public Result handleTokenException(){
-        return Result.error(ErrorState.TOKEN_INVALID);
+    public ResponseEntity<String> handleTokenException(){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorState.TOKEN_INVALID.getMsg());
     }
 
 
     /**
-     * 参数校验异常处理
+     * 参数校验(缺少)异常处理
      * @return result
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public Result handleMissingParameterException(){
-        return Result.error(ErrorState.MISSING_PARAMETER);
+    public ResponseEntity<String> handleMissingParameterException(){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorState.MISSING_PARAMETER.getMsg());
     }
 
-
-    /**
-     * redis异常
-     * @return REDIS_CONNECTION_FAILURE
-     */
-    @ExceptionHandler(RedisException.class)
-    public Result handleRedisException(){
-        return Result.error(ErrorState.REDIS_CONNECTION_FAILURE);
-    }
 
 }

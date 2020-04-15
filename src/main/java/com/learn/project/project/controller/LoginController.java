@@ -28,7 +28,7 @@ import javax.validation.constraints.NotEmpty;
 @RestController
 @RequestMapping("/user")
 @Validated
-public class UserController {
+public class LoginController {
 
     @Resource
     private IUserService userService;

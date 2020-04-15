@@ -34,14 +34,6 @@ public class CommonsUtils {
 
 
     /**
-     * 获取请求域中的UserId
-     */
-    public static Integer getUserId(){
-        return (Integer) ServletUtils.getRequest().getAttribute("userId");
-    }
-
-
-    /**
      * 获取uuid
      * @return string
      */

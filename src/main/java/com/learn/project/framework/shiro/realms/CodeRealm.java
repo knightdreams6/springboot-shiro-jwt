@@ -1,9 +1,9 @@
 package com.learn.project.framework.shiro.realms;
 
 import com.learn.project.common.constant.ConstantRedisKey;
-import com.learn.project.common.utils.RedisUtil;
+import com.learn.project.framework.redis.RedisCache;
 import com.learn.project.framework.shiro.token.CustomizedToken;
-import com.learn.project.project.pojo.User;
+import com.learn.project.project.entity.User;
 import com.learn.project.project.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
@@ -25,7 +25,7 @@ public class CodeRealm extends AuthorizingRealm {
     private IUserService userService;
 
     @Resource
-    private RedisUtil redisUtil;
+    private RedisCache redisCache;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -61,7 +61,7 @@ public class CodeRealm extends AuthorizingRealm {
         }
         // 1.principal：认证的实体信息，可以是手机号，也可以是数据表对应的用户的实体类对象
         // 2.从redis中获取登录验证码
-        Object credentials = redisUtil.get(ConstantRedisKey.getLoginCodeKey(user.getPhone()));
+        Object credentials = redisCache.getCacheObject(ConstantRedisKey.getLoginCodeKey(user.getPhone()));
         if (credentials == null) {
             throw new ExpiredCredentialsException();
         }

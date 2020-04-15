@@ -1,13 +1,13 @@
 server:
-  port: 80
+  port: 8888
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.0.113/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://192.168.0.100/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: 123
   redis:
-    host: 192.168.0.113
+    host: 192.168.0.100
     database: 0
     port: 6379
     ## 连接超时时间（毫秒）
@@ -31,7 +31,6 @@ mybatis-plus:
   # 实体扫描，多个package用逗号或者分号分隔
   type-aliases-package: com.learn.project.project.pojo
   global-config:
-    # 主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
     db-config:
       id-type: auto
       table-underline: true

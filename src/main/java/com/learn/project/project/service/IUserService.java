@@ -3,7 +3,7 @@ package com.learn.project.project.service;
 import com.aliyuncs.exceptions.ClientException;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.learn.project.framework.Result;
-import com.learn.project.project.pojo.User;
+import com.learn.project.project.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

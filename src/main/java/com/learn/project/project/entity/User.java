@@ -1,4 +1,4 @@
-package com.learn.project.project.pojo;
+package com.learn.project.project.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -24,8 +24,8 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("project_user")
-@ApiModel(value="User对象", description="")
+@TableName("sys_user")
+@ApiModel(value="User对象", description="用户信息")
 public class User implements Serializable {
 
     private static final long serialVersionUID=1L;

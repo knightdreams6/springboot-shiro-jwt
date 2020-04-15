@@ -34,22 +34,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         String token = ((HttpServletRequest) request).getHeader(Constant.TOKEN_HEADER_NAME);
         if (token != null) {
-            try {
-                executeLogin(request, response);
-                return true;
-            } catch (IncorrectCredentialsException e) {
-                response.setCharacterEncoding("utf-8");
-                response.setContentType("application/json; charset=utf-8");
-                try (PrintWriter writer = response.getWriter()) {
-                    JSONObject o = new JSONObject();
-                    o.put("msg", e.getMessage());
-                    writer.write(o.toString());
-                    writer.flush();
-                    return false;
-                } catch (IOException e1) {
-                    log.error(e1.getMessage());
-                }
-            }
+            return executeLogin(request, response);
         }
         // 如果请求头不存在 Token，则可能是执行登陆操作或者是游客状态访问，无需检查 token，直接返回 true
         return true;
@@ -64,7 +49,21 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         String token = httpServletRequest.getHeader(Constant.TOKEN_HEADER_NAME);
         JwtToken jwtToken = new JwtToken(token);
         // 提交给realm进行登入，如果错误他会抛出异常并被捕获
-        getSubject(request, response).login(jwtToken);
+        try {
+            getSubject(request, response).login(jwtToken);
+        } catch (IncorrectCredentialsException e) {
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("application/json; charset=utf-8");
+            try (PrintWriter writer = response.getWriter()) {
+                JSONObject o = new JSONObject();
+                o.put("msg", e.getMessage());
+                writer.write(o.toString());
+                writer.flush();
+                return false;
+            } catch (IOException e1) {
+                log.error("返回token校验失败异常"+ e1);
+            }
+        }
         // 如果没有抛出异常则代表登入成功，返回true
         return true;
     }

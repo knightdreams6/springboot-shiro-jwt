@@ -1,16 +1,16 @@
 package com.learn.project.project.service;
 
-import com.learn.project.entity.Role;
+import com.learn.project.entity.UserRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- * 角色信息表 服务类
+ * 用户和角色关联表 服务类
  * </p>
  *
  * @author lixiao
  * @since 2020-04-15
  */
-public interface IRoleService extends IService<Role> {
+public interface IUserRoleService extends IService<UserRole> {
 
 }

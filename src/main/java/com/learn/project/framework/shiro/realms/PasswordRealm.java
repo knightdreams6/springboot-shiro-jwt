@@ -2,7 +2,7 @@ package com.learn.project.framework.shiro.realms;
 
 
 import com.learn.project.framework.shiro.token.CustomizedToken;
-import com.learn.project.project.pojo.User;
+import com.learn.project.project.entity.User;
 import com.learn.project.project.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;

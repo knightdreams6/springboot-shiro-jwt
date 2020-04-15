@@ -1,16 +1,16 @@
 package com.learn.project.project.mapper;
 
-import com.learn.project.entity.Role;
+import com.learn.project.entity.Menu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
- * 角色信息表 Mapper 接口
+ * 菜单权限表 Mapper 接口
  * </p>
  *
  * @author lixiao
  * @since 2020-04-15
  */
-public interface RoleMapper extends BaseMapper<Role> {
+public interface MenuMapper extends BaseMapper<Menu> {
 
 }

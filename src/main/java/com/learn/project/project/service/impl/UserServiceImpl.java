@@ -4,15 +4,13 @@ import com.learn.project.common.constant.Constant;
 import com.learn.project.common.constant.ConstantRedisKey;
 import com.learn.project.common.enums.ErrorState;
 import com.learn.project.common.enums.LoginType;
-import com.learn.project.common.enums.RoleEnums;
 import com.learn.project.common.utils.CommonsUtils;
-import com.learn.project.common.utils.JwtUtil;
-import com.learn.project.common.utils.RedisUtil;
 import com.learn.project.framework.Result;
+import com.learn.project.framework.redis.RedisCache;
+import com.learn.project.framework.shiro.TokenService;
 import com.learn.project.framework.shiro.token.CustomizedToken;
-import com.learn.project.project.pojo.User;
+import com.learn.project.project.entity.User;
 import com.learn.project.project.mapper.UserMapper;
-import com.learn.project.project.service.IConUserRoleService;
 import com.learn.project.project.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.shiro.SecurityUtils;
@@ -27,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -40,10 +39,13 @@ import java.util.Objects;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
     @Resource
-    private RedisUtil redisUtil;
+    private RedisCache redisCache;
 
     @Resource
-    private IConUserRoleService conUserRoleService;
+    private TokenService tokenService;
+
+//    @Resource
+//    private IConUserRoleService conUserRoleService;
 
     @Override
     public Result sendLoginCode(String phone){
@@ -52,7 +54,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // todo 此处为发送验证码代码
         // 将验证码加密后存储到redis中
         String encryptCode = CommonsUtils.encryptPassword(String.valueOf(code), phone);
-        redisUtil.set(ConstantRedisKey.getLoginCodeKey(phone), encryptCode, Constant.CODE_EXPIRE_TIME);
+        redisCache.setCacheObject(ConstantRedisKey.getLoginCodeKey(phone), encryptCode, Constant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
         return Result.success();
     }
 
@@ -60,7 +62,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public Result sendModifyPasswordCode(String phone) {
         int code = 6666;
         // todo 此处为发送验证码代码
-        redisUtil.set(ConstantRedisKey.getModifyPasswordCodeKey(phone), code, Constant.CODE_EXPIRE_TIME);
+        redisCache.setCacheObject(ConstantRedisKey.getModifyPasswordCodeKey(phone), code, Constant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
         return Result.success();
     }
 
@@ -110,7 +112,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public Result modifyPassword(String phone, String code, String password) {
-        String redisCode = redisUtil.get(ConstantRedisKey.getModifyPasswordCodeKey(phone)).toString();
+        String redisCode = redisCache.getCacheObject(ConstantRedisKey.getModifyPasswordCodeKey(phone)).toString();
         if(!Objects.equals(code, redisCode)){
             return Result.error(ErrorState.CODE_ERROR);
         }
@@ -138,9 +140,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         Map<String, Object> data = new HashMap<>(1);
         User user = selectUserByPhone(phone);
         // 生成jwtToken
-        String jwtToken = JwtUtil.sign(phone, user.getUserId(), user.getPassword());
+        String token = tokenService.createToken(phone, user.getUserId(), user.getPassword());
         // token
-        data.put("jwtToken", jwtToken);
+        data.put("token", token);
         return data;
     }
 
@@ -159,13 +161,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             user.setPassword(encryptPassword);
             user.setSalt(salt);
             this.save(user);
-            conUserRoleService.connectUserRole(user.getUserId(), RoleEnums.ROLE1.getCode());
+//            conUserRoleService.connectUserRole(user.getUserId(), RoleEnums.ROLE1.getCode());
         }else{
             String encryptPassword = CommonsUtils.encryptPassword(phone.substring(5, 11), salt);
             user.setSalt(salt);
             user.setPassword(encryptPassword);
             this.save(user);
-            conUserRoleService.connectUserRole(user.getUserId(), RoleEnums.ROLE1.getCode());
+//            conUserRoleService.connectUserRole(user.getUserId(), RoleEnums.ROLE1.getCode());
         }
     }
 

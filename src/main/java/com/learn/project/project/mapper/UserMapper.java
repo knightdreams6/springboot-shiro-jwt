@@ -1,6 +1,6 @@
 package com.learn.project.project.mapper;
 
-import com.learn.project.project.pojo.User;
+import com.learn.project.project.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

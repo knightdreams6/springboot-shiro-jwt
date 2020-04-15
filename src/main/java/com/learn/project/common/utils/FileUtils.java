@@ -4,7 +4,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.UUID;
+import java.util.Objects;
 
 /**
  * @author lixiao
@@ -26,17 +26,10 @@ public class FileUtils {
      * @param fileOriginName 源文件名
      * @return  返回新的文件名
      */
-    private static String getFileName(String fileOriginName){
-        return getUUID() + getSuffix(fileOriginName);
+    public static String getFileName(String fileOriginName){
+        return CommonsUtils.uuid() + getSuffix(fileOriginName);
     }
 
-    /**
-     * 生成一个UUID
-     * @return 返回一个UUID
-     */
-    private static String getUUID(){
-        return UUID.randomUUID().toString().replace("-", "");
-    }
 
     /**
      *
@@ -115,15 +108,8 @@ public class FileUtils {
             File file = null;
             try {
                 InputStream in = param.getInputStream();
-                file = new File(param.getOriginalFilename());
-                OutputStream out = new FileOutputStream(file);
-                int bytesRead = 0;
-                byte[] buffer = new byte[8192];
-                while ((bytesRead = in.read(buffer, 0, 8192)) != -1) {
-                    out.write(buffer, 0, bytesRead);
-                }
-                in.close();
-                out.close();
+                file = new File(Objects.requireNonNull(param.getOriginalFilename()));
+                inputStreamToFile(in, file);
                 return file;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -136,11 +122,11 @@ public class FileUtils {
     /**
      * 获取指定文件的输入流
      *
-     * @param logoPath 文件的路径
+     * @param path 文件的路径
      * @return
      */
-    public static InputStream getResourceAsStream(String logoPath) {
-        ClassPathResource classPathResource = new ClassPathResource("static/logo.png");
+    public static InputStream getResourceAsStream(String path) {
+        ClassPathResource classPathResource = new ClassPathResource(path);
         try {
             return classPathResource.getInputStream();
         } catch (IOException e) {
@@ -156,7 +142,7 @@ public class FileUtils {
      * @param file
      * @throws IOException
      */
-    public void inputstreamtofile(InputStream ins, File file) throws IOException {
+    public static void inputStreamToFile(InputStream ins, File file) throws IOException {
         OutputStream os = new FileOutputStream(file);
         int bytesRead = 0;
         byte[] buffer = new byte[8192];

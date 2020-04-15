@@ -11,8 +11,9 @@ import com.aliyuncs.profile.IClientProfile;
 /**
  * @author lixiao
  * @date 2019/8/8 16:06
+ * 阿里云sms
  */
-public class SmsUtil {
+public class SmsUtils {
 
     private static final String ACCESS_KEY_ID = "";
     private static final String ACCESS_KEY_SECRET = "";
