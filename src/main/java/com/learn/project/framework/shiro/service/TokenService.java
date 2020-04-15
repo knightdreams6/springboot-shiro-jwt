@@ -1,4 +1,4 @@
-package com.learn.project.framework.shiro;
+package com.learn.project.framework.shiro.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

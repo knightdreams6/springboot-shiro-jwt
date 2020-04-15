@@ -1,8 +1,8 @@
 package com.learn.project.project.service.impl;
 
-import com.learn.project.entity.UserRole;
-import com.learn.project.mapper.UserRoleMapper;
-import com.learn.project.service.IUserRoleService;
+import com.learn.project.project.entity.UserRole;
+import com.learn.project.project.mapper.UserRoleMapper;
+import com.learn.project.project.service.IUserRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

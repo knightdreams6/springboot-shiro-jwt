@@ -1,8 +1,8 @@
 package com.learn.project.project.service.impl;
 
-import com.learn.project.entity.Menu;
-import com.learn.project.mapper.MenuMapper;
-import com.learn.project.service.IMenuService;
+import com.learn.project.project.entity.Menu;
+import com.learn.project.project.mapper.MenuMapper;
+import com.learn.project.project.service.IMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

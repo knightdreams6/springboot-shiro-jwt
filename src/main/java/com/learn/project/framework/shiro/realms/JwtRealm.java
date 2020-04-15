@@ -2,7 +2,7 @@ package com.learn.project.framework.shiro.realms;
 
 import com.learn.project.common.enums.ErrorState;
 import com.learn.project.common.utils.ServletUtils;
-import com.learn.project.framework.shiro.TokenService;
+import com.learn.project.framework.shiro.service.TokenService;
 import com.learn.project.framework.shiro.token.JwtToken;
 import com.learn.project.project.entity.User;
 import lombok.extern.slf4j.Slf4j;

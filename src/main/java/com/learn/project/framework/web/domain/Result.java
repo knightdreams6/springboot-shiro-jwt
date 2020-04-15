@@ -1,4 +1,4 @@
-package com.learn.project.framework;
+package com.learn.project.framework.web.domain;
 
 import com.learn.project.common.enums.ErrorState;
 import lombok.AllArgsConstructor;
@@ -16,6 +16,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Result {
+
     private boolean success;
     private Map<String, Object> data;
     private Integer code;
@@ -42,6 +43,12 @@ public class Result {
 
     public static Result success(){
         return new Result(true);
+    }
+
+    public static Result success(Object value){
+        Map<String, Object> data = new HashMap<>(1);
+        data.put("data", value);
+        return new Result(true, data);
     }
 
     public static Result success(String key, Object value){

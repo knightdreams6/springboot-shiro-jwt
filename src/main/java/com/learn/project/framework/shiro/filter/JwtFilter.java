@@ -1,4 +1,4 @@
-package com.learn.project.framework.filter;
+package com.learn.project.framework.shiro.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.learn.project.common.constant.Constant;

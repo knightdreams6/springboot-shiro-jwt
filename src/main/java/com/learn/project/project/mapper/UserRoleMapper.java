@@ -1,6 +1,6 @@
 package com.learn.project.project.mapper;
 
-import com.learn.project.entity.UserRole;
+import com.learn.project.project.entity.UserRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

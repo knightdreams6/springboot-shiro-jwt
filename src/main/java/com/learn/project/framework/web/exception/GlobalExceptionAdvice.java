@@ -1,9 +1,8 @@
-package com.learn.project.framework.exception;
+package com.learn.project.framework.web.exception;
 
 
 import com.aliyuncs.exceptions.ClientException;
 import com.learn.project.common.enums.ErrorState;
-import com.learn.project.framework.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authz.AuthorizationException;
@@ -22,12 +21,12 @@ import javax.validation.ConstraintViolationException;
  */
 @RestControllerAdvice
 @Slf4j
-public class ExceptionAdvice {
+public class GlobalExceptionAdvice {
 
     /**
      * 参数校验异常
      * @param e e
-     * @return 错误信息
+     * @return ResponseEntity
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
@@ -36,7 +35,7 @@ public class ExceptionAdvice {
 
     /**
      * 阿里短信发送异常
-     * @return result
+     * @return ResponseEntity
      */
     @ExceptionHandler(ClientException.class)
     public ResponseEntity<String> handleClientException(){
@@ -46,7 +45,7 @@ public class ExceptionAdvice {
     
     /**
      * shiro权限异常处理
-     * @return result
+     * @return ResponseEntity
      */
     @ExceptionHandler(AuthorizationException.class)
     public ResponseEntity<String> handleShiroException() {
@@ -65,7 +64,7 @@ public class ExceptionAdvice {
 
     /**
      * 参数校验(缺少)异常处理
-     * @return result
+     * @return ResponseEntity
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<String> handleMissingParameterException(){

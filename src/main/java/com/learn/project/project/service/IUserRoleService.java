@@ -1,6 +1,6 @@
 package com.learn.project.project.service;
 
-import com.learn.project.entity.UserRole;
+import com.learn.project.project.entity.UserRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

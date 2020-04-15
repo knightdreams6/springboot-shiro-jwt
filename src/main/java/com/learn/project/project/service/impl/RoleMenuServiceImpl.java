@@ -1,8 +1,8 @@
 package com.learn.project.project.service.impl;
 
-import com.learn.project.entity.RoleMenu;
-import com.learn.project.mapper.RoleMenuMapper;
-import com.learn.project.service.IRoleMenuService;
+import com.learn.project.project.entity.RoleMenu;
+import com.learn.project.project.mapper.RoleMenuMapper;
+import com.learn.project.project.service.IRoleMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

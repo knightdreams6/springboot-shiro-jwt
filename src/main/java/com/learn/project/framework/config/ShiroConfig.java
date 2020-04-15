@@ -1,6 +1,6 @@
 package com.learn.project.framework.config;
 
-import com.learn.project.framework.filter.JwtFilter;
+import com.learn.project.framework.shiro.filter.JwtFilter;
 import com.learn.project.framework.shiro.realms.CodeRealm;
 import com.learn.project.framework.shiro.realms.JwtRealm;
 import com.learn.project.framework.shiro.realms.PasswordRealm;

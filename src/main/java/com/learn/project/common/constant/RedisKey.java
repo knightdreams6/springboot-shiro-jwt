@@ -4,7 +4,7 @@ package com.learn.project.common.constant;
  * @author lixiao
  * @date 2019/10/26 12:03
  */
-public class ConstantRedisKey {
+public class RedisKey {
 
 
     public static String getLoginCodeKey(String phone){
@@ -13,6 +13,10 @@ public class ConstantRedisKey {
 
     public static String getModifyPasswordCodeKey(String phone){
         return "MODIFY:PASSWORD:CODE:" + phone;
+    }
+
+    public static String getLoginUserKey(String phone){
+        return "USER:" + phone;
     }
 
 }

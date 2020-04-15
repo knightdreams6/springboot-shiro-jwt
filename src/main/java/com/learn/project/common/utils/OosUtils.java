@@ -5,6 +5,7 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.*;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -109,6 +110,24 @@ public class OosUtils {
              * Do not forget to shut down the client finally to release all allocated resources.
              */
             ossClient.shutdown();
+        }
+        return null;
+    }
+
+    /**
+     * 更新文件
+     * @param file 要更新的文件
+     * @param uploadPath 更新的文件上传路径
+     * @param originPath 原始文件路径
+     * @return 新文件上传路径
+     */
+    public static String updateFile(MultipartFile file, String uploadPath, String originPath){
+        if(file != null && !file.isEmpty()){
+            String imageName = upload(file, uploadPath);
+            if(!StringUtils.isEmpty(originPath)){
+                deletedFile(basePath + originPath);
+            }
+            return imageName;
         }
         return null;
     }

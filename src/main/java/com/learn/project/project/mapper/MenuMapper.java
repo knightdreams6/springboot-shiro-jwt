@@ -1,6 +1,6 @@
 package com.learn.project.project.mapper;
 
-import com.learn.project.entity.Menu;
+import com.learn.project.project.entity.Menu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
