@@ -122,7 +122,7 @@ public class ShiroConfig {
         bean.setLoginUrl("/user/unLogin");
 
         Map<String, String> filterMap = new LinkedHashMap<>();
-        filterMap.put("/user/**","anon");
+        filterMap.put("/login/**","anon");
         filterMap.put("/static/**","anon");
         filterMap.put("/user/logout", "logout");
         //从这里开始，是我为解决问题增加的，为swagger页面放行

@@ -2,6 +2,9 @@ package com.learn.project.project.mapper;
 
 import com.learn.project.project.entity.Menu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Set;
 
 /**
  * <p>
@@ -13,4 +16,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface MenuMapper extends BaseMapper<Menu> {
 
+    /**
+     * 根据角色id获取其权限
+     * @param roleId 角色id
+     * @return Set<String>
+     */
+    Set<String> getPermissionsSet(@Param("roleId") Integer roleId);
 }

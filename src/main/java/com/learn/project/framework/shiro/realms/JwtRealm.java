@@ -2,6 +2,7 @@ package com.learn.project.framework.shiro.realms;
 
 import com.learn.project.common.enums.ErrorState;
 import com.learn.project.common.utils.ServletUtils;
+import com.learn.project.framework.shiro.service.PermissionsService;
 import com.learn.project.framework.shiro.service.TokenService;
 import com.learn.project.framework.shiro.token.JwtToken;
 import com.learn.project.project.entity.User;
@@ -13,6 +14,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import javax.annotation.Resource;
+import java.util.Set;
 
 /**
  * @author lixiao
@@ -25,8 +27,8 @@ public class JwtRealm extends AuthorizingRealm {
     @Resource
     private TokenService tokenService;
 
-//    @Resource
-//    private IConUserRoleService userRoleService;
+    @Resource
+    private PermissionsService permissionsService;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -39,15 +41,17 @@ public class JwtRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         User user = tokenService.getLoginUser(ServletUtils.getRequest());
-
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         // 添加角色
-//        authorizationInfo.addRoles(userRoleService.selectRoleNamesByUserId(user.getUserId()));
+        authorizationInfo.addRoles(permissionsService.getRoleSet(user.getUserId()));
+        // 添加权限
+        authorizationInfo.addStringPermissions(permissionsService.getPermissionsSet(user.getUserId()));
         return authorizationInfo;
     }
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken auth) throws AuthenticationException {
+        log.info("token auth start...");
         String token = (String) auth.getCredentials();
         // 解密获得token
         User user = tokenService.getLoginUser(ServletUtils.getRequest());

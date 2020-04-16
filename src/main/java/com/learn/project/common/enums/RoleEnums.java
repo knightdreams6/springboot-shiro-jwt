@@ -5,13 +5,13 @@ package com.learn.project.common.enums;
  */
 public enum RoleEnums {
     /**
-     * 角色1
+     * 管理员
      */
-    ROLE1(1, "role1", "角色1"),
+    ADMIN(1, "admin", "管理员"),
     /**
-     * 角色2
+     * 普通角色
      */
-    ROLE2(2, "role2", "角色2");
+    COMMON(2, "common", "普通角色");
 
     private Integer code;
 

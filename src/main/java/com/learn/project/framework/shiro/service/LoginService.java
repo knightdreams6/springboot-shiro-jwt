@@ -4,6 +4,7 @@ import com.learn.project.common.constant.Constant;
 import com.learn.project.common.constant.RedisKey;
 import com.learn.project.common.enums.ErrorState;
 import com.learn.project.common.enums.LoginType;
+import com.learn.project.common.enums.RoleEnums;
 import com.learn.project.common.utils.CommonsUtils;
 import com.learn.project.framework.web.domain.Result;
 import com.learn.project.framework.redis.RedisCache;
@@ -40,6 +41,9 @@ public class LoginService {
 
     @Resource
     private TokenService tokenService;
+
+    @Resource
+    private PermissionsService permissionsService;
 
     
     public void sendLoginCode(String phone){
@@ -155,13 +159,13 @@ public class LoginService {
             user.setPassword(encryptPassword);
             user.setSalt(salt);
             userService.save(user);
-//            conUserRoleService.connectUserRole(user.getUserId(), RoleEnums.ROLE1.getCode());
+            permissionsService.addRole(user.getUserId(), RoleEnums.ADMIN.getCode(), RoleEnums.COMMON.getCode());
         }else{
             String encryptPassword = CommonsUtils.encryptPassword(phone.substring(5, 11), salt);
             user.setSalt(salt);
             user.setPassword(encryptPassword);
             userService.save(user);
-//            conUserRoleService.connectUserRole(user.getUserId(), RoleEnums.ROLE1.getCode());
+            permissionsService.addRole(user.getUserId(), RoleEnums.ADMIN.getCode(), RoleEnums.COMMON.getCode());
         }
     }
 }
