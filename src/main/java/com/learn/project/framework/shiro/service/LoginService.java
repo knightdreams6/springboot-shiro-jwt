@@ -108,7 +108,11 @@ public class LoginService {
 
     
     public Result modifyPassword(String phone, String code, String password) {
-        String redisCode = redisCache.getCacheObject(RedisKey.getModifyPasswordCodeKey(phone)).toString();
+        Object modifyCode = redisCache.getCacheObject(RedisKey.getModifyPasswordCodeKey(phone));
+        if(Objects.isNull(modifyCode)){
+            return Result.error(ErrorState.CODE_EXPIRE);
+        }
+        String redisCode = modifyCode.toString();
         if(!Objects.equals(code, redisCode)){
             return Result.error(ErrorState.CODE_ERROR);
         }

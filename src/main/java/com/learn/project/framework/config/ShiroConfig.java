@@ -62,7 +62,7 @@ public class ShiroConfig {
     public HashedCredentialsMatcher hashedCredentialsMatcher(){
         HashedCredentialsMatcher matcher = new HashedCredentialsMatcher();
         // 设置哈希算法名称
-        matcher.setHashAlgorithmName("MD5");
+        matcher.setHashAlgorithmName("SHA-256");
         // 设置哈希迭代次数
         matcher.setHashIterations(1024);
         // 设置存储凭证十六进制编码

@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -30,14 +31,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public User selectUserByPhone(String phone) {
-        Object cacheObject = redisCache.getCacheObject(RedisKey.getLoginUserKey(phone));
-        if (cacheObject != null) {
-            return (User) cacheObject;
-        } else {
+        String userKey = RedisKey.getUserKey(phone);
+        Object cacheObject = redisCache.getCacheObject(userKey);
+        if (cacheObject == null) {
             User db = userMapper.selectOne(new QueryWrapper<User>().eq("phone", phone));
-            redisCache.setCacheObject(RedisKey.getLoginUserKey(phone), db);
+            redisCache.setCacheObject(RedisKey.getUserKey(phone), db, 30, TimeUnit.SECONDS);
             return db;
         }
+        return (User) cacheObject;
     }
 
 }

@@ -42,7 +42,7 @@ public class LoginController {
     @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query")
     @GetMapping("/modifyPasswordCode")
     public Result sendModifyPasswordCode(@Valid @PhoneNumber String phone) throws ClientException {
-        loginService.sendLoginCode(phone);
+        loginService.sendModifyPasswordCode(phone);
         return Result.success();
     }
 

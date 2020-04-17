@@ -1,6 +1,7 @@
 package com.learn.project.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.crypto.hash.SimpleHash;
 
 import java.util.UUID;
@@ -23,13 +24,13 @@ public class CommonsUtils {
 
 
     /**
-     * 使用md5加密
+     * 使用SHA256加密
      * @param password 需要加密的密码
      * @param salt 盐
      * @return 返回加密后的密码
      */
     public static String encryptPassword(String password, String salt){
-        return String.valueOf(new SimpleHash("MD5", password,  salt, 1024));
+        return String.valueOf(new Sha256Hash(password, salt, 1024));
     }
 
 

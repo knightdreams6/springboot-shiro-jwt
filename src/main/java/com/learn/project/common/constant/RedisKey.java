@@ -15,8 +15,12 @@ public class RedisKey {
         return "MODIFY:PASSWORD:CODE:" + phone;
     }
 
-    public static String getLoginUserKey(String phone){
+    public static String getUserKey(String phone){
         return "USER:" + phone;
+    }
+
+    public static String getLoginUserKey(String phone){
+        return "LOGIN:USER:" + phone;
     }
 
 }

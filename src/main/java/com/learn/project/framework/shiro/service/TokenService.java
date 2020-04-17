@@ -7,6 +7,9 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.learn.project.common.constant.Constant;
+import com.learn.project.common.constant.RedisKey;
+import com.learn.project.framework.redis.RedisCache;
+import com.learn.project.framework.web.domain.LoginUser;
 import com.learn.project.project.entity.User;
 import com.learn.project.project.service.IUserService;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author lixiao
@@ -26,13 +31,41 @@ public class TokenService {
     @Resource
     private IUserService userService;
 
+    @Resource
+    private PermissionsService permissionsService;
+
+    @Resource
+    private RedisCache redisCache;
+
     /**
      * 获取当前登录的User对象
      * @return User
      */
-    public User getLoginUser(HttpServletRequest request){
+    public LoginUser getLoginUser(HttpServletRequest request){
+        // 获取token
         String token = getToken(request);
-        return userService.selectUserByPhone(getPhone(token));
+        // 获取手机号
+        String phone = getPhone(token);
+        // 获取缓存loginUserKey
+        String loginUserKey = RedisKey.getLoginUserKey(phone);
+        // 获取缓存loginUser
+        Object cacheObject = redisCache.getCacheObject(loginUserKey);
+        if (cacheObject == null) {
+            LoginUser loginUser = new LoginUser();
+            // 获取当前登录用户
+            User user = userService.selectUserByPhone(phone);
+            loginUser.setUser(user);
+            // 获取当前登录用户所有权限
+            Set<String> permissionsSet = permissionsService.getPermissionsSet(user.getUserId());
+            loginUser.setPermissionsSet(permissionsSet);
+            // 获取当前登录用户所有角色
+            Set<String> roleSet = permissionsService.getRoleSet(user.getUserId());
+            loginUser.setRoleSet(roleSet);
+            // 缓存当前登录用户
+            redisCache.setCacheObject(loginUserKey, loginUser, 60, TimeUnit.SECONDS);
+            return loginUser;
+        }
+        return (LoginUser) cacheObject;
     }
 
 
