@@ -21,4 +21,9 @@ public interface IUserService extends IService<User> {
      */
     User selectUserByPhone(String phone);
 
+    /**
+     * 获取当前用户基本信息
+     * @return user
+     */
+    User selectInfo();
 }

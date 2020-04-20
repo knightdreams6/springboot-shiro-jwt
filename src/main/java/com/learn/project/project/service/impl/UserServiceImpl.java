@@ -2,7 +2,9 @@ package com.learn.project.project.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.learn.project.common.constant.RedisKey;
+import com.learn.project.common.utils.ServletUtils;
 import com.learn.project.framework.redis.RedisCache;
+import com.learn.project.framework.shiro.service.TokenService;
 import com.learn.project.project.entity.User;
 import com.learn.project.project.mapper.UserMapper;
 import com.learn.project.project.service.IUserService;
@@ -29,6 +31,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Resource
     private RedisCache redisCache;
 
+    @Resource
+    private TokenService tokenService;
+
     @Override
     public User selectUserByPhone(String phone) {
         String userKey = RedisKey.getUserKey(phone);
@@ -39,6 +44,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             return db;
         }
         return (User) cacheObject;
+    }
+
+    @Override
+    public User selectInfo() {
+        return tokenService.getLoginUser(ServletUtils.getRequest()).getUser();
     }
 
 }

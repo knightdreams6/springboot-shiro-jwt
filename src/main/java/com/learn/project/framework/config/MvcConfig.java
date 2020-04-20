@@ -13,7 +13,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/user/**")
+        registry.addMapping("/**")
                 //设置允许跨域请求的域名
                 .allowedOrigins("*")
                 .allowCredentials(false)

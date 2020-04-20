@@ -20,5 +20,5 @@ public class Constant {
     /**
      * token请求头名称
      */
-    public static String TOKEN_HEADER_NAME = "authorization";
+    public static String TOKEN_HEADER_NAME = "X-Token";
 }

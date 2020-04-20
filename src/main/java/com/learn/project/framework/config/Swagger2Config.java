@@ -1,5 +1,6 @@
 package com.learn.project.framework.config;
 
+import com.learn.project.common.constant.Constant;
 import com.learn.project.framework.annotction.PhoneNumber;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;
@@ -58,8 +59,8 @@ public class Swagger2Config {
      * 安全模式，这里指定token通过Authorization头请求头传递
      */
     private List<ApiKey> securitySchemes() {
-        List<ApiKey> apiKeyList = new ArrayList<ApiKey>();
-        apiKeyList.add(new ApiKey("Authorization", "Authorization", "header"));
+        List<ApiKey> apiKeyList = new ArrayList<>();
+        apiKeyList.add(new ApiKey(Constant.TOKEN_HEADER_NAME, Constant.TOKEN_HEADER_NAME, "header"));
         return apiKeyList;
     }
 
@@ -84,7 +85,7 @@ public class Swagger2Config {
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
         List<SecurityReference> securityReferences = new ArrayList<>();
-        securityReferences.add(new SecurityReference("Authorization", authorizationScopes));
+        securityReferences.add(new SecurityReference(Constant.TOKEN_HEADER_NAME, authorizationScopes));
         return securityReferences;
     }
 }

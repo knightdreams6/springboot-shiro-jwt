@@ -3,6 +3,7 @@ package com.learn.project.project.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author knight
@@ -37,11 +38,16 @@ public class User implements Serializable {
     @ApiModelProperty(value = "手机号")
     private String phone;
 
-    @ApiModelProperty(value = "盐值")
+    @ApiModelProperty(value = "盐值", hidden = true)
+    @JsonIgnore
     private String salt;
 
     @ApiModelProperty(value = "密码")
+    @JsonIgnore
     private String password;
+
+    @ApiModelProperty(value = "头像")
+    private String avatar;
 
     @ApiModelProperty(value = "用户名")
     private String name;
