@@ -58,14 +58,14 @@ public class UserController {
     @GetMapping
     @RequiresRoles("admin")
     public Result user() {
-        return Result.success(userService.list());
+        return Result.success("userList", userService.list());
     }
 
     @ApiOperation("获取所有用户")
     @GetMapping("/list")
     @RequiresPermissions("system:user:list")
     public Result users() {
-        return Result.success(userService.list());
+        return Result.success("userList", userService.list());
     }
 
 }
