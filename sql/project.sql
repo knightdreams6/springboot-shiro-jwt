@@ -11,7 +11,7 @@
  Target Server Version : 80019
  File Encoding         : 65001
 
- Date: 17/04/2020 17:11:49
+ Date: 21/04/2020 10:06:58
 */
 
 SET NAMES utf8mb4;
@@ -259,6 +259,7 @@ CREATE TABLE `sys_user`  (
   `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '手机号',
   `salt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '盐值',
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '密码',
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '头像',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户名',
   `sex` tinyint(0) NULL DEFAULT 0 COMMENT '性别',
   `birth` date NULL DEFAULT NULL COMMENT '出生日期',
@@ -271,9 +272,9 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, '18735182285', 'db878a0fcd9d4516900c9ebc6aab9b66', '5b699ed67695f41b08b83a80dbfd35e47150b55b39a4dcb5e9348148e0112915', NULL, 0, NULL, '2020-04-15 11:41:12', NULL);
-INSERT INTO `sys_user` VALUES (2, '18735182288', '016d6e6ec3c043de8993f0d244c4ca4d', '135714f1abab94cad6d0ce039e94a26c', NULL, 0, NULL, '2020-04-16 16:06:56', NULL);
-INSERT INTO `sys_user` VALUES (3, '18735182286', '23b95feaa2b648629f8a2ae0185832e3', '7c93bfd1c3be24b12a5ab063f7f8f7dd', NULL, 0, NULL, '2020-04-16 16:09:33', NULL);
+INSERT INTO `sys_user` VALUES (1, '18735182285', '3b72fdccbf1d424e8456d72dd93648b5', '2201d197183435fbcfa3ca63867179fafbbc98f24d19ee6059f48f92c025e396', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 'admin', 0, NULL, '2020-04-15 11:41:12', NULL);
+INSERT INTO `sys_user` VALUES (2, '18735182288', '016d6e6ec3c043de8993f0d244c4ca4d', '135714f1abab94cad6d0ce039e94a26c', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', NULL, 0, NULL, '2020-04-16 16:06:56', NULL);
+INSERT INTO `sys_user` VALUES (3, '18735182286', '23b95feaa2b648629f8a2ae0185832e3', '7c93bfd1c3be24b12a5ab063f7f8f7dd', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', NULL, 0, NULL, '2020-04-16 16:09:33', NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_role

@@ -1,5 +1,8 @@
 package com.learn.project.project.controller;
 
+import com.learn.project.common.utils.ServletUtils;
+import com.learn.project.framework.shiro.service.TokenService;
+import com.learn.project.framework.web.domain.LoginUser;
 import com.learn.project.framework.web.domain.Result;
 import com.learn.project.project.service.IUserService;
 import io.swagger.annotations.Api;
@@ -20,7 +23,7 @@ import javax.annotation.Resource;
  * @author knight
  * @since 2019-12-17
  */
-@Api(tags = "【user】需要权限校验的接口")
+@Api(tags = "【user】用户")
 @RestController
 @RequestMapping("/user")
 @Validated
@@ -29,11 +32,16 @@ public class UserController {
     @Resource
     private IUserService userService;
 
+    @Resource
+    private TokenService tokenService;
+
+
     @ApiOperation("获取当前用户基本信息")
     @GetMapping("/info")
     @RequiresRoles(value = {"admin", "common"}, logical = Logical.OR)
     public Result info() {
-        return Result.success(userService.selectInfo());
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        return Result.success(loginUser);
     }
 
 

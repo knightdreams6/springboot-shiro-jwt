@@ -46,9 +46,4 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return (User) cacheObject;
     }
 
-    @Override
-    public User selectInfo() {
-        return tokenService.getLoginUser(ServletUtils.getRequest()).getUser();
-    }
-
 }
