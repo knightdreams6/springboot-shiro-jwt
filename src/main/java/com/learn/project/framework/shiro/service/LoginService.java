@@ -35,17 +35,14 @@ public class LoginService {
 
     @Resource
     private IUserService userService;
-    
+
     @Resource
     private RedisCache redisCache;
 
     @Resource
     private TokenService tokenService;
 
-    @Resource
-    private PermissionsService permissionsService;
 
-    
     public void sendLoginCode(String phone){
         // 这里使用默认值，随机验证码的方法为CommonsUtils.getCode()
         int code = 6666;
@@ -55,14 +52,14 @@ public class LoginService {
         redisCache.setCacheObject(RedisKey.getLoginCodeKey(phone), encryptCode, Constant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
     }
 
-    
+
     public void sendModifyPasswordCode(String phone) {
         int code = 6666;
         // todo 此处为发送验证码代码
         redisCache.setCacheObject(RedisKey.getModifyPasswordCodeKey(phone), code, Constant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
     }
 
-    
+
     public Result loginByPassword(String phone, String password) {
         // 1.获取Subject
         Subject subject = SecurityUtils.getSubject();
@@ -80,7 +77,7 @@ public class LoginService {
         }
     }
 
-    
+
     public Result loginByCode(String phone, String code) {
         // 1.获取Subject
         Subject subject = SecurityUtils.getSubject();
@@ -88,7 +85,7 @@ public class LoginService {
         // 2.验证码登录，如果该用户不存在则创建该用户
         if (Objects.isNull(sysUser)) {
             // 2.1 注册
-            this.register(phone);
+            userService.register(phone);
         }
         // 3.封装用户数据
         CustomizedToken token = new CustomizedToken(phone, code, LoginType.CODE_LOGIN_TYPE.toString());
@@ -106,7 +103,7 @@ public class LoginService {
         }
     }
 
-    
+
     public Result modifyPassword(String phone, String code, String password) {
         Object modifyCode = redisCache.getCacheObject(RedisKey.getModifyPasswordCodeKey(phone));
         if(Objects.isNull(modifyCode)){
@@ -119,7 +116,7 @@ public class LoginService {
         User user = userService.selectUserByPhone(phone);
         // 如果用户不存在，执行注册
         if(Objects.isNull(user)){
-            this.register(phone, password);
+            userService.register(phone, password);
             return Result.success(this.returnLoginInitParam(phone));
         }
         String salt = CommonsUtils.uuid();
@@ -148,28 +145,4 @@ public class LoginService {
         return data;
     }
 
-    /**
-     * 用户注册,默认密码为手机号后六位
-     * @param phone phone
-     */
-    private void register(String phone, String... args){
-        User user = new User();
-        user.setPhone(phone);
-        user.setRegisterTime(LocalDateTime.now());
-        // 如果有密码，则使用用户输入的密码
-        String salt = CommonsUtils.uuid();
-        if(args.length > 0){
-            String encryptPassword = CommonsUtils.encryptPassword(args[0], salt);
-            user.setPassword(encryptPassword);
-            user.setSalt(salt);
-            userService.save(user);
-            permissionsService.addRole(user.getUserId(), RoleEnums.ADMIN.getCode(), RoleEnums.COMMON.getCode());
-        }else{
-            String encryptPassword = CommonsUtils.encryptPassword(phone.substring(5, 11), salt);
-            user.setSalt(salt);
-            user.setPassword(encryptPassword);
-            userService.save(user);
-            permissionsService.addRole(user.getUserId(), RoleEnums.ADMIN.getCode(), RoleEnums.COMMON.getCode());
-        }
-    }
 }

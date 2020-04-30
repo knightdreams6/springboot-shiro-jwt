@@ -104,6 +104,7 @@ public class ShiroConfig {
         return new JwtRealm();
     }
 
+
     /**
      * Shiro内置过滤器，可以实现拦截器相关的拦截器
      *    常用的过滤器：
@@ -118,9 +119,6 @@ public class ShiroConfig {
         ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
         // 设置 SecurityManager
         bean.setSecurityManager(securityManager);
-        // 设置未登录跳转url
-        bean.setLoginUrl("/user/unLogin");
-
         Map<String, String> filterMap = new LinkedHashMap<>();
         filterMap.put("/login/**","anon");
         filterMap.put("/static/**","anon");
@@ -135,7 +133,6 @@ public class ShiroConfig {
         filter.put("jwt", new JwtFilter());
         bean.setFilters(filter);
         filterMap.put("/**", "jwt");
-
         bean.setFilterChainDefinitionMap(filterMap);
         return bean;
     }
@@ -143,11 +140,12 @@ public class ShiroConfig {
 
     @Bean
     public UserModularRealmAuthenticator userModularRealmAuthenticator(){
-        //自己重写的ModularRealmAuthenticator
+        // 自己重写的ModularRealmAuthenticator
         UserModularRealmAuthenticator modularRealmAuthenticator = new UserModularRealmAuthenticator();
         modularRealmAuthenticator.setAuthenticationStrategy(new AtLeastOneSuccessfulStrategy());
         return modularRealmAuthenticator;
     }
+
 
     /**
      *  SecurityManager 是 Shiro 架构的核心，通过它来链接Realm和用户(文档中称之为Subject.)
@@ -174,7 +172,6 @@ public class ShiroConfig {
         defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
         subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
         securityManager.setSubjectDAO(subjectDAO);
-
         return securityManager;
     }
 }

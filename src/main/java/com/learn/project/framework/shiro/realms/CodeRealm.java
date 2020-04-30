@@ -44,15 +44,14 @@ public class CodeRealm extends AuthorizingRealm {
 
     /**
      * 获取身份认证信息
-     * @param authenticationToken authenticationToken
+     * @param auth authenticationToken
      * @return AuthenticationInfo
      * @throws AuthenticationException AuthenticationException
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-
-        CustomizedToken token = (CustomizedToken) authenticationToken;
-        log.info("CodeRealm"+token.getUsername()+"开始身份认证");
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken auth) throws AuthenticationException {
+        CustomizedToken token = (CustomizedToken) auth;
+        log.info(token.getUsername() + " - code auth start...");
         // 根据手机号查询用户
         User user = userService.selectUserByPhone(token.getUsername());
         if (user == null) {

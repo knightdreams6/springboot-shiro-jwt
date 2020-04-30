@@ -38,6 +38,7 @@ public class LoginController {
         return Result.success();
     }
 
+
     @ApiOperation("发送修改密码验证码")
     @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query")
     @GetMapping("/modifyPasswordCode")
@@ -45,6 +46,7 @@ public class LoginController {
         loginService.sendModifyPasswordCode(phone);
         return Result.success();
     }
+
 
     @ApiOperation("通过手机验证码修改密码")
     @ApiImplicitParams({
@@ -59,6 +61,7 @@ public class LoginController {
         return loginService.modifyPassword(phone, code, password);
     }
 
+
     @ApiOperation("密码登录")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query", dataType = "string"),
@@ -69,6 +72,7 @@ public class LoginController {
                                   @NotEmpty(message = "密码不能为空") String password){
         return loginService.loginByPassword(phone, password);
     }
+
 
     @ApiOperation("验证码登录")
     @ApiImplicitParams({

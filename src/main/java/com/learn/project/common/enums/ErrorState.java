@@ -10,8 +10,8 @@ public enum ErrorState {
     SYSTEM_ERROR(1, "系统异常"),
     // 发送短信失败
     SEND_SMS_ERROR(2, "短信发送失败"),
-    // 该用户不存在
-    USER_NOT_EXIST(101, "用户不存在"),
+    // 该用户已存在
+    USER_ALREADY_EXIST(101, "该用户已存在"),
     // 验证码无效
     CODE_EXPIRE(102, "验证码无效"),
     // 验证码不正确
@@ -23,7 +23,7 @@ public enum ErrorState {
     // 没有相关权限
     NOT_AUTH(106, "没有相关权限"),
     // token无效
-    TOKEN_INVALID(107, "token无效"),
+    TOKEN_INVALID(107, "token failure!"),
     // 缺少相应参数
     MISSING_PARAMETER(108, "参数绑定失败:缺少参数")
     ;

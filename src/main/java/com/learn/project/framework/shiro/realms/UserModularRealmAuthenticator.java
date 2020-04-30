@@ -22,17 +22,14 @@ import java.util.Collection;
 @Slf4j
 public class UserModularRealmAuthenticator extends ModularRealmAuthenticator {
 
+
     @Override
     protected AuthenticationInfo doAuthenticate(AuthenticationToken authenticationToken) throws AuthenticationException {
-        log.info("UserModularRealmAuthenticator:method doAuthenticate() 执行 ");
-        // 判断getRealms()是否返回为空
         assertRealmsConfigured();
-
         // 所有Realm
         Collection<Realm> realms = getRealms();
         // 登录类型对应的所有Realm
         Collection<Realm> typeRealms = new ArrayList<>();
-
         // 强制转换回自定义的Token
         try{
             JwtToken jwtToken = (JwtToken) authenticationToken;
@@ -44,17 +41,14 @@ public class UserModularRealmAuthenticator extends ModularRealmAuthenticator {
             return doSingleRealmAuthentication(typeRealms.iterator().next(), jwtToken);
         }catch (ClassCastException e){
             typeRealms.clear();
-
             CustomizedToken customizedToken = (CustomizedToken) authenticationToken;
             // 登录类型
             String loginType = customizedToken.getLoginType();
-
             for (Realm realm : realms) {
                 if (realm.getName().contains(loginType)){
                     typeRealms.add(realm);
                 }
             }
-
             // 判断是单Realm还是多Realm
             if(typeRealms.size() == 1){
                 return doSingleRealmAuthentication(typeRealms.iterator().next(), customizedToken);

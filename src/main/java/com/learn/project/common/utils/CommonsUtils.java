@@ -2,7 +2,6 @@ package com.learn.project.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.crypto.hash.Sha256Hash;
-import org.apache.shiro.crypto.hash.SimpleHash;
 
 import java.util.UUID;
 

@@ -39,12 +39,13 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         // 如果请求头不存在 Token，则可能是执行登陆操作或者是游客状态访问，无需检查 token，直接返回 true
         return true;
     }
- 
+
     /**
      * 执行登录
      */
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response){
+        log.info("executeLogin");
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String token = httpServletRequest.getHeader(Constant.TOKEN_HEADER_NAME);
         JwtToken jwtToken = new JwtToken(token);
@@ -61,13 +62,13 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                 writer.flush();
                 return false;
             } catch (IOException e1) {
-                log.error("返回token校验失败异常"+ e1);
+                // ignore
             }
         }
         // 如果没有抛出异常则代表登入成功，返回true
         return true;
     }
- 
+
     /**
      * 对跨域提供支持
      */

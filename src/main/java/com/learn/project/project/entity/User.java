@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
@@ -27,6 +29,8 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @TableName("sys_user")
 @ApiModel(value="User对象", description="用户信息")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User implements Serializable {
 
     private static final long serialVersionUID=1L;
@@ -42,7 +46,7 @@ public class User implements Serializable {
     @JsonIgnore
     private String salt;
 
-    @ApiModelProperty(value = "密码")
+    @ApiModelProperty(value = "密码", hidden = true)
     @JsonIgnore
     private String password;
 
@@ -61,7 +65,8 @@ public class User implements Serializable {
     @ApiModelProperty(value = "注册时间")
     private LocalDateTime registerTime;
 
-    @ApiModelProperty(value = "更新时间")
+    @ApiModelProperty(value = "更新时间", hidden = true)
+    @JsonIgnore
     private LocalDateTime updateTime;
 
 

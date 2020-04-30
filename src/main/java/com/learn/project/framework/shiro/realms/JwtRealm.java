@@ -5,6 +5,8 @@ import com.learn.project.common.utils.ServletUtils;
 import com.learn.project.framework.shiro.service.TokenService;
 import com.learn.project.framework.shiro.token.JwtToken;
 import com.learn.project.framework.web.domain.LoginUser;
+import com.learn.project.project.entity.User;
+import com.learn.project.project.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -21,9 +23,11 @@ import javax.annotation.Resource;
 @Slf4j
 public class JwtRealm extends AuthorizingRealm {
 
-
     @Resource
     private TokenService tokenService;
+
+    @Resource
+    private IUserService userService;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -46,11 +50,12 @@ public class JwtRealm extends AuthorizingRealm {
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken auth) throws AuthenticationException {
-        log.info("token auth start...");
         String token = (String) auth.getCredentials();
-        // 解密获得token
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (loginUser == null || !tokenService.verify(token, loginUser.getUser().getPassword())) {
+        // 获得phone
+        String phone = tokenService.getPhone(token);
+        log.info(phone + " - token auth start...");
+        User user = userService.selectUserByPhone(phone);
+        if (user == null || !tokenService.verify(token, user.getPassword())) {
             throw new IncorrectCredentialsException(ErrorState.TOKEN_INVALID.getMsg());
         }
         return new SimpleAuthenticationInfo(token, token, "JwtRealm");

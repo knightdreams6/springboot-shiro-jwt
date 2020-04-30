@@ -24,6 +24,17 @@ import javax.validation.ConstraintViolationException;
 public class GlobalExceptionAdvice {
 
     /**
+     * serviceException
+     * @param e e
+     * @return ResponseEntity
+     */
+    @ExceptionHandler(ServiceException.class)
+    public ResponseEntity<String> handleServiceException(ServiceException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
+
+    /**
      * 参数校验异常
      * @param e e
      * @return ResponseEntity
@@ -32,6 +43,7 @@ public class GlobalExceptionAdvice {
     public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
+
 
     /**
      * 阿里短信发送异常
@@ -42,7 +54,7 @@ public class GlobalExceptionAdvice {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorState.SEND_SMS_ERROR.getMsg());
     }
 
-    
+
     /**
      * shiro权限异常处理
      * @return ResponseEntity

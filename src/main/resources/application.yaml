@@ -1,15 +1,14 @@
-server:
-  port: 8888
 spring:
+  profiles:
+    active: dev
+  data:
+    redis:
+      repositories:
+        enabled: false
+  ## 数据源
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.0.100/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
-    username: root
-    password: 123
   redis:
-    host: 192.168.0.100
-    database: 1
-    port: 6379
     ## 连接超时时间（毫秒）
     timeout: 5000
     lettuce:
@@ -35,10 +34,37 @@ mybatis-plus:
       id-type: auto
       table-underline: true
 
-
   configuration:
     # 配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
     map-underscore-to-camel-case: true
     cache-enabled: false
     # 配置JdbcTypeForNull, oracle数据库必须配置
     # jdbc-type-for-null: 'null'
+---
+
+server:
+  port: 8888
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://192.168.0.100/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123
+  redis:
+    host: 192.168.0.100
+    database: 1
+    port: 6379
+
+---
+server:
+  port: 8080
+spring:
+  profiles: prod
+  datasource:
+    url: jdbc:mysql://192.168.0.100/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123
+  redis:
+    host: 192.168.0.100
+    database: 1
+    port: 6379
