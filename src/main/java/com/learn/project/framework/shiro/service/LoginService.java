@@ -5,13 +5,10 @@ import com.learn.project.common.constant.Constant;
 import com.learn.project.common.constant.RedisKey;
 import com.learn.project.common.enums.ErrorState;
 import com.learn.project.common.enums.LoginType;
-import com.learn.project.common.enums.RoleEnums;
 import com.learn.project.common.utils.CommonsUtils;
-import com.learn.project.common.utils.SmsUtils;
 import com.learn.project.framework.web.domain.Result;
 import com.learn.project.framework.redis.RedisCache;
 import com.learn.project.framework.shiro.token.CustomizedToken;
-import com.learn.project.framework.web.exception.ServiceException;
 import com.learn.project.project.entity.User;
 import com.learn.project.project.service.IUserService;
 import org.apache.shiro.SecurityUtils;
@@ -110,11 +107,11 @@ public class LoginService {
         Object modifyCode = redisCache.getCacheObject(RedisKey.getModifyPasswordCodeKey(phone));
         // 判断redis中是否存在验证码
         if(Objects.isNull(modifyCode)){
-            throw new ServiceException(ErrorState.CODE_EXPIRE.getCode(), ErrorState.CODE_EXPIRE.getMsg());
+            return Result.error(ErrorState.CODE_EXPIRE);
         }
         // 判断redis中code与传递过来的code 是否相等
         if(!Objects.equals(code, modifyCode.toString())){
-            throw new ServiceException(ErrorState.CODE_ERROR.getCode(), ErrorState.CODE_ERROR.getMsg());
+            return Result.error(ErrorState.CODE_ERROR);
         }
         User user = userService.selectUserByPhone(phone);
         // 如果用户不存在，执行注册

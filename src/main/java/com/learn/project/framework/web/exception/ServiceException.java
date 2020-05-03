@@ -3,7 +3,6 @@ package com.learn.project.framework.web.exception;
 import com.learn.project.common.enums.ErrorState;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.http.HttpStatus;
 
 /**
  * @author lixiao
