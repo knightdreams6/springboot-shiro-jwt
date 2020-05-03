@@ -54,7 +54,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         User user = new User();
         user.setPhone(phone);
-        user.setRegisterTime(LocalDateTime.now());
         // 如果有密码，则使用用户输入的密码
         String salt = CommonsUtils.uuid();
         String encryptPassword;

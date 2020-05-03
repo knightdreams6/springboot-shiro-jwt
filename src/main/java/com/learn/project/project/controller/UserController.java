@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 
 /**
  * <p>
@@ -40,7 +41,23 @@ public class UserController extends BaseController {
     private TokenService tokenService;
 
 
-    @ApiOperation("用户注册")
+    @ApiOperation("退出")
+    @PostMapping("/logout")
+    public Result logout() {
+        // 退出操作
+        return Result.success();
+    }
+
+
+    @ApiOperation("删除用户")
+    @DeleteMapping("/{userId}")
+    @RequiresPermissions("system:user:remove")
+    public Result deleted(@PathVariable @NotNull(message = "userId不能为空") Integer userId){
+        return super.result(userService.removeById(userId));
+    }
+
+
+    @ApiOperation("添加用户")
     @ApiImplicitParam(name = "phone", value = "手机号", paramType = "query")
     @GetMapping("/register")
     public Result register(@PhoneNumber String phone) {
@@ -57,15 +74,7 @@ public class UserController extends BaseController {
     }
 
 
-    @ApiOperation("退出")
-    @PostMapping("/logout")
-    public Result logout() {
-        // 退出操作
-        return Result.success();
-    }
-
-
-    @ApiOperation(value = "获取所有用户", response = User.class)
+    @ApiOperation(value = "获取所有用户[role: admin]", response = User.class)
     @GetMapping
     @RequiresRoles("admin")
     public Result user() {
@@ -73,7 +82,7 @@ public class UserController extends BaseController {
     }
 
 
-    @ApiOperation(value = "获取所有用户", response = User.class)
+    @ApiOperation(value = "获取所有用户[permissions: system:user:list]", response = User.class)
     @GetMapping("/list")
     @RequiresPermissions("system:user:list")
     public Result users() {

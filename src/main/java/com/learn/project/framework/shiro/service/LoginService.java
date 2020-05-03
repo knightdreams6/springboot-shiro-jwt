@@ -113,7 +113,7 @@ public class LoginService {
             throw new ServiceException(ErrorState.CODE_EXPIRE.getCode(), ErrorState.CODE_EXPIRE.getMsg());
         }
         // 判断redis中code与传递过来的code 是否相等
-        if(!Objects.equals(code, modifyCode)){
+        if(!Objects.equals(code, modifyCode.toString())){
             throw new ServiceException(ErrorState.CODE_ERROR.getCode(), ErrorState.CODE_ERROR.getMsg());
         }
         User user = userService.selectUserByPhone(phone);

@@ -33,6 +33,9 @@ mybatis-plus:
     db-config:
       id-type: AUTO
       table-underline: true
+      logic-delete-value: 1
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+      logic-delete-field: flag
 
   configuration:
     # 配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）

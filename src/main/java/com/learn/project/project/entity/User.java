@@ -1,14 +1,10 @@
 package com.learn.project.project.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -25,11 +21,9 @@ import java.time.LocalDateTime;
  * @since 2020-03-28
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("sys_user")
 @ApiModel(value="User对象", description="用户信息")
-@AllArgsConstructor
 @NoArgsConstructor
 public class User implements Serializable {
 
@@ -63,11 +57,16 @@ public class User implements Serializable {
     private LocalDate birth;
 
     @ApiModelProperty(value = "注册时间")
-    private LocalDateTime registerTime;
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
     @ApiModelProperty(value = "更新时间", hidden = true)
+    @TableField(fill = FieldFill.UPDATE)
     @JsonIgnore
     private LocalDateTime updateTime;
 
+    @ApiModelProperty(value = "0未删除1已删除" ,hidden = true)
+    @JsonIgnore
+    private Integer flag;
 
 }
