@@ -3,29 +3,30 @@ package com.learn.project.common.enums;
 /**
  * @author lixiao
  * @date 2019/8/5 17:16
+ * 第三方接口异常使用五位数
  */
 public enum ErrorState {
 
     // 系统错误状态码
-    SYSTEM_ERROR(1, "系统异常"),
+    GENERAL_EXCEPTION(10000, "通用异常"),
     // 发送短信失败
-    SEND_SMS_ERROR(2, "短信发送失败"),
+    SEND_SMS_ERROR(10001, "短信发送失败"),
     // 该用户已存在
-    USER_ALREADY_EXIST(101, "该用户已存在"),
+    USER_ALREADY_EXIST(1001, "该用户已存在"),
     // 验证码无效
-    CODE_EXPIRE(102, "验证码无效"),
+    CODE_EXPIRE(1002, "验证码无效"),
     // 验证码不正确
-    CODE_ERROR(103, "验证码不正确"),
+    CODE_ERROR(1003, "验证码不正确"),
     // 用户名不存在
-    USERNAME_NOT_EXIST(104, "用户名不存在"),
+    USERNAME_NOT_EXIST(1004, "用户名不存在"),
     // 密码不正确
-    PASSWORD_ERROR(105, "密码不正确"),
+    PASSWORD_ERROR(1005, "密码不正确"),
     // 没有相关权限
-    NOT_AUTH(106, "没有相关权限"),
+    NOT_AUTH(1006, "没有相关权限"),
     // token无效
-    TOKEN_INVALID(107, "token failure!"),
+    TOKEN_INVALID(1007, "token failure!"),
     // 缺少相应参数
-    MISSING_PARAMETER(108, "参数绑定失败:缺少参数")
+    MISSING_PARAMETER(1008, "参数绑定失败:缺少参数")
     ;
 
 
@@ -51,4 +52,5 @@ public enum ErrorState {
                 "code=" + code +
                 ", msg='" + msg + '\'' +
                 '}';
-    }}
+    }
+}

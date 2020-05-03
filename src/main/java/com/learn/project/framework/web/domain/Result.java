@@ -1,64 +1,162 @@
 package com.learn.project.framework.web.domain;
 
+
 import com.learn.project.common.enums.ErrorState;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author lixiao
  * @date 2019/7/31 14:46
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Result {
+public class Result extends HashMap<String, Object> {
 
-    private boolean success;
-    private Map<String, Object> data;
-    private Integer code;
-    private String msg;
+    private static final long serialVersionUID = 1L;
 
-    private Result(boolean success){
-        this.success = success;
+    /**
+     * 状态码
+     */
+    private static final String CODE_TAG = "code";
+
+    /**
+     * 返回内容
+     */
+    private static final String MSG_TAG = "msg";
+
+    /**
+     * 数据对象
+     */
+    private static final String DATA_TAG = "data";
+
+    /**
+     * 初始化一个新创建的 Result 对象，使其表示一个空消息。
+     */
+    public Result() {
     }
 
-    private Result(boolean success, Map<String, Object> data){
-        this.success = success;
-        this.data = data;
+    /**
+     * 初始化一个新创建的 Result 对象
+     *
+     * @param code 状态码
+     * @param msg  返回内容
+     */
+    public Result(int code, String msg) {
+        super.put(CODE_TAG, code);
+        super.put(MSG_TAG, msg);
     }
 
-    private Result(boolean success, Integer code, String msg){
-        this.success = success;
-        this.code = code;
-        this.msg = msg;
+    /**
+     * 初始化一个新创建的 Result 对象
+     *
+     * @param code 状态码
+     * @param msg  返回内容
+     * @param data 数据对象
+     */
+    public Result(int code, String msg, Object data) {
+        super.put(CODE_TAG, code);
+        super.put(MSG_TAG, msg);
+        if (data != null) {
+            super.put(DATA_TAG, data);
+        }
     }
 
-    public static Result success(Map<String, Object> data){
-        return new Result(true, data);
+    /**
+     * 返回成功消息
+     *
+     * @return 成功消息
+     */
+    public static Result success() {
+        return Result.success("操作成功");
     }
 
-    public static Result success(){
-        return new Result(true);
+    /**
+     * 返回成功数据
+     *
+     * @return 成功消息
+     */
+    public static Result success(Object data) {
+        return Result.success("操作成功", data);
     }
 
-    public static Result success(Object value){
-        Map<String, Object> data = new HashMap<>(1);
-        data.put("data", value);
-        return new Result(true, data);
+    /**
+     * 返回成功消息
+     *
+     * @param msg 返回内容
+     * @return 成功消息
+     */
+    public static Result success(String msg) {
+        return Result.success(msg, null);
     }
 
-    public static Result success(String key, Object value){
-        Map<String, Object> data = new HashMap<>(1);
-        data.put(key, value);
-        return new Result(true, data);
+    /**
+     * 返回成功消息
+     *
+     * @param msg  返回内容
+     * @param data 数据对象
+     * @return 成功消息
+     */
+    public static Result success(String msg, Object data) {
+        return new Result(HttpStatus.OK.value(), msg, data);
     }
 
-    public static Result error(ErrorState errorState){
-        return new Result(false, errorState.getCode(), errorState.getMsg());
+    /**
+     * 返回错误消息
+     */
+    public static Result error() {
+        return Result.error("操作失败");
     }
 
+    /**
+     * 返回错误消息
+     *
+     * @param msg 返回内容
+     * @return 警告消息
+     */
+    public static Result error(String msg) {
+        return Result.error(msg, null);
+    }
+
+    /**
+     * 返回错误消息
+     *
+     * @param msg  返回内容
+     * @param data 数据对象
+     * @return 警告消息
+     */
+    public static Result error(String msg, Object data) {
+        return new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), msg, data);
+    }
+
+    /**
+     * 返回错误消息
+     *
+     * @param code 状态码
+     * @param msg  返回内容
+     * @return 警告消息
+     */
+    public static Result error(int code, String msg) {
+        return new Result(code, msg, null);
+    }
+
+    /**
+     * 返回错误消息
+     *
+     * @param errorState  错误信息枚举类
+     * @return 警告消息
+     */
+    public static Result error(ErrorState errorState) {
+        return Result.error(errorState.getCode(), errorState.getMsg());
+    }
+
+    /**
+     * 返回错误消息
+     *
+     * @param errorState  错误信息枚举类
+     * @param data  返回内容
+     * @return 警告消息
+     */
+    public static Result error(ErrorState errorState, Object data) {
+        return new Result(errorState.getCode(), errorState.getMsg(), data);
+    }
 }

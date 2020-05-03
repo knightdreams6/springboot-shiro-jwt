@@ -30,7 +30,7 @@ public class GlobalExceptionAdvice {
      */
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<String> handleServiceException(ServiceException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        return ResponseEntity.status(e.getCode()).body(e.getMessage());
     }
 
 

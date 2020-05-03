@@ -12,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
 /**
@@ -30,10 +29,10 @@ public class LoginController {
     private LoginService loginService;
 
 
-    @ApiOperation("发送登录验证码")
+    @ApiOperation(value = "发送登录验证码")
     @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query")
     @GetMapping("/code")
-    public Result sendLoginCode(@Valid @PhoneNumber String phone) throws ClientException {
+    public Result sendLoginCode(@PhoneNumber String phone) throws ClientException {
         loginService.sendLoginCode(phone);
         return Result.success();
     }
@@ -42,7 +41,7 @@ public class LoginController {
     @ApiOperation("发送修改密码验证码")
     @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query")
     @GetMapping("/modifyPasswordCode")
-    public Result sendModifyPasswordCode(@Valid @PhoneNumber String phone) throws ClientException {
+    public Result sendModifyPasswordCode(@PhoneNumber String phone) throws ClientException {
         loginService.sendModifyPasswordCode(phone);
         return Result.success();
     }
@@ -55,7 +54,7 @@ public class LoginController {
             @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query", dataType = "string")
     })
     @PutMapping("/modifyPassword")
-    public Result modifyPassword(@Valid @PhoneNumber String phone,
+    public Result modifyPassword(@PhoneNumber String phone,
                                  @NotEmpty(message = "验证码不能为空") String code,
                                  @NotEmpty(message = "密码不能为空") String password){
         return loginService.modifyPassword(phone, code, password);
@@ -68,7 +67,7 @@ public class LoginController {
             @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query", dataType = "string")
     })
     @PostMapping("/password")
-    public Result loginByPassword(@Valid @PhoneNumber String phone,
+    public Result loginByPassword(@PhoneNumber String phone,
                                   @NotEmpty(message = "密码不能为空") String password){
         return loginService.loginByPassword(phone, password);
     }
@@ -80,7 +79,7 @@ public class LoginController {
             @ApiImplicitParam(name = "code", value = "验证码", required = true, paramType = "query", dataType = "string"),
     })
     @PostMapping("/code")
-    public Result loginByCode(@Valid @PhoneNumber String phone,
+    public Result loginByCode(@PhoneNumber String phone,
                               @NotEmpty(message = "验证码不能为空") String code){
         return loginService.loginByCode(phone, code);
     }

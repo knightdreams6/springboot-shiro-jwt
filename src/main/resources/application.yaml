@@ -31,7 +31,7 @@ mybatis-plus:
   type-aliases-package: com.learn.project.project.entity
   global-config:
     db-config:
-      id-type: auto
+      id-type: AUTO
       table-underline: true
 
   configuration:
@@ -47,11 +47,11 @@ server:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://192.168.0.100/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://192.168.3.222/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
     password: 123
   redis:
-    host: 192.168.0.100
+    host: 192.168.3.222
     database: 1
     port: 6379
 

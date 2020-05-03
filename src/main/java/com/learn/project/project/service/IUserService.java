@@ -26,7 +26,8 @@ public interface IUserService extends IService<User> {
      * 用户注册,默认密码为手机号后六位
      * @param phone phone
      * @param args 密码
+     * @return boolean
      */
-    void register(String phone, String... args);
+    Boolean register(String phone, String... args);
 
 }

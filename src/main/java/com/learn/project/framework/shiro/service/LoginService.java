@@ -1,14 +1,17 @@
 package com.learn.project.framework.shiro.service;
 
+import com.aliyuncs.exceptions.ClientException;
 import com.learn.project.common.constant.Constant;
 import com.learn.project.common.constant.RedisKey;
 import com.learn.project.common.enums.ErrorState;
 import com.learn.project.common.enums.LoginType;
 import com.learn.project.common.enums.RoleEnums;
 import com.learn.project.common.utils.CommonsUtils;
+import com.learn.project.common.utils.SmsUtils;
 import com.learn.project.framework.web.domain.Result;
 import com.learn.project.framework.redis.RedisCache;
 import com.learn.project.framework.shiro.token.CustomizedToken;
+import com.learn.project.framework.web.exception.ServiceException;
 import com.learn.project.project.entity.User;
 import com.learn.project.project.service.IUserService;
 import org.apache.shiro.SecurityUtils;
@@ -19,7 +22,6 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -43,19 +45,21 @@ public class LoginService {
     private TokenService tokenService;
 
 
-    public void sendLoginCode(String phone){
+    public void sendLoginCode(String phone) throws ClientException {
         // 这里使用默认值，随机验证码的方法为CommonsUtils.getCode()
         int code = 6666;
         // todo 此处为发送验证码代码
+//        SmsUtils.sendSms(phone, code);
         // 将验证码加密后存储到redis中
         String encryptCode = CommonsUtils.encryptPassword(String.valueOf(code), phone);
         redisCache.setCacheObject(RedisKey.getLoginCodeKey(phone), encryptCode, Constant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
     }
 
 
-    public void sendModifyPasswordCode(String phone) {
+    public void sendModifyPasswordCode(String phone) throws ClientException {
         int code = 6666;
         // todo 此处为发送验证码代码
+//        SmsUtils.sendSms(phone, code);
         redisCache.setCacheObject(RedisKey.getModifyPasswordCodeKey(phone), code, Constant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
     }
 
@@ -68,8 +72,7 @@ public class LoginService {
         // 3.执行登录方法
         try{
             subject.login(token);
-            Map<String, Object> data = returnLoginInitParam(phone);
-            return Result.success(data);
+            return Result.success(returnLoginInitParam(phone));
         }catch (UnknownAccountException e) {
             return Result.error(ErrorState.USERNAME_NOT_EXIST);
         } catch (IncorrectCredentialsException e){
@@ -92,8 +95,7 @@ public class LoginService {
         // 4.执行登录方法
         try{
             subject.login(token);
-            Map<String, Object> data = returnLoginInitParam(phone);
-            return Result.success(data);
+            return Result.success(returnLoginInitParam(phone));
         }catch (UnknownAccountException e) {
             return Result.error(ErrorState.USERNAME_NOT_EXIST);
         }catch (ExpiredCredentialsException e){
@@ -106,18 +108,23 @@ public class LoginService {
 
     public Result modifyPassword(String phone, String code, String password) {
         Object modifyCode = redisCache.getCacheObject(RedisKey.getModifyPasswordCodeKey(phone));
+        // 判断redis中是否存在验证码
         if(Objects.isNull(modifyCode)){
-            return Result.error(ErrorState.CODE_EXPIRE);
+            throw new ServiceException(ErrorState.CODE_EXPIRE.getCode(), ErrorState.CODE_EXPIRE.getMsg());
         }
-        String redisCode = modifyCode.toString();
-        if(!Objects.equals(code, redisCode)){
-            return Result.error(ErrorState.CODE_ERROR);
+        // 判断redis中code与传递过来的code 是否相等
+        if(!Objects.equals(code, modifyCode)){
+            throw new ServiceException(ErrorState.CODE_ERROR.getCode(), ErrorState.CODE_ERROR.getMsg());
         }
         User user = userService.selectUserByPhone(phone);
         // 如果用户不存在，执行注册
         if(Objects.isNull(user)){
-            userService.register(phone, password);
-            return Result.success(this.returnLoginInitParam(phone));
+            Boolean flag = userService.register(phone, password);
+           if(flag){
+               return Result.success(this.returnLoginInitParam(phone));
+           }else {
+               return Result.error();
+           }
         }
         String salt = CommonsUtils.uuid();
         String encryptPassword = CommonsUtils.encryptPassword(password, salt);
@@ -125,8 +132,12 @@ public class LoginService {
         user.setPassword(encryptPassword);
         // 删除缓存
         redisCache.deleteObject(RedisKey.getLoginUserKey(phone));
-        userService.updateById(user);
-        return Result.success(this.returnLoginInitParam(phone));
+        boolean flag = userService.updateById(user);
+        if(flag){
+            return Result.success(this.returnLoginInitParam(phone));
+        }else {
+            return Result.error();
+        }
     }
 
 

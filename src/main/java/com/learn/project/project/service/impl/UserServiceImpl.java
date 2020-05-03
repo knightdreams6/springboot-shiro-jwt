@@ -1,15 +1,17 @@
 package com.learn.project.project.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.learn.project.common.enums.ErrorState;
 import com.learn.project.common.enums.RoleEnums;
 import com.learn.project.common.utils.CommonsUtils;
 import com.learn.project.framework.shiro.service.PermissionsService;
+import com.learn.project.framework.web.exception.ServiceException;
 import com.learn.project.project.entity.User;
 import com.learn.project.project.mapper.UserMapper;
 import com.learn.project.project.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
@@ -31,6 +33,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Resource
     private PermissionsService permissionsService;
 
+    @Resource
+    private TransactionTemplate transactionTemplate;
+
     @Override
     public User selectUserByPhone(String phone) {
         return userMapper.selectOne(new QueryWrapper<User>().eq("phone", phone));
@@ -40,9 +45,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
      * 用户注册,默认密码为手机号后六位
      * @param phone phone
      */
-    @Transactional(rollbackFor = Exception.class)
     @Override
-    public void register(String phone, String... args){
+    public Boolean register(String phone, String... args){
+        // 判断是否已存在该用户
+        User db = this.selectUserByPhone(phone);
+        if (db != null) {
+            throw new ServiceException(ErrorState.USER_ALREADY_EXIST.getCode(), ErrorState.USER_ALREADY_EXIST.getMsg());
+        }
         User user = new User();
         user.setPhone(phone);
         user.setRegisterTime(LocalDateTime.now());
@@ -56,8 +65,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         user.setPassword(encryptPassword);
         user.setSalt(salt);
-        userMapper.insert(user);
-        permissionsService.addRole(user.getUserId(), RoleEnums.ADMIN.getCode(), RoleEnums.COMMON.getCode());
+        return transactionTemplate.execute(status -> {
+            try {
+                userMapper.insert(user);
+                permissionsService.addRole(user.getUserId(), RoleEnums.ADMIN.getCode(), RoleEnums.COMMON.getCode());
+                return Boolean.TRUE;
+            } catch (Exception e) {
+                //回滚
+                status.setRollbackOnly();
+                return Boolean.FALSE;
+            }
+        });
     }
 
 }
