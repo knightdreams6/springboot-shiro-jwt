@@ -2,6 +2,7 @@ package com.learn.project.project.controller;
 
 import com.learn.project.common.utils.ServletUtils;
 import com.learn.project.framework.annotction.PhoneNumber;
+import com.learn.project.framework.annotction.RepeatSubmit;
 import com.learn.project.framework.shiro.service.TokenService;
 import com.learn.project.framework.web.controller.BaseController;
 import com.learn.project.framework.web.domain.LoginUser;
@@ -59,7 +60,8 @@ public class UserController extends BaseController {
 
     @ApiOperation("添加用户")
     @ApiImplicitParam(name = "phone", value = "手机号", paramType = "query")
-    @GetMapping("/register")
+    @PostMapping("/register")
+    @RepeatSubmit
     public Result register(@PhoneNumber String phone) {
         return super.result(userService.register(phone));
     }

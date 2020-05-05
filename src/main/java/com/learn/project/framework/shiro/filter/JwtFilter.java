@@ -2,6 +2,7 @@ package com.learn.project.framework.shiro.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.learn.project.common.constant.Constant;
+import com.learn.project.common.utils.ServletUtils;
 import com.learn.project.framework.shiro.token.JwtToken;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -52,17 +53,10 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         try {
             getSubject(request, response).login(jwtToken);
         } catch (IncorrectCredentialsException e) {
-            response.setCharacterEncoding("utf-8");
-            response.setContentType("application/json; charset=utf-8");
-            try (PrintWriter writer = response.getWriter()) {
-                JSONObject o = new JSONObject();
-                o.put("msg", e.getMessage());
-                writer.write(o.toString());
-                writer.flush();
-                return false;
-            } catch (IOException e1) {
-                // ignore
-            }
+            JSONObject o = new JSONObject();
+            o.put("msg", e.getMessage());
+            ServletUtils.renderString((HttpServletResponse) response, o.toString());
+            return false;
         }
         // 如果没有抛出异常则代表登入成功，返回true
         return true;

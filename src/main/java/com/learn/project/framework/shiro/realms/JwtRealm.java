@@ -13,6 +13,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 
@@ -54,8 +55,19 @@ public class JwtRealm extends AuthorizingRealm {
         // 获得phone
         String phone = tokenService.getPhone(token);
         log.info(phone + " - token auth start...");
+        if (StringUtils.isEmpty(phone)) {
+            throw new IncorrectCredentialsException(ErrorState.TOKEN_INVALID.getMsg());
+        }
         User user = userService.selectUserByPhone(phone);
-        if (user == null || !tokenService.verify(token, user.getPassword())) {
+        if (user == null) {
+            throw new IncorrectCredentialsException(ErrorState.TOKEN_INVALID.getMsg());
+        }
+        try{
+            boolean verify = tokenService.verify(token, user.getPassword());
+            if(verify == Boolean.FALSE){
+                throw new IncorrectCredentialsException(ErrorState.TOKEN_INVALID.getMsg());
+            }
+        } catch (Exception e){
             throw new IncorrectCredentialsException(ErrorState.TOKEN_INVALID.getMsg());
         }
         return new SimpleAuthenticationInfo(token, token, "JwtRealm");

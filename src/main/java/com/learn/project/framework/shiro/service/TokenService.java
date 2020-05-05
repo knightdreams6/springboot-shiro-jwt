@@ -62,7 +62,7 @@ public class TokenService {
             Set<String> roleSet = permissionsService.getRoleSet(user.getUserId());
             loginUser.setRoleSet(roleSet);
             // 缓存当前登录用户
-            redisCache.setCacheObject(loginUserKey, loginUser, 60, TimeUnit.SECONDS);
+            redisCache.setCacheObject(loginUserKey, loginUser, 15, TimeUnit.MINUTES);
             return loginUser;
         }
         return (LoginUser) cacheObject;
@@ -92,6 +92,20 @@ public class TokenService {
     public String getUserId(String token) {
         try {
             DecodedJWT jwt = JWT.decode(token);
+            return jwt.getClaim("userId").asString();
+        } catch (JWTDecodeException e) {
+            return null;
+        }
+    }
+
+    /**
+     * 获得token中的信息无需secret解密也能获得
+     * @param request HttpServletRequest
+     * @return token中包含的用户id
+     */
+    public String getUserId(HttpServletRequest request) {
+        try {
+            DecodedJWT jwt = JWT.decode(this.getToken(request));
             return jwt.getClaim("userId").asString();
         } catch (JWTDecodeException e) {
             return null;

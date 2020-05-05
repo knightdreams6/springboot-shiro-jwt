@@ -1,5 +1,6 @@
 package com.learn.project.framework.config;
 
+import com.learn.project.common.filter.RepeatableFilter;
 import com.learn.project.framework.shiro.filter.JwtFilter;
 import com.learn.project.framework.shiro.realms.CodeRealm;
 import com.learn.project.framework.shiro.realms.JwtRealm;
@@ -119,6 +120,7 @@ public class ShiroConfig {
         ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
         // 设置 SecurityManager
         bean.setSecurityManager(securityManager);
+
         Map<String, String> filterMap = new LinkedHashMap<>();
         filterMap.put("/login/**","anon");
         filterMap.put("/static/**","anon");
@@ -129,10 +131,11 @@ public class ShiroConfig {
         filterMap.put("/webjars/**", "anon");
         filterMap.put("/images/**", "anon");
 
-        Map<String, Filter> filter = new HashMap<>(1);
+        Map<String, Filter> filter = new LinkedHashMap<>(1);
         filter.put("jwt", new JwtFilter());
+        filter.put("repeat", new RepeatableFilter());
         bean.setFilters(filter);
-        filterMap.put("/**", "jwt");
+        filterMap.put("/**", "jwt,repeat");
         bean.setFilterChainDefinitionMap(filterMap);
         return bean;
     }

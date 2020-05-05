@@ -6,7 +6,6 @@ package com.learn.project.common.constant;
  */
 public class RedisKey {
 
-
     public static String getLoginCodeKey(String phone){
         return "LOGIN:CODE:" + phone;
     }
@@ -21,6 +20,10 @@ public class RedisKey {
 
     public static String getLoginUserKey(String phone){
         return "LOGIN:USER:" + phone;
+    }
+
+    public static String getFormRepeatKey(){
+        return "REPEAT:DATA";
     }
 
 }
