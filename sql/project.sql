@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 192.168.0.100
+ Source Server         : sweet
  Source Server Type    : MySQL
- Source Server Version : 80019
- Source Host           : 192.168.0.100:3306
+ Source Server Version : 80020
+ Source Host           : 192.168.75.128:3306
  Source Schema         : project
 
  Target Server Type    : MySQL
- Target Server Version : 80019
+ Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 21/04/2020 10:06:58
+ Date: 07/05/2020 08:30:20
 */
 
 SET NAMES utf8mb4;
@@ -263,8 +263,9 @@ CREATE TABLE `sys_user`  (
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户名',
   `sex` tinyint(0) NULL DEFAULT 0 COMMENT '性别',
   `birth` date NULL DEFAULT NULL COMMENT '出生日期',
-  `register_time` datetime(0) NULL DEFAULT NULL COMMENT '注册时间',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '注册时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `flag` tinyint(1) NULL DEFAULT 0 COMMENT '0未删除1已删除',
   PRIMARY KEY (`user_id`) USING BTREE,
   UNIQUE INDEX `phone`(`phone`) USING BTREE COMMENT '手机号唯一索引'
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
@@ -272,9 +273,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, '18735182285', '3b72fdccbf1d424e8456d72dd93648b5', '2201d197183435fbcfa3ca63867179fafbbc98f24d19ee6059f48f92c025e396', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', 'admin', 0, NULL, '2020-04-15 11:41:12', NULL);
-INSERT INTO `sys_user` VALUES (2, '18735182288', '016d6e6ec3c043de8993f0d244c4ca4d', '135714f1abab94cad6d0ce039e94a26c', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', NULL, 0, NULL, '2020-04-16 16:06:56', NULL);
-INSERT INTO `sys_user` VALUES (3, '18735182286', '23b95feaa2b648629f8a2ae0185832e3', '7c93bfd1c3be24b12a5ab063f7f8f7dd', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif', NULL, 0, NULL, '2020-04-16 16:09:33', NULL);
+INSERT INTO `sys_user` VALUES (1, '18735182285', '120c949253d34c7e9c2e700d59eb0032', 'ede51b7df319b4a56060095c3f251c99fbc2e6480844013f8ea88e541352d88d', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80', 'sweetBaby', 0, '1997-05-12', '2020-05-06 13:00:31', '2020-05-06 13:01:25', 0);
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -292,8 +291,5 @@ CREATE TABLE `sys_user_role`  (
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES (1, 1);
 INSERT INTO `sys_user_role` VALUES (1, 2);
-INSERT INTO `sys_user_role` VALUES (2, 1);
-INSERT INTO `sys_user_role` VALUES (3, 1);
-INSERT INTO `sys_user_role` VALUES (3, 2);
 
 SET FOREIGN_KEY_CHECKS = 1;
