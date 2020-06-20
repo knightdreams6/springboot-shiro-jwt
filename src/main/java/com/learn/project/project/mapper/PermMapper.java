@@ -1,7 +1,7 @@
 package com.learn.project.project.mapper;
 
-import com.learn.project.project.entity.Menu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.learn.project.project.entity.Perm;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Set;
@@ -14,7 +14,7 @@ import java.util.Set;
  * @author lixiao
  * @since 2020-04-15
  */
-public interface MenuMapper extends BaseMapper<Menu> {
+public interface PermMapper extends BaseMapper<Perm> {
 
     /**
      * 根据角色id获取其权限

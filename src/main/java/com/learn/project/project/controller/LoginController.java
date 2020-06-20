@@ -1,6 +1,7 @@
 package com.learn.project.project.controller;
 
 import com.aliyuncs.exceptions.ClientException;
+import com.learn.project.framework.web.controller.BaseController;
 import com.learn.project.framework.web.domain.Result;
 import com.learn.project.framework.annotction.PhoneNumber;
 import com.learn.project.framework.shiro.service.LoginService;
@@ -23,7 +24,7 @@ import javax.validation.constraints.NotEmpty;
 @RestController
 @RequestMapping("/login")
 @Validated
-public class LoginController {
+public class LoginController extends BaseController {
 
     @Resource
     private LoginService loginService;
@@ -33,8 +34,7 @@ public class LoginController {
     @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query")
     @GetMapping("/code")
     public Result sendLoginCode(@PhoneNumber String phone) throws ClientException {
-        loginService.sendLoginCode(phone);
-        return Result.success();
+        return result(loginService.sendLoginCode(phone));
     }
 
 
@@ -42,8 +42,7 @@ public class LoginController {
     @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query")
     @GetMapping("/modifyPasswordCode")
     public Result sendModifyPasswordCode(@PhoneNumber String phone) throws ClientException {
-        loginService.sendModifyPasswordCode(phone);
-        return Result.success();
+        return result(loginService.sendModifyPasswordCode(phone));
     }
 
 

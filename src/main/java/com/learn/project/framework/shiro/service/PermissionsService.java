@@ -1,6 +1,6 @@
 package com.learn.project.framework.shiro.service;
 
-import com.learn.project.project.mapper.MenuMapper;
+import com.learn.project.project.mapper.PermMapper;
 import com.learn.project.project.mapper.RoleMapper;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ import java.util.Set;
 public class PermissionsService {
 
     @Resource
-    private MenuMapper menuMapper;
+    private PermMapper menuMapper;
 
     @Resource
     private RoleMapper roleMapper;

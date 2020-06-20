@@ -1,0 +1,17 @@
+server:
+  port: 8888
+spring:
+  profiles: prod
+  datasource:
+    url: jdbc:mysql://192.168.75.128/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123
+  redis:
+    host: 192.168.75.128
+    database: 1
+    port: 6379
+    password: 123
+
+# 日志
+logging:
+  config: classpath:conf/logback-spring-prod.xml

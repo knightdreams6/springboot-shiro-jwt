@@ -78,7 +78,6 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "获取所有用户[role: admin]", response = User.class)
     @GetMapping
-    @RequiresRoles("admin")
     public Result user() {
         return Result.success(userService.list());
     }
@@ -86,7 +85,6 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "获取所有用户[permissions: system:user:list]", response = User.class)
     @GetMapping("/list")
-    @RequiresPermissions("system:user:list")
     public Result users() {
         return Result.success(userService.list());
     }

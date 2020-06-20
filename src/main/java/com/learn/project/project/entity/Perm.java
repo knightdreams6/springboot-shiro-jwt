@@ -10,11 +10,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.apache.ibatis.type.Alias;
 
 /**
  * <p>
- * 角色信息表
+ * 菜单权限表
  * </p>
  *
  * @author lixiao
@@ -23,22 +22,21 @@ import org.apache.ibatis.type.Alias;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("sys_role")
-@ApiModel(value="Role对象", description="角色信息表")
-@Alias("Role")
-public class Role implements Serializable {
+@TableName("sys_perm")
+@ApiModel(value="权限对象", description="权限表")
+public class Perm implements Serializable {
 
     private static final long serialVersionUID=1L;
 
-    @ApiModelProperty(value = "角色ID")
-    @TableId(value = "role_id", type = IdType.AUTO)
-    private Long roleId;
+    @ApiModelProperty(value = "权限ID")
+    @TableId(value = "perm_id", type = IdType.AUTO)
+    private Long permId;
 
-    @ApiModelProperty(value = "角色名称")
-    private String roleName;
+    @ApiModelProperty(value = "菜单名称")
+    private String permName;
 
-    @ApiModelProperty(value = "角色权限字符串")
-    private String roleKey;
+    @ApiModelProperty(value = "菜单名称")
+    private String permsKey;
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;

@@ -49,7 +49,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // 判断是否已存在该用户
         User db = this.selectUserByPhone(phone);
         if (db != null) {
-            throw new ServiceException(ErrorState.USER_ALREADY_EXIST.getCode(), ErrorState.USER_ALREADY_EXIST.getMsg());
+            throw new ServiceException(ErrorState.USER_ALREADY_EXIST.getMsg());
         }
         User user = new User();
         user.setPhone(phone);

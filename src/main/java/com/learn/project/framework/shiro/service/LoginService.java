@@ -42,7 +42,7 @@ public class LoginService {
     private TokenService tokenService;
 
 
-    public void sendLoginCode(String phone) throws ClientException {
+    public boolean sendLoginCode(String phone) throws ClientException {
         // 这里使用默认值，随机验证码的方法为CommonsUtils.getCode()
         int code = 6666;
         // todo 此处为发送验证码代码
@@ -50,14 +50,16 @@ public class LoginService {
         // 将验证码加密后存储到redis中
         String encryptCode = CommonsUtils.encryptPassword(String.valueOf(code), phone);
         redisCache.setCacheObject(RedisKey.getLoginCodeKey(phone), encryptCode, Constant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
+        return true;
     }
 
 
-    public void sendModifyPasswordCode(String phone) throws ClientException {
+    public boolean sendModifyPasswordCode(String phone) throws ClientException {
         int code = 6666;
         // todo 此处为发送验证码代码
 //        SmsUtils.sendSms(phone, code);
         redisCache.setCacheObject(RedisKey.getModifyPasswordCodeKey(phone), code, Constant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
+        return true;
     }
 
 

@@ -1,6 +1,8 @@
 package com.learn.project.framework.web.exception;
 
+import com.alibaba.fastjson.JSON;
 import com.learn.project.common.enums.ErrorState;
+import com.learn.project.framework.web.domain.Result;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,20 +15,17 @@ import lombok.EqualsAndHashCode;
 @Data
 public class ServiceException extends RuntimeException {
 
-    private Integer code;
     private String message;
 
     public ServiceException() {
     }
 
-    public ServiceException(String message) {
-        this.code = ErrorState.GENERAL_EXCEPTION.getCode();
-        this.message = message;
+    public ServiceException(ErrorState errorState) {
+        this.message = JSON.toJSONString(Result.error(errorState));
     }
 
-    public ServiceException(Integer code, String message) {
-        this.code = code;
-        this.message = message;
+    public ServiceException(String message) {
+        this.message = JSON.toJSONString(Result.error(ErrorState.GENERAL_EXCEPTION.getCode(), message));
     }
 
     public ServiceException(String message, Throwable cause) {
