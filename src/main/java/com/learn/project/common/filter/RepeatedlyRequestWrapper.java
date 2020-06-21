@@ -1,6 +1,6 @@
 package com.learn.project.common.filter;
 
-import com.learn.project.common.utils.HttpHelper;
+import com.learn.project.common.utils.http.HttpHelper;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;

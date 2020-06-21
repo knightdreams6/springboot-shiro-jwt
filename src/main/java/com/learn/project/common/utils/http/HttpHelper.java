@@ -1,4 +1,4 @@
-package com.learn.project.common.utils;
+package com.learn.project.common.utils.http;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;

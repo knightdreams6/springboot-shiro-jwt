@@ -1,4 +1,4 @@
-package com.learn.project.common.utils;
+package com.learn.project.common.utils.ali;
 
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;

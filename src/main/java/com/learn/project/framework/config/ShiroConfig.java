@@ -154,7 +154,8 @@ public class ShiroConfig {
      *  SecurityManager 是 Shiro 架构的核心，通过它来链接Realm和用户(文档中称之为Subject.)
      */
     @Bean
-    public SecurityManager securityManager(@Qualifier("passwordRealm") PasswordRealm passwordRealm, @Qualifier("codeRealm") CodeRealm codeRealm,
+    public SecurityManager securityManager(@Qualifier("passwordRealm") PasswordRealm passwordRealm,
+                                           @Qualifier("codeRealm") CodeRealm codeRealm,
                                            @Qualifier("jwtRealm") JwtRealm jwtRealm,
                                            @Qualifier("userModularRealmAuthenticator") UserModularRealmAuthenticator userModularRealmAuthenticator) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
