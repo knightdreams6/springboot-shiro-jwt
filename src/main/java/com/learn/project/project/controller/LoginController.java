@@ -1,6 +1,8 @@
 package com.learn.project.project.controller;
 
 import com.aliyuncs.exceptions.ClientException;
+import com.learn.project.common.enums.ErrorState;
+import com.learn.project.framework.annotction.RequestLimit;
 import com.learn.project.framework.web.controller.BaseController;
 import com.learn.project.framework.web.domain.Result;
 import com.learn.project.framework.annotction.PhoneNumber;
@@ -30,6 +32,7 @@ public class LoginController extends BaseController {
     private LoginService loginService;
 
 
+    @RequestLimit(second = 60 * 60 * 24, maxCount = 5, msg = ErrorState.REQUEST_LIMIT)
     @ApiOperation(value = "发送登录验证码")
     @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query")
     @GetMapping("/code")
@@ -38,9 +41,10 @@ public class LoginController extends BaseController {
     }
 
 
+    @RequestLimit(second = 60 * 60 * 24, maxCount = 5, msg = ErrorState.REQUEST_LIMIT)
     @ApiOperation("发送修改密码验证码")
     @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query")
-    @GetMapping("/modifyPasswordCode")
+    @GetMapping("/modify-pwd-code")
     public Result sendModifyPasswordCode(@PhoneNumber String phone) throws ClientException {
         return result(loginService.sendModifyPasswordCode(phone));
     }
@@ -52,7 +56,7 @@ public class LoginController extends BaseController {
             @ApiImplicitParam(name = "code", value = "验证码", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query", dataType = "string")
     })
-    @PutMapping("/modifyPassword")
+    @PutMapping("/password")
     public Result modifyPassword(@PhoneNumber String phone,
                                  @NotEmpty(message = "验证码不能为空") String code,
                                  @NotEmpty(message = "密码不能为空") String password){

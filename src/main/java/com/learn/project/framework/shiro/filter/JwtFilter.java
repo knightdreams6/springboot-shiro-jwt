@@ -1,9 +1,12 @@
 package com.learn.project.framework.shiro.filter;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.learn.project.common.constant.Constant;
+import com.learn.project.common.enums.ErrorState;
 import com.learn.project.common.utils.ServletUtils;
 import com.learn.project.framework.shiro.token.JwtToken;
+import com.learn.project.framework.web.domain.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
@@ -52,9 +55,8 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         try {
             getSubject(request, response).login(jwtToken);
         } catch (IncorrectCredentialsException e) {
-            JSONObject o = new JSONObject();
-            o.put("msg", e.getMessage());
-            ServletUtils.renderString((HttpServletResponse) response, o.toString());
+            ServletUtils.renderString((HttpServletResponse) response,
+                    JSON.toJSONString(Result.error(ErrorState.TOKEN_INVALID)));
             return false;
         }
         // 如果没有抛出异常则代表登入成功，返回true

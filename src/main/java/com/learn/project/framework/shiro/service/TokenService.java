@@ -83,6 +83,20 @@ public class TokenService {
         }
     }
 
+    /**
+     * 获得token中的信息无需secret解密也能获得
+     * @param request HttpServletRequest
+     * @return token中包含的用户手机号
+     */
+    public String getPhone(HttpServletRequest request) {
+        try {
+            DecodedJWT jwt = JWT.decode(this.getToken(request));
+            return jwt.getClaim("phone").asString();
+        } catch (JWTDecodeException e) {
+            return null;
+        }
+    }
+
 
     /**
      * 获得token中的信息无需secret解密也能获得

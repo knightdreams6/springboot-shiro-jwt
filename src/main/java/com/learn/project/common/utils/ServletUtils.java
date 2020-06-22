@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 
 /**
  * 客户端工具类
@@ -53,10 +54,10 @@ public class ServletUtils {
      * @return null
      */
     public static String renderString(HttpServletResponse response, String string) {
+        response.setStatus(HttpStatus.OK.value());
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("application/json;charset=UTF-8");
         try( PrintWriter writer = response.getWriter()) {
-            response.setStatus(HttpStatus.OK.value());
-            response.setContentType("application/json; charset=utf-8");
-            response.setCharacterEncoding("utf-8");
             writer.print(string);
         }catch (IOException e){
             // ignore

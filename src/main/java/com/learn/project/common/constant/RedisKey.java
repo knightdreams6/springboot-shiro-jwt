@@ -22,4 +22,8 @@ public class RedisKey {
         return "REPEAT:DATA";
     }
 
+    public static String getRequestLimitKey(String servletPath, String phone){
+        return "LIMIT:" + servletPath + ":" + phone;
+    }
+
 }

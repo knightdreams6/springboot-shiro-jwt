@@ -56,19 +56,19 @@ public class JwtRealm extends AuthorizingRealm {
         String phone = tokenService.getPhone(token);
         log.info(phone + " - token auth start...");
         if (StringUtils.isEmpty(phone)) {
-            throw new IncorrectCredentialsException(ErrorState.TOKEN_INVALID.getMsg());
+            throw new IncorrectCredentialsException();
         }
         User user = userService.selectUserByPhone(phone);
         if (user == null) {
-            throw new IncorrectCredentialsException(ErrorState.TOKEN_INVALID.getMsg());
+            throw new IncorrectCredentialsException();
         }
         try{
             boolean verify = tokenService.verify(token, user.getPassword());
             if(verify == Boolean.FALSE){
-                throw new IncorrectCredentialsException(ErrorState.TOKEN_INVALID.getMsg());
+                throw new IncorrectCredentialsException();
             }
         } catch (Exception e){
-            throw new IncorrectCredentialsException(ErrorState.TOKEN_INVALID.getMsg());
+            throw new IncorrectCredentialsException();
         }
         return new SimpleAuthenticationInfo(token, token, "JwtRealm");
     }

@@ -27,7 +27,9 @@ public enum ErrorState {
     // token无效
     TOKEN_INVALID(1007, "token failure!"),
     // 缺少相应参数
-    MISSING_PARAMETER(1008, "参数绑定失败:缺少参数")
+    MISSING_PARAMETER(1008, "参数绑定失败:缺少参数"),
+    // 接口请求限制
+    REQUEST_LIMIT(10009, "请求频繁,请稍后重试")
     ;
 
 

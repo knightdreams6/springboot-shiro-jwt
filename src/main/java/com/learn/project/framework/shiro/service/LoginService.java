@@ -6,8 +6,6 @@ import com.learn.project.common.constant.RedisKey;
 import com.learn.project.common.enums.ErrorState;
 import com.learn.project.common.enums.LoginType;
 import com.learn.project.common.utils.CommonsUtils;
-import com.learn.project.framework.manager.AsyncManager;
-import com.learn.project.framework.manager.factory.AsyncTaskFactory;
 import com.learn.project.framework.web.domain.Result;
 import com.learn.project.framework.redis.RedisCache;
 import com.learn.project.framework.shiro.token.CustomizedToken;

@@ -1,9 +1,10 @@
-package com.learn.project.framework.web.interceptor;
+package com.learn.project.framework.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.learn.project.common.utils.ServletUtils;
 import com.learn.project.framework.annotction.RepeatSubmit;
 import com.learn.project.framework.web.domain.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -16,10 +17,12 @@ import java.lang.reflect.Method;
  *
  * @author ruoyi
  */
+@Slf4j
 public abstract class AbstractRepeatSubmitInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        log.info("防止重复提交拦截器执行了...");
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Method method = handlerMethod.getMethod();

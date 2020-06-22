@@ -3,6 +3,7 @@ package com.learn.project.project.controller;
 import com.learn.project.common.utils.ServletUtils;
 import com.learn.project.framework.annotction.PhoneNumber;
 import com.learn.project.framework.annotction.RepeatSubmit;
+import com.learn.project.framework.annotction.RequestLimit;
 import com.learn.project.framework.shiro.service.TokenService;
 import com.learn.project.framework.web.controller.BaseController;
 import com.learn.project.framework.web.domain.LoginUser;
@@ -15,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +46,7 @@ public class UserController extends BaseController {
 
     @ApiOperation("退出")
     @PostMapping("/logout")
+    @RequiresUser
     public Result logout() {
         // 退出操作
         return Result.success();
