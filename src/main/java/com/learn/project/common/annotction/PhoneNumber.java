@@ -1,8 +1,8 @@
-package com.learn.project.framework.annotction;
+package com.learn.project.common.annotction;
 
 
 
-import com.learn.project.framework.annotction.validator.PhoneNumberValidator;
+import com.learn.project.common.annotction.validator.PhoneNumberValidator;
 
 import javax.validation.Constraint;
 import java.lang.annotation.*;

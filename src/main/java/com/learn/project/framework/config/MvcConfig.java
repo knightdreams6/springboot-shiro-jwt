@@ -1,7 +1,7 @@
 package com.learn.project.framework.config;
 
-import com.learn.project.framework.interceptor.RequestLimitInterceptor;
-import com.learn.project.framework.interceptor.impl.SameUrlDataInterceptor;
+import com.learn.project.framework.web.interceptor.RequestLimitInterceptor;
+import com.learn.project.framework.web.interceptor.impl.SameUrlDataInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

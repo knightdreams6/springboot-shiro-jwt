@@ -8,7 +8,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.learn.project.common.constant.Constant;
 import com.learn.project.common.constant.RedisKey;
-import com.learn.project.framework.redis.RedisCache;
+import com.learn.project.common.utils.redis.RedisCache;
 import com.learn.project.framework.web.domain.LoginUser;
 import com.learn.project.project.entity.User;
 import com.learn.project.project.service.IUserService;

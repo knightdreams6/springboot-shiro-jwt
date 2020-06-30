@@ -1,7 +1,7 @@
 package com.learn.project.framework.config;
 
 import com.learn.project.common.constant.Constant;
-import com.learn.project.framework.annotction.PhoneNumber;
+import com.learn.project.common.annotction.PhoneNumber;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

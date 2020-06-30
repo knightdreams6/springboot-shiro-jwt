@@ -1,4 +1,4 @@
-package com.learn.project.framework.annotction;
+package com.learn.project.common.annotction;
 
 import java.lang.annotation.*;
 

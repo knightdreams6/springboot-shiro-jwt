@@ -1,7 +1,7 @@
 package com.learn.project.framework.shiro.realms;
 
 import com.learn.project.common.constant.RedisKey;
-import com.learn.project.framework.redis.RedisCache;
+import com.learn.project.common.utils.redis.RedisCache;
 import com.learn.project.framework.shiro.token.CustomizedToken;
 import com.learn.project.project.entity.User;
 import com.learn.project.project.service.IUserService;

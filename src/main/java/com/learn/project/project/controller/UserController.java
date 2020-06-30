@@ -1,9 +1,8 @@
 package com.learn.project.project.controller;
 
 import com.learn.project.common.utils.ServletUtils;
-import com.learn.project.framework.annotction.PhoneNumber;
-import com.learn.project.framework.annotction.RepeatSubmit;
-import com.learn.project.framework.annotction.RequestLimit;
+import com.learn.project.common.annotction.PhoneNumber;
+import com.learn.project.common.annotction.RepeatSubmit;
 import com.learn.project.framework.shiro.service.TokenService;
 import com.learn.project.framework.web.controller.BaseController;
 import com.learn.project.framework.web.domain.LoginUser;

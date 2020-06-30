@@ -1,12 +1,12 @@
-package com.learn.project.framework.interceptor.impl;
+package com.learn.project.framework.web.interceptor.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.learn.project.common.constant.Constant;
 import com.learn.project.common.constant.RedisKey;
-import com.learn.project.common.filter.RepeatedlyRequestWrapper;
+import com.learn.project.framework.web.filter.RepeatedlyRequestWrapper;
 import com.learn.project.common.utils.http.HttpHelper;
-import com.learn.project.framework.redis.RedisCache;
-import com.learn.project.framework.interceptor.AbstractRepeatSubmitInterceptor;
+import com.learn.project.common.utils.redis.RedisCache;
+import com.learn.project.framework.web.interceptor.AbstractRepeatSubmitInterceptor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

@@ -1,4 +1,4 @@
-package com.learn.project.framework.redis;
+package com.learn.project.common.utils.redis;
 
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * spring redis 工具类
- * 
+ *
  * @author ruoyi
  **/
 @SuppressWarnings(value = { "unchecked", "rawtypes" })
@@ -187,7 +187,7 @@ public class RedisCache
 
     /**
      * 获得缓存的基本对象列表
-     * 
+     *
      * @param pattern 字符串前缀
      * @return 对象列表
      */

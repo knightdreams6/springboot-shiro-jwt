@@ -1,6 +1,6 @@
-package com.learn.project.framework.annotction.validator;
+package com.learn.project.common.annotction.validator;
 
-import com.learn.project.framework.annotction.PhoneNumber;
+import com.learn.project.common.annotction.PhoneNumber;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

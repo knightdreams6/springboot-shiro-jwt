@@ -1,10 +1,10 @@
-package com.learn.project.framework.interceptor;
+package com.learn.project.framework.web.interceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.learn.project.common.constant.RedisKey;
 import com.learn.project.common.utils.ServletUtils;
-import com.learn.project.framework.annotction.RequestLimit;
-import com.learn.project.framework.redis.RedisCache;
+import com.learn.project.common.annotction.RequestLimit;
+import com.learn.project.common.utils.redis.RedisCache;
 import com.learn.project.framework.web.domain.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.HandlerMethod;

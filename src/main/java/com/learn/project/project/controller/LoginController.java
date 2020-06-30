@@ -2,10 +2,10 @@ package com.learn.project.project.controller;
 
 import com.aliyuncs.exceptions.ClientException;
 import com.learn.project.common.enums.ErrorState;
-import com.learn.project.framework.annotction.RequestLimit;
+import com.learn.project.common.annotction.RequestLimit;
 import com.learn.project.framework.web.controller.BaseController;
 import com.learn.project.framework.web.domain.Result;
-import com.learn.project.framework.annotction.PhoneNumber;
+import com.learn.project.common.annotction.PhoneNumber;
 import com.learn.project.framework.shiro.service.LoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

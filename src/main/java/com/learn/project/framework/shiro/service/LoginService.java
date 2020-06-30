@@ -7,7 +7,7 @@ import com.learn.project.common.enums.ErrorState;
 import com.learn.project.common.enums.LoginType;
 import com.learn.project.common.utils.CommonsUtils;
 import com.learn.project.framework.web.domain.Result;
-import com.learn.project.framework.redis.RedisCache;
+import com.learn.project.common.utils.redis.RedisCache;
 import com.learn.project.framework.shiro.token.CustomizedToken;
 import com.learn.project.project.entity.User;
 import com.learn.project.project.service.IUserService;
