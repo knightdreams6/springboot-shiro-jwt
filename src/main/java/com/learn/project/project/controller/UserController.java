@@ -73,7 +73,7 @@ public class UserController extends BaseController {
     @GetMapping("/info")
     @RequiresRoles(value = {"admin", "common"}, logical = Logical.OR)
     public Result info() {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        LoginUser loginUser = tokenService.getLoginUser();
         return Result.success(loginUser);
     }
 

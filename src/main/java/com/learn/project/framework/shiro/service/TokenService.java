@@ -8,6 +8,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.learn.project.common.constant.Constant;
 import com.learn.project.common.constant.RedisKey;
+import com.learn.project.common.utils.ServletUtils;
 import com.learn.project.common.utils.redis.RedisCache;
 import com.learn.project.framework.web.domain.LoginUser;
 import com.learn.project.project.entity.User;
@@ -41,9 +42,9 @@ public class TokenService {
      * 获取当前登录的User对象
      * @return User
      */
-    public LoginUser getLoginUser(HttpServletRequest request){
+    public LoginUser getLoginUser(){
         // 获取token
-        String token = getToken(request);
+        String token = getToken(ServletUtils.getRequest());
         // 获取手机号
         String phone = getPhone(token);
         // 获取缓存loginUserKey

@@ -1,5 +1,7 @@
 package com.learn.project.common.constant;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * 常量类
  * @author lixiao
@@ -15,7 +17,7 @@ public class Constant {
     /**
      * jwtToken过期时间
      */
-    public static Long TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60 * 1000L;
+    public static Long TOKEN_EXPIRE_TIME = TimeUnit.DAYS.toMillis(30);
 
     /**
      * token请求头名称

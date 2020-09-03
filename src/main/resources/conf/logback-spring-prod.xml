@@ -12,11 +12,11 @@
     <contextName>sweet</contextName>
 
     <!-- 文件存放地址 -->
-    <property name="INFO_LOG_HOME" value="E:/logs/info"/>
+    <property name="INFO_LOG_HOME" value="/home/logs/info"/>
     <!-- ERROR文件存放地址 -->
-    <property name="ERROR_LOG_HOME" value="E:/logs/error"/>
+    <property name="ERROR_LOG_HOME" value="/home/logs/error"/>
     <!-- 文件备份地址 -->
-    <property name="LOG_BACK_HOME" value="E:/logs/sweet/backup"/>
+    <property name="LOG_BACK_HOME" value="/home/logs/sweet/backup"/>
 
     <!-- 文件切割大小 -->
     <property name="maxFileSize" value="100MB" />

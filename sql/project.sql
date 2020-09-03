@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : sweet
+ Source Server         : localMysql
  Source Server Type    : MySQL
  Source Server Version : 80020
  Source Host           : 192.168.75.128:3306
@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 22/06/2020 08:59:09
+ Date: 08/07/2020 15:35:10
 */
 
 SET NAMES utf8mb4;
@@ -24,12 +24,13 @@ DROP TABLE IF EXISTS `sys_perm`;
 CREATE TABLE `sys_perm`  (
   `perm_id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '权限id',
   `perm_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '权限名称',
-  `perms_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '权限标识',
+  `perms_key` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '权限标识',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '备注',
-  PRIMARY KEY (`perm_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`perm_id`) USING BTREE,
+  UNIQUE INDEX `ux_perms_key`(`perms_key`) USING BTREE COMMENT '权限key唯一索引'
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_perm
@@ -42,12 +43,13 @@ DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role`  (
   `role_id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '角色id',
   `role_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '角色名称',
-  `role_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '角色权限字符串',
+  `role_key` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '角色权限字符串',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`role_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色信息表' ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`role_id`) USING BTREE,
+  UNIQUE INDEX `ux_role_key`(`role_key`) USING BTREE COMMENT '角色权限key唯一索引'
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
@@ -87,12 +89,12 @@ CREATE TABLE `sys_user`  (
   `flag` tinyint(1) NULL DEFAULT 0 COMMENT '0未删除1已删除',
   PRIMARY KEY (`user_id`) USING BTREE,
   UNIQUE INDEX `phone`(`phone`) USING BTREE COMMENT '手机号唯一索引'
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, '18735182285', 'c6f26452cc3a4259b0990343f82f6769', 'b3236e9248d855aa2bfe75d828568a92e7f267977af28de68f1a1c3d78ba0951', 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg', 'sweetBaby', 0, '1997-05-12', '2020-05-06 13:00:31', '2020-05-06 13:01:25', 0);
+INSERT INTO `sys_user` VALUES (1, '18735182285', '76b0eebe71e648d1a0dd5043f2436c9f', '07a5f2193487e2bc977a9bd301e2fcfd988b16152fd6d9482e5001e9c8b3af6b', 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg', 'sweetBaby', 0, '1997-05-12', '2020-05-06 13:00:31', '2020-05-06 13:01:25', 0);
 
 -- ----------------------------
 -- Table structure for sys_user_role

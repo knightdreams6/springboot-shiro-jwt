@@ -3,12 +3,11 @@ server:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://192.168.75.128/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://192.168.0.134:3306/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
     password: 123
   redis:
-    host: 192.168.75.128
-    database: 1
+    host: 192.168.0.134
     port: 6379
     password: 123
 

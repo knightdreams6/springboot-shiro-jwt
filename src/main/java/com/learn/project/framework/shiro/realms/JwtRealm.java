@@ -1,7 +1,5 @@
 package com.learn.project.framework.shiro.realms;
 
-import com.learn.project.common.enums.ErrorState;
-import com.learn.project.common.utils.ServletUtils;
 import com.learn.project.framework.shiro.service.TokenService;
 import com.learn.project.framework.shiro.token.JwtToken;
 import com.learn.project.framework.web.domain.LoginUser;
@@ -40,7 +38,7 @@ public class JwtRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        LoginUser loginUser = tokenService.getLoginUser();
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         // 添加角色
         authorizationInfo.addRoles(loginUser.getRoleSet());

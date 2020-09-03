@@ -1,0 +1,40 @@
+version: "3"
+services:
+  # redis
+  service_redis:
+    image: redis:6.0
+    container_name: redis6
+    ports:
+      - 6380:6379
+    volumes:
+      - "${REDIS_DIR}/conf:/usr/local/etc/redis"
+      - "${REDIS_DIR}/data:/data"
+    command:
+      redis-server --requirepass 123
+
+  # mysql
+  service_mysql:
+    image: mysql:8.0
+    container_name: mysql8
+    hostname: mysql
+    ports:
+      - 3307:3306
+    volumes:
+      - "${MYSQL_DIR}/data:/var/lib/mysql"
+      - "${MYSQL_DIR}/conf.d:/etc/mysql/conf.d"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+
+  # 本项目
+  project:
+    build: .
+    container_name: sweet
+    working_dir: /app
+    ports:
+      - 8888:8888
+    depends_on:
+      - service_redis
+      - service_mysql
+    volumes:
+      - /home/learn/logs:/home/logs
+
