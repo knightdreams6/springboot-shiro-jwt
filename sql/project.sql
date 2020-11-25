@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localMysql
+ Source Server         : master
  Source Server Type    : MySQL
- Source Server Version : 80020
- Source Host           : 192.168.75.128:3306
+ Source Server Version : 80021
+ Source Host           : 192.168.0.134:3309
  Source Schema         : project
 
  Target Server Type    : MySQL
- Target Server Version : 80020
+ Target Server Version : 80021
  File Encoding         : 65001
 
- Date: 08/07/2020 15:35:10
+ Date: 02/11/2020 10:13:54
 */
 
 SET NAMES utf8mb4;
@@ -35,6 +35,11 @@ CREATE TABLE `sys_perm`  (
 -- ----------------------------
 -- Records of sys_perm
 -- ----------------------------
+INSERT INTO `sys_perm` VALUES (1, '查看用户权限', 'system:user:list', '2020-11-02 09:16:31', NULL, '');
+INSERT INTO `sys_perm` VALUES (2, '更新用户权限', 'system:user:update', '2020-11-02 09:16:31', NULL, '');
+INSERT INTO `sys_perm` VALUES (3, '删除用户权限', 'system:user:remove', '2020-11-02 09:16:31', NULL, '');
+INSERT INTO `sys_perm` VALUES (4, '添加用户权限', 'system:user:insert', '2020-11-02 09:16:31', NULL, '');
+INSERT INTO `sys_perm` VALUES (5, '用户所有权限', 'system:user:*', '2020-11-02 09:16:31', NULL, '');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -49,7 +54,7 @@ CREATE TABLE `sys_role`  (
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`role_id`) USING BTREE,
   UNIQUE INDEX `ux_role_key`(`role_key`) USING BTREE COMMENT '角色权限key唯一索引'
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
@@ -70,6 +75,7 @@ CREATE TABLE `sys_role_perm`  (
 -- ----------------------------
 -- Records of sys_role_perm
 -- ----------------------------
+INSERT INTO `sys_role_perm` VALUES (1, 5);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -89,12 +95,12 @@ CREATE TABLE `sys_user`  (
   `flag` tinyint(1) NULL DEFAULT 0 COMMENT '0未删除1已删除',
   PRIMARY KEY (`user_id`) USING BTREE,
   UNIQUE INDEX `phone`(`phone`) USING BTREE COMMENT '手机号唯一索引'
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, '18735182285', '76b0eebe71e648d1a0dd5043f2436c9f', '07a5f2193487e2bc977a9bd301e2fcfd988b16152fd6d9482e5001e9c8b3af6b', 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg', 'sweetBaby', 0, '1997-05-12', '2020-05-06 13:00:31', '2020-05-06 13:01:25', 0);
+INSERT INTO `sys_user` VALUES (1, '18735182285', 'f0d1503610f54898b38280740b7bd42e', '1ada0549b879804c95ed65d28168b5fdec894aa770cc5921b39a3d86dd0af3ee', 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg', 'sweetBaby', 0, '1997-05-12', '2020-05-06 13:00:31', '2020-05-06 13:01:25', 0);
 
 -- ----------------------------
 -- Table structure for sys_user_role

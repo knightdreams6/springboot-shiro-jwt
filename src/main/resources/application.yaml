@@ -1,13 +1,10 @@
 spring:
   profiles:
-    active: prod
+    active: dev
   data:
     redis:
       repositories:
         enabled: false
-  ## 数据源
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     ## 连接超时时间（毫秒）
     timeout: 5000

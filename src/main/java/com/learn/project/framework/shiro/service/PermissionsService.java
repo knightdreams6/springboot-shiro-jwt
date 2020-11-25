@@ -39,7 +39,7 @@ public class PermissionsService {
     }
 
     /**
-     * 根据用户id获取其角色列表
+     * 根据用户id获取权限列表
      * @param userId userId
      * @return Set<Role>
      */

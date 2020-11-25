@@ -1,5 +1,6 @@
 package com.learn.project.framework.config;
 
+import com.baomidou.dynamic.datasource.plugin.MasterSlaveAutoRoutingPlugin;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
@@ -22,5 +23,10 @@ public class MybatisConfig {
         PaginationInterceptor page = new PaginationInterceptor();
         page.setDialectType("mysql");
         return new PaginationInterceptor();
+    }
+
+    @Bean
+    public MasterSlaveAutoRoutingPlugin masterSlaveAutoRoutingPlugin(){
+        return new MasterSlaveAutoRoutingPlugin();
     }
 }
