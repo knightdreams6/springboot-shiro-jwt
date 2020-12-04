@@ -120,13 +120,14 @@ public class LoginService {
         if(Objects.isNull(user)){
             Boolean flag = userService.register(phone, password);
            if(flag){
-
                return Result.success(this.returnLoginInitParam(phone));
            }else {
                return Result.error();
            }
         }
+        // 加密所需盐值
         String salt = CommonsUtils.uuid();
+        // 加密后的密码
         String encryptPassword = CommonsUtils.encryptPassword(password, salt);
         user.setSalt(salt);
         user.setPassword(encryptPassword);
@@ -147,13 +148,40 @@ public class LoginService {
      * @return Map<String, Object>
      */
     private Map<String, Object> returnLoginInitParam(String phone) {
-        Map<String, Object> data = new HashMap<>(1);
+        Map<String, Object> data = new HashMap<>(4);
+        // 根据手机号查询用户
         User user = userService.selectUserByPhone(phone);
         // 生成jwtToken
-        String token = tokenService.createToken(phone, user.getUserId(), user.getPassword());
+        String token = tokenService.createToken(phone, user.getUserId(), user.getPassword(), Constant.TOKEN_EXPIRE_TIME);
+        // 生成刷新token
+        String refreshToken = tokenService.createToken(phone, user.getUserId(), user.getPassword(), Constant.TOKEN_REFRESH_TIME);
         // token
         data.put("token", token);
+        // 刷新时所需token
+        data.put("refreshToken", refreshToken);
         return data;
     }
 
+    /**
+     * token刷新
+     * @return Result
+     */
+    public Result tokenRefresh(String refreshToken) {
+        String phone = tokenService.getPhone(refreshToken);
+        User user = userService.selectUserByPhone(phone);
+        boolean verify = tokenService.verify(refreshToken, user.getPassword());
+        if (!verify) {
+            return Result.error(ErrorState.REFRESH_TOKEN_INVALID);
+        }
+        Map<String, Object> data = new HashMap<>(4);
+        // 生成jwtToken
+        String newToken = tokenService.createToken(phone, user.getUserId(), user.getPassword(), Constant.TOKEN_EXPIRE_TIME);
+        // 生成刷新token
+        String newRefreshToken = tokenService.createToken(phone, user.getUserId(), user.getPassword(), Constant.TOKEN_REFRESH_TIME);
+        // toke
+        data.put("token", newToken);
+        // 刷新时所需token
+        data.put("refreshToken", newRefreshToken);
+        return Result.success(data);
+    }
 }

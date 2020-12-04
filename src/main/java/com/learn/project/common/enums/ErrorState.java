@@ -7,11 +7,11 @@ package com.learn.project.common.enums;
  * 第三方接口异常使用五位数
  */
 public enum ErrorState {
+    // 短信发送失败
+    SEND_SMS_ERROR(10001, "短信发送失败"),
 
     // 系统错误状态码
     GENERAL_EXCEPTION(1000, "通用异常"),
-
-    SEND_SMS_ERROR(10001, "短信发送失败"),
     // 该用户已存在
     USER_ALREADY_EXIST(1001, "用户名已存在"),
     // 验证码无效
@@ -29,7 +29,9 @@ public enum ErrorState {
     // 缺少相应参数
     MISSING_PARAMETER(1008, "参数绑定失败:缺少参数"),
     // 接口请求限制
-    REQUEST_LIMIT(10009, "请求频繁,请稍后重试")
+    REQUEST_LIMIT(1009, "请求频繁,请稍后重试"),
+    // refreshToken无效
+    REFRESH_TOKEN_INVALID(1010, "认证过期,请重新登录")
     ;
 
 

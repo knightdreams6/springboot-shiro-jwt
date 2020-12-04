@@ -1,7 +1,6 @@
 package com.learn.project.project.controller;
 
 import com.aliyuncs.exceptions.ClientException;
-import com.learn.project.common.enums.ErrorState;
 import com.learn.project.common.annotction.RequestLimit;
 import com.learn.project.framework.web.controller.BaseController;
 import com.learn.project.framework.web.domain.Result;
@@ -11,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +32,7 @@ public class LoginController extends BaseController {
     private LoginService loginService;
 
 
-    @RequestLimit(second = 60 * 60 * 24, maxCount = 5, msg = ErrorState.REQUEST_LIMIT)
+    @RequestLimit(second = 60 * 60 * 24, maxCount = 5)
     @ApiOperation(value = "发送登录验证码")
     @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query")
     @GetMapping("/code")
@@ -41,7 +41,8 @@ public class LoginController extends BaseController {
     }
 
 
-    @RequestLimit(second = 60 * 60 * 24, maxCount = 5, msg = ErrorState.REQUEST_LIMIT)
+    @RequiresUser
+    @RequestLimit(second = 60 * 60 * 24, maxCount = 5)
     @ApiOperation("发送修改密码验证码")
     @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query")
     @GetMapping("/modify-pwd-code")
@@ -50,6 +51,7 @@ public class LoginController extends BaseController {
     }
 
 
+    @RequiresUser
     @ApiOperation("通过手机验证码修改密码")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query", dataType = "string"),
@@ -85,6 +87,13 @@ public class LoginController extends BaseController {
     public Result loginByCode(@PhoneNumber String phone,
                               @NotEmpty(message = "验证码不能为空") String code){
         return loginService.loginByCode(phone, code);
+    }
+
+
+    @ApiOperation("token刷新")
+    @PostMapping("/token/refresh")
+    public Result tokenRefresh(@RequestParam String refreshToken){
+        return loginService.tokenRefresh(refreshToken);
     }
 
 }

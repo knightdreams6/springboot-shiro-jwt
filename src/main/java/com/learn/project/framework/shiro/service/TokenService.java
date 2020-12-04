@@ -14,6 +14,7 @@ import com.learn.project.framework.web.domain.LoginUser;
 import com.learn.project.project.entity.User;
 import com.learn.project.project.service.IUserService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -69,7 +70,6 @@ public class TokenService {
         return (LoginUser) cacheObject;
     }
 
-
     /**
      * 获得token中的信息无需secret解密也能获得
      * @param token token
@@ -86,21 +86,6 @@ public class TokenService {
 
     /**
      * 获得token中的信息无需secret解密也能获得
-     * @param request HttpServletRequest
-     * @return token中包含的用户手机号
-     */
-    public String getPhone(HttpServletRequest request) {
-        try {
-            DecodedJWT jwt = JWT.decode(this.getToken(request));
-            return jwt.getClaim("phone").asString();
-        } catch (JWTDecodeException e) {
-            return null;
-        }
-    }
-
-
-    /**
-     * 获得token中的信息无需secret解密也能获得
      * @param token token
      * @return token中包含的用户id
      */
@@ -114,39 +99,29 @@ public class TokenService {
     }
 
     /**
-     * 获得token中的信息无需secret解密也能获得
-     * @param request HttpServletRequest
-     * @return token中包含的用户id
-     */
-    public String getUserId(HttpServletRequest request) {
-        try {
-            DecodedJWT jwt = JWT.decode(this.getToken(request));
-            return jwt.getClaim("userId").asString();
-        } catch (JWTDecodeException e) {
-            return null;
-        }
-    }
-
-
-    /**
-     * 获取当前登录用户的token
+     * 获取当前登录用户的token,如果token为null则获取refreshToken
      * @param request HttpServletRequest
      * @return token
      */
     public String getToken(HttpServletRequest request){
-        return request.getHeader(Constant.TOKEN_HEADER_NAME);
+        String token = request.getHeader(Constant.TOKEN_HEADER_NAME);
+        if (StringUtils.isEmpty(token)) {
+            return request.getParameter("refreshToken");
+        } else {
+            return token;
+        }
     }
-
 
     /**
      *
      * @param phone 用户名/手机号
      * @param userId   用户id
      * @param secret   用户的密码
+     * @param time   token的有效时间 单位:毫秒
      * @return 加密的token
      */
-    public String createToken(String phone, Integer userId, String secret) {
-        Date date = new Date(System.currentTimeMillis() + Constant.TOKEN_EXPIRE_TIME);
+    public String createToken(String phone, Integer userId, String secret, Long time) {
+        Date date = new Date(System.currentTimeMillis() + time);
         Algorithm algorithm = Algorithm.HMAC256(secret);
         return JWT.create()
                 .withClaim("phone", phone)
