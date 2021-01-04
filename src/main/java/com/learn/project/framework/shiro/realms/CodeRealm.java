@@ -6,7 +6,12 @@ import com.learn.project.framework.shiro.token.CustomizedToken;
 import com.learn.project.project.entity.User;
 import com.learn.project.project.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.ExpiredCredentialsException;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -34,6 +39,7 @@ public class CodeRealm extends AuthorizingRealm {
 
     /**
      * 获取授权信息
+     *
      * @param principals principals
      * @return AuthorizationInfo
      */
@@ -44,6 +50,7 @@ public class CodeRealm extends AuthorizingRealm {
 
     /**
      * 获取身份认证信息
+     *
      * @param auth authenticationToken
      * @return AuthenticationInfo
      * @throws AuthenticationException AuthenticationException

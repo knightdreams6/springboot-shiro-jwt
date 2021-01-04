@@ -1,11 +1,11 @@
 package com.learn.project.framework.config;
 
-import com.learn.project.framework.web.filter.RepeatableFilter;
 import com.learn.project.framework.shiro.filter.JwtFilter;
 import com.learn.project.framework.shiro.realms.CodeRealm;
 import com.learn.project.framework.shiro.realms.JwtRealm;
 import com.learn.project.framework.shiro.realms.PasswordRealm;
 import com.learn.project.framework.shiro.realms.UserModularRealmAuthenticator;
+import com.learn.project.framework.web.filter.RepeatableFilter;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
@@ -21,7 +21,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.Filter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author lixiao
@@ -32,10 +35,11 @@ public class ShiroConfig {
 
     /**
      * 开启shiro权限注解
+     *
      * @return DefaultAdvisorAutoProxyCreator
      */
     @Bean
-    public static DefaultAdvisorAutoProxyCreator creator(){
+    public static DefaultAdvisorAutoProxyCreator creator() {
         DefaultAdvisorAutoProxyCreator creator = new DefaultAdvisorAutoProxyCreator();
         creator.setProxyTargetClass(true);
         return creator;
@@ -57,10 +61,11 @@ public class ShiroConfig {
 
     /**
      * 密码登录时使用该匹配器进行匹配
+     *
      * @return HashedCredentialsMatcher
      */
     @Bean("hashedCredentialsMatcher")
-    public HashedCredentialsMatcher hashedCredentialsMatcher(){
+    public HashedCredentialsMatcher hashedCredentialsMatcher() {
         HashedCredentialsMatcher matcher = new HashedCredentialsMatcher();
         // 设置哈希算法名称
         matcher.setHashAlgorithmName("SHA-256");
@@ -74,11 +79,12 @@ public class ShiroConfig {
 
     /**
      * 密码登录Realm
+     *
      * @param matcher 密码匹配器
      * @return PasswordRealm
      */
     @Bean
-    public PasswordRealm passwordRealm(@Qualifier("hashedCredentialsMatcher") HashedCredentialsMatcher matcher){
+    public PasswordRealm passwordRealm(@Qualifier("hashedCredentialsMatcher") HashedCredentialsMatcher matcher) {
         PasswordRealm userRealm = new PasswordRealm();
         userRealm.setCredentialsMatcher(matcher);
         return userRealm;
@@ -86,11 +92,12 @@ public class ShiroConfig {
 
     /**
      * 验证码登录Realm
+     *
      * @param matcher 密码匹配器
      * @return CodeRealm
      */
     @Bean
-    public CodeRealm codeRealm(@Qualifier("hashedCredentialsMatcher") HashedCredentialsMatcher matcher){
+    public CodeRealm codeRealm(@Qualifier("hashedCredentialsMatcher") HashedCredentialsMatcher matcher) {
         CodeRealm codeRealm = new CodeRealm();
         codeRealm.setCredentialsMatcher(matcher);
         return codeRealm;
@@ -98,32 +105,33 @@ public class ShiroConfig {
 
     /**
      * jwtRealm
+     *
      * @return JwtRealm
      */
     @Bean
-    public JwtRealm jwtRealm(){
+    public JwtRealm jwtRealm() {
         return new JwtRealm();
     }
 
 
     /**
      * Shiro内置过滤器，可以实现拦截器相关的拦截器
-     *    常用的过滤器：
-     *      anon：无需认证（登录）可以访问
-     *      authc：必须认证才可以访问
-     *      user：如果使用rememberMe的功能可以直接访问
-     *      perms：该资源必须得到资源权限才可以访问
-     *      role：该资源必须得到角色权限才可以访问
+     * 常用的过滤器：
+     * anon：无需认证（登录）可以访问
+     * authc：必须认证才可以访问
+     * user：如果使用rememberMe的功能可以直接访问
+     * perms：该资源必须得到资源权限才可以访问
+     * role：该资源必须得到角色权限才可以访问
      **/
     @Bean
-    public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager securityManager){
+    public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager securityManager) {
         ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
         // 设置 SecurityManager
         bean.setSecurityManager(securityManager);
 
         Map<String, String> filterMap = new LinkedHashMap<>();
-        filterMap.put("/login/**","anon");
-        filterMap.put("/static/**","anon");
+        filterMap.put("/login/**", "anon");
+        filterMap.put("/static/**", "anon");
         //从这里开始，是我为解决问题增加的，为swagger页面放行
         filterMap.put("/swagger-ui.html", "anon");
         filterMap.put("/swagger-resources/**", "anon");
@@ -142,7 +150,7 @@ public class ShiroConfig {
 
 
     @Bean
-    public UserModularRealmAuthenticator userModularRealmAuthenticator(){
+    public UserModularRealmAuthenticator userModularRealmAuthenticator() {
         // 自己重写的ModularRealmAuthenticator
         UserModularRealmAuthenticator modularRealmAuthenticator = new UserModularRealmAuthenticator();
         modularRealmAuthenticator.setAuthenticationStrategy(new AtLeastOneSuccessfulStrategy());
@@ -151,7 +159,7 @@ public class ShiroConfig {
 
 
     /**
-     *  SecurityManager 是 Shiro 架构的核心，通过它来链接Realm和用户(文档中称之为Subject.)
+     * SecurityManager 是 Shiro 架构的核心，通过它来链接Realm和用户(文档中称之为Subject.)
      */
     @Bean
     public SecurityManager securityManager(@Qualifier("passwordRealm") PasswordRealm passwordRealm,

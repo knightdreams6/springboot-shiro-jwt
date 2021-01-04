@@ -24,26 +24,28 @@ public class PermissionsService {
 
     /**
      * 根据用户id获取其角色列表
+     *
      * @param userId userId
      * @return Set<Role>
      */
-    public Set<String> getRoleSet(Integer userId){
+    public Set<String> getRoleSet(Integer userId) {
         return roleMapper.getRoleSet(userId);
     }
 
     /**
      * 给用户添加角色
      */
-    public void addRole(Integer userId, Integer... roleIds){
+    public void addRole(Integer userId, Integer... roleIds) {
         roleMapper.addRole(userId, roleIds);
     }
 
     /**
      * 根据用户id获取权限列表
+     *
      * @param userId userId
      * @return Set<Role>
      */
-    public Set<String> getPermissionsSet(Integer userId){
+    public Set<String> getPermissionsSet(Integer userId) {
         Set<Integer> roleIdSet = roleMapper.getRoleIdSet(userId);
         Set<String> strings = new HashSet<>();
         for (Integer roleId : roleIdSet) {
@@ -57,10 +59,11 @@ public class PermissionsService {
 
     /**
      * 根据角色id获取权限列表
+     *
      * @param roleId 角色id
      * @return 权限列表
      */
-    public Set<String> getPermissionsSetByRoleId(Integer roleId){
+    public Set<String> getPermissionsSetByRoleId(Integer roleId) {
         return menuMapper.getPermissionsSet(roleId);
     }
 }

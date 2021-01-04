@@ -14,9 +14,9 @@ public enum LoginType {
      */
     CODE_LOGIN_TYPE("Code");
 
-    private String type;
+    private final String type;
 
-    LoginType(String type){
+    LoginType(String type) {
         this.type = type;
     }
 

@@ -5,7 +5,11 @@ import com.learn.project.common.utils.ServletUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -31,15 +35,17 @@ public class AopLog {
      * 切入点
      */
     @Pointcut("execution(public * com.learn.project.project.controller.*Controller.*(..))")
-    public void pointCut() {}
+    public void pointCut() {
+    }
 
 
     /**
      * 前置操作
+     *
      * @param point 切入点
      */
     @Before("pointCut()")
-    public void beforeLog(JoinPoint point){
+    public void beforeLog(JoinPoint point) {
         HttpServletRequest request = ServletUtils.getRequest();
 
         log.info("【请求 URL】：{}", request.getRequestURL());

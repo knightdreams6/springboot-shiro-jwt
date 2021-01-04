@@ -3,7 +3,13 @@ package com.learn.project.common.utils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Objects;
 
 /**
@@ -14,36 +20,37 @@ public class FileUtils {
 
     /**
      * 获取文件后缀
+     *
      * @param fileName 文件名称
      * @return 返回文件后缀
      */
-    private static String getSuffix(String fileName){
+    private static String getSuffix(String fileName) {
         return fileName.substring(fileName.lastIndexOf("."));
     }
 
     /**
      * 生成新的文件名
+     *
      * @param fileOriginName 源文件名
-     * @return  返回新的文件名
+     * @return 返回新的文件名
      */
-    public static String getFileName(String fileOriginName){
+    public static String getFileName(String fileOriginName) {
         return CommonsUtils.uuid() + getSuffix(fileOriginName);
     }
 
 
     /**
-     *
      * @param file 文件
      * @param path 文件存放路径
      * @return 图片名称
      */
-    public static String upload(MultipartFile file, String path){
+    public static String upload(MultipartFile file, String path) {
         // 生成新的文件名
         String imgName = FileUtils.getFileName(file.getOriginalFilename());
         String realPath = path + "/" + imgName;
         File dest = new File(realPath);
         // 判断文件父目录是否存在
-        if(!dest.getParentFile().exists()){
+        if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();
         }
         try {
@@ -53,7 +60,7 @@ public class FileUtils {
         } catch (IllegalStateException | IOException e) {
             e.printStackTrace();
         }
-        return  null;
+        return null;
     }
 
 
@@ -156,11 +163,12 @@ public class FileUtils {
 
     /**
      * 如果文件存在，删除文件
+     *
      * @param path
      */
-    public static void deletedFile(String path){
+    public static void deletedFile(String path) {
         File file = new File(path);
-        if(file.exists()){
+        if (file.exists()) {
             file.delete();
         }
     }

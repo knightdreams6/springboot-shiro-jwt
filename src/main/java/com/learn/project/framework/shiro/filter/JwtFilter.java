@@ -1,7 +1,6 @@
 package com.learn.project.framework.shiro.filter;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.learn.project.common.constant.Constant;
 import com.learn.project.common.enums.ErrorState;
 import com.learn.project.common.utils.ServletUtils;
@@ -28,8 +27,9 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 
     /**
      * 执行登录认证
-     * @param request ServletRequest
-     * @param response ServletResponse
+     *
+     * @param request     ServletRequest
+     * @param response    ServletResponse
      * @param mappedValue mappedValue
      * @return 是否成功
      */
@@ -47,7 +47,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
      * 执行登录
      */
     @Override
-    protected boolean executeLogin(ServletRequest request, ServletResponse response){
+    protected boolean executeLogin(ServletRequest request, ServletResponse response) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String token = httpServletRequest.getHeader(Constant.TOKEN_HEADER_NAME);
         JwtToken jwtToken = new JwtToken(token);

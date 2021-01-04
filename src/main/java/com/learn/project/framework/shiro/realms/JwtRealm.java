@@ -6,7 +6,11 @@ import com.learn.project.framework.web.domain.LoginUser;
 import com.learn.project.project.entity.User;
 import com.learn.project.project.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -60,12 +64,12 @@ public class JwtRealm extends AuthorizingRealm {
         if (user == null) {
             throw new IncorrectCredentialsException();
         }
-        try{
+        try {
             boolean verify = tokenService.verify(token, user.getPassword());
-            if(verify == Boolean.FALSE){
+            if (verify == Boolean.FALSE) {
                 throw new IncorrectCredentialsException();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new IncorrectCredentialsException();
         }
         return new SimpleAuthenticationInfo(token, token, "JwtRealm");

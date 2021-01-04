@@ -7,7 +7,7 @@
     2. logback使用application.yml中的属性
        使用springProperty才可使用application.yml中的值 可以设置默认值
 -->
-<configuration  scan="true" scanPeriod="60 seconds" debug="false">
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
 
     <contextName>sweet</contextName>
 
@@ -19,11 +19,11 @@
     <property name="LOG_BACK_HOME" value="/home/logs/sweet/backup"/>
 
     <!-- 文件切割大小 -->
-    <property name="maxFileSize" value="100MB" />
+    <property name="maxFileSize" value="100MB"/>
     <!-- 文档保留天数 -->
-    <property name="maxHistory" value="60" />
+    <property name="maxHistory" value="60"/>
     <!-- 文档保留总大小 -->
-    <property name="totalSizeCap" value="10GB" />
+    <property name="totalSizeCap" value="10GB"/>
 
 
     <!-- INFO级别log但排除ERROR -->
@@ -90,8 +90,8 @@
     </appender>
 
     <root level="info">
-        <appender-ref ref="ASYNC-INFO" />
-        <appender-ref ref="ASYNC-ERROR" />
+        <appender-ref ref="ASYNC-INFO"/>
+        <appender-ref ref="ASYNC-ERROR"/>
     </root>
 
 

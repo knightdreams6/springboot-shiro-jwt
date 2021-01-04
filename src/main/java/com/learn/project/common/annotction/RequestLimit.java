@@ -2,10 +2,16 @@ package com.learn.project.common.annotction;
 
 import com.learn.project.common.enums.ErrorState;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * 请求限制，接口防刷
+ *
  * @author lixiao
  * @version 1.0
  * @date 2020/6/22 9:25
@@ -25,6 +31,7 @@ public @interface RequestLimit {
 
     /**
      * 超出限制后，返回的错误提示
+     *
      * @return msg
      */
     ErrorState msg() default ErrorState.REQUEST_LIMIT;

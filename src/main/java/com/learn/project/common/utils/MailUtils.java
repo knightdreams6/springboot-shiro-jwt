@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+
 /**
  * @author li'xiao
  * @version 1.0
@@ -25,11 +26,12 @@ public class MailUtils {
 
     /**
      * 发送普通邮件
-     * @param to 收件人
+     *
+     * @param to      收件人
      * @param subject 主题
      * @param content 内容
      */
-    public void sendSimpleMailMessage(String subject, String content, String... to){
+    public void sendSimpleMailMessage(String subject, String content, String... to) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(sender);
         message.setTo(to);

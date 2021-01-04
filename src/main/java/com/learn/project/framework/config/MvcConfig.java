@@ -31,7 +31,7 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(requestLimitInterceptor())
                 .excludePathPatterns("/webjars/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/**", "/images/**")
                 .addPathPatterns("/**")
-                .order(Integer.MAX_VALUE-1);
+                .order(Integer.MAX_VALUE - 1);
 
         registry.addInterceptor(new SameUrlDataInterceptor())
                 .excludePathPatterns("/login/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/**", "/images/**")
@@ -40,7 +40,7 @@ public class MvcConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public RequestLimitInterceptor requestLimitInterceptor(){
+    public RequestLimitInterceptor requestLimitInterceptor() {
         return new RequestLimitInterceptor();
     }
 }

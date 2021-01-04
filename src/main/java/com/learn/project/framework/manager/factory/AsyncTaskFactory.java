@@ -9,6 +9,7 @@ import java.util.TimerTask;
 
 /**
  * 异步任务生产工厂
+ *
  * @author lixiao
  * @date 2020/6/21 21:17
  */
@@ -16,12 +17,12 @@ public class AsyncTaskFactory {
 
     private static final Logger logger = LoggerFactory.getLogger(AsyncTaskFactory.class);
 
-    public static TimerTask sendMailTask (String subject, String content, String... to){
+    public static TimerTask sendMailTask(String subject, String content, String... to) {
         return new TimerTask() {
             @Override
             public void run() {
                 MailUtils mailUtils = SpringUtils.getBean("mailUtils");
-                mailUtils .sendSimpleMailMessage(subject, content, to);
+                mailUtils.sendSimpleMailMessage(subject, content, to);
             }
         };
     }

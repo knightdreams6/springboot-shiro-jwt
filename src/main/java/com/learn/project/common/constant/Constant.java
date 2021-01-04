@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 常量类
+ *
  * @author lixiao
  * @date 2019/10/3 15:45
  */

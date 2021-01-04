@@ -17,14 +17,20 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 
 /**
  * <p>
- *  用户前端控制器
+ * 用户前端控制器
  * </p>
  *
  * @author knight
@@ -64,7 +70,7 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:remove")
     @ApiOperation("删除用户")
     @DeleteMapping("/{userId}")
-    public Result deleted(@PathVariable @NotNull(message = "userId不能为空") Integer userId){
+    public Result deleted(@PathVariable @NotNull(message = "userId不能为空") Integer userId) {
         return super.result(userService.removeById(userId));
     }
 
@@ -72,7 +78,7 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:update")
     @ApiOperation("修改用户")
     @PutMapping("/{userId}")
-    public Result update(User user){
+    public Result update(User user) {
         return super.result(userService.updateById(user));
     }
 

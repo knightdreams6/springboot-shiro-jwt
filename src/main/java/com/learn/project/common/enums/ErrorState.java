@@ -31,12 +31,11 @@ public enum ErrorState {
     // 接口请求限制
     REQUEST_LIMIT(1009, "请求频繁,请稍后重试"),
     // refreshToken无效
-    REFRESH_TOKEN_INVALID(1010, "认证过期,请重新登录")
-    ;
+    REFRESH_TOKEN_INVALID(1010, "认证过期,请重新登录");
 
 
-    private Integer code;
-    private String msg;
+    private final Integer code;
+    private final String msg;
 
     ErrorState(Integer code, String msg) {
         this.code = code;

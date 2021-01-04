@@ -21,7 +21,7 @@ public class SmsUtils {
     private static final String TEMPLATE_CODE = "";
     private static final String REGION_ID = "";
 
-    public static String sendSms(String phone,Integer code) throws ClientException {
+    public static String sendSms(String phone, Integer code) throws ClientException {
 
         final String product = "Dysmsapi";
         final String domain = "dysmsapi.aliyuncs.com";
@@ -40,7 +40,7 @@ public class SmsUtils {
         request.putQueryParameter("PhoneNumbers", phone);
         request.putQueryParameter("SignName", SIGN_NAME);
         request.putQueryParameter("TemplateCode", TEMPLATE_CODE);
-        request.putQueryParameter("TemplateParam", "{code:"+code+"}");
+        request.putQueryParameter("TemplateParam", "{code:" + code + "}");
         return acsClient.getAcsResponse(request).getCode();
     }
 }

@@ -41,9 +41,10 @@ public class TokenService {
 
     /**
      * 获取当前登录的User对象
+     *
      * @return User
      */
-    public LoginUser getLoginUser(){
+    public LoginUser getLoginUser() {
         // 获取token
         String token = getToken(ServletUtils.getRequest());
         // 获取手机号
@@ -72,6 +73,7 @@ public class TokenService {
 
     /**
      * 获得token中的信息无需secret解密也能获得
+     *
      * @param token token
      * @return token中包含的用户手机号
      */
@@ -86,6 +88,7 @@ public class TokenService {
 
     /**
      * 获得token中的信息无需secret解密也能获得
+     *
      * @param token token
      * @return token中包含的用户id
      */
@@ -100,10 +103,11 @@ public class TokenService {
 
     /**
      * 获取当前登录用户的token,如果token为null则获取refreshToken
+     *
      * @param request HttpServletRequest
      * @return token
      */
-    public String getToken(HttpServletRequest request){
+    public String getToken(HttpServletRequest request) {
         String token = request.getHeader(Constant.TOKEN_HEADER_NAME);
         if (StringUtils.isEmpty(token)) {
             return request.getParameter("refreshToken");
@@ -113,10 +117,9 @@ public class TokenService {
     }
 
     /**
-     *
-     * @param phone 用户名/手机号
-     * @param userId   用户id
-     * @param secret   用户的密码
+     * @param phone  用户名/手机号
+     * @param userId 用户id
+     * @param secret 用户的密码
      * @param time   token的有效时间 单位:毫秒
      * @return 加密的token
      */

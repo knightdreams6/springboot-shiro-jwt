@@ -20,11 +20,6 @@ public final class SpringUtils implements BeanFactoryPostProcessor {
      */
     private static ConfigurableListableBeanFactory beanFactory;
 
-    @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        SpringUtils.beanFactory = beanFactory;
-    }
-
     /**
      * 获取对象
      *
@@ -45,7 +40,7 @@ public final class SpringUtils implements BeanFactoryPostProcessor {
      * @throws org.springframework.beans.BeansException
      */
     public static <T> T getBean(Class<T> clz) throws BeansException {
-        T result = (T) beanFactory.getBean(clz);
+        T result = beanFactory.getBean(clz);
         return result;
     }
 
@@ -99,5 +94,10 @@ public final class SpringUtils implements BeanFactoryPostProcessor {
     @SuppressWarnings("unchecked")
     public static <T> T getAopProxy(T invoker) {
         return (T) AopContext.currentProxy();
+    }
+
+    @Override
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        SpringUtils.beanFactory = beanFactory;
     }
 }

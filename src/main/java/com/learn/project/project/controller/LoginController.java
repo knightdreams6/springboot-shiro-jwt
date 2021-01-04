@@ -1,18 +1,23 @@
 package com.learn.project.project.controller;
 
 import com.aliyuncs.exceptions.ClientException;
+import com.learn.project.common.annotction.PhoneNumber;
 import com.learn.project.common.annotction.RequestLimit;
+import com.learn.project.framework.shiro.service.LoginService;
 import com.learn.project.framework.web.controller.BaseController;
 import com.learn.project.framework.web.domain.Result;
-import com.learn.project.common.annotction.PhoneNumber;
-import com.learn.project.framework.shiro.service.LoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotEmpty;
@@ -61,7 +66,7 @@ public class LoginController extends BaseController {
     @PutMapping("/password")
     public Result modifyPassword(@PhoneNumber String phone,
                                  @NotEmpty(message = "验证码不能为空") String code,
-                                 @NotEmpty(message = "密码不能为空") String password){
+                                 @NotEmpty(message = "密码不能为空") String password) {
         return loginService.modifyPassword(phone, code, password);
     }
 
@@ -73,7 +78,7 @@ public class LoginController extends BaseController {
     })
     @PostMapping("/password")
     public Result loginByPassword(@PhoneNumber String phone,
-                                  @NotEmpty(message = "密码不能为空") String password){
+                                  @NotEmpty(message = "密码不能为空") String password) {
         return loginService.loginByPassword(phone, password);
     }
 
@@ -85,14 +90,14 @@ public class LoginController extends BaseController {
     })
     @PostMapping("/code")
     public Result loginByCode(@PhoneNumber String phone,
-                              @NotEmpty(message = "验证码不能为空") String code){
+                              @NotEmpty(message = "验证码不能为空") String code) {
         return loginService.loginByCode(phone, code);
     }
 
 
     @ApiOperation("token刷新")
     @PostMapping("/token/refresh")
-    public Result tokenRefresh(@RequestParam String refreshToken){
+    public Result tokenRefresh(@RequestParam String refreshToken) {
         return loginService.tokenRefresh(refreshToken);
     }
 

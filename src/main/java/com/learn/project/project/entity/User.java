@@ -1,6 +1,10 @@
 package com.learn.project.project.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -23,11 +27,11 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("sys_user")
-@ApiModel(value="User对象", description="用户信息")
+@ApiModel(value = "User对象", description = "用户信息")
 @NoArgsConstructor
 public class User implements Serializable {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "用户id")
     @TableId(value = "user_id", type = IdType.AUTO)
@@ -65,7 +69,7 @@ public class User implements Serializable {
     @JsonIgnore
     private LocalDateTime updateTime;
 
-    @ApiModelProperty(value = "0未删除1已删除" ,hidden = true)
+    @ApiModelProperty(value = "0未删除1已删除", hidden = true)
     @JsonIgnore
     private Integer flag;
 

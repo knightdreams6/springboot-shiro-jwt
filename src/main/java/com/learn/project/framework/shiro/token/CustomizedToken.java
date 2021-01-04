@@ -13,7 +13,7 @@ public class CustomizedToken extends UsernamePasswordToken {
      */
     private String loginType;
 
-    public CustomizedToken(final String username, final String password, String loginType){
+    public CustomizedToken(final String username, final String password, String loginType) {
         super(username, password);
         this.loginType = loginType;
     }
@@ -27,7 +27,7 @@ public class CustomizedToken extends UsernamePasswordToken {
     }
 
     @Override
-    public String toString(){
-        return "loginType="+ loginType +",username=" + super.getUsername()+",password="+ String.valueOf(super.getPassword());
+    public String toString() {
+        return "loginType=" + loginType + ",username=" + super.getUsername() + ",password=" + String.valueOf(super.getPassword());
     }
 }

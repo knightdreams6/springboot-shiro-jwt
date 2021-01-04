@@ -142,7 +142,7 @@ public class Result extends HashMap<String, Object> {
     /**
      * 返回错误消息
      *
-     * @param errorState  错误信息枚举类
+     * @param errorState 错误信息枚举类
      * @return 警告消息
      */
     public static Result error(ErrorState errorState) {
@@ -152,8 +152,8 @@ public class Result extends HashMap<String, Object> {
     /**
      * 返回错误消息
      *
-     * @param errorState  错误信息枚举类
-     * @param data  返回内容
+     * @param errorState 错误信息枚举类
+     * @param data       返回内容
      * @return 警告消息
      */
     public static Result error(ErrorState errorState, Object data) {

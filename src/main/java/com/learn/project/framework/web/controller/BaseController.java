@@ -15,7 +15,7 @@ public class BaseController {
      * @param rows 影响行数
      * @return 操作结果
      */
-    protected Result result(int rows){
+    protected Result result(int rows) {
         return rows > 0 ? Result.success() : Result.error();
     }
 
@@ -25,7 +25,7 @@ public class BaseController {
      * @param flag 操作是否成功flag
      * @return 操作结果
      */
-    protected Result result(boolean flag){
+    protected Result result(boolean flag) {
         return flag ? Result.success() : Result.error();
     }
 }

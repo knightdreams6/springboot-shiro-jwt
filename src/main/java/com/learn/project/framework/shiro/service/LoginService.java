@@ -6,9 +6,9 @@ import com.learn.project.common.constant.RedisKey;
 import com.learn.project.common.enums.ErrorState;
 import com.learn.project.common.enums.LoginType;
 import com.learn.project.common.utils.CommonsUtils;
-import com.learn.project.framework.web.domain.Result;
 import com.learn.project.common.utils.redis.RedisCache;
 import com.learn.project.framework.shiro.token.CustomizedToken;
+import com.learn.project.framework.web.domain.Result;
 import com.learn.project.project.entity.User;
 import com.learn.project.project.service.IUserService;
 import org.apache.shiro.SecurityUtils;
@@ -69,12 +69,12 @@ public class LoginService {
         // 2.封装用户数据
         CustomizedToken token = new CustomizedToken(phone, password, LoginType.PASSWORD_LOGIN_TYPE.toString());
         // 3.执行登录方法
-        try{
+        try {
             subject.login(token);
             return Result.success(returnLoginInitParam(phone));
-        }catch (UnknownAccountException e) {
+        } catch (UnknownAccountException e) {
             return Result.error(ErrorState.USERNAME_NOT_EXIST);
-        } catch (IncorrectCredentialsException e){
+        } catch (IncorrectCredentialsException e) {
             return Result.error(ErrorState.PASSWORD_ERROR);
         }
     }
@@ -92,14 +92,14 @@ public class LoginService {
         // 3.封装用户数据
         CustomizedToken token = new CustomizedToken(phone, code, LoginType.CODE_LOGIN_TYPE.toString());
         // 4.执行登录方法
-        try{
+        try {
             subject.login(token);
             return Result.success(returnLoginInitParam(phone));
-        }catch (UnknownAccountException e) {
+        } catch (UnknownAccountException e) {
             return Result.error(ErrorState.USERNAME_NOT_EXIST);
-        }catch (ExpiredCredentialsException e){
+        } catch (ExpiredCredentialsException e) {
             return Result.error(ErrorState.CODE_EXPIRE);
-        } catch (IncorrectCredentialsException e){
+        } catch (IncorrectCredentialsException e) {
             return Result.error(ErrorState.CODE_ERROR);
         }
     }
@@ -108,22 +108,22 @@ public class LoginService {
     public Result modifyPassword(String phone, String code, String password) {
         Object modifyCode = redisCache.getCacheObject(RedisKey.getModifyPasswordCodeKey(phone));
         // 判断redis中是否存在验证码
-        if(Objects.isNull(modifyCode)){
+        if (Objects.isNull(modifyCode)) {
             return Result.error(ErrorState.CODE_EXPIRE);
         }
         // 判断redis中code与传递过来的code 是否相等
-        if(!Objects.equals(code, modifyCode.toString())){
+        if (!Objects.equals(code, modifyCode.toString())) {
             return Result.error(ErrorState.CODE_ERROR);
         }
         User user = userService.selectUserByPhone(phone);
         // 如果用户不存在，执行注册
-        if(Objects.isNull(user)){
+        if (Objects.isNull(user)) {
             Boolean flag = userService.register(phone, password);
-           if(flag){
-               return Result.success(this.returnLoginInitParam(phone));
-           }else {
-               return Result.error();
-           }
+            if (flag) {
+                return Result.success(this.returnLoginInitParam(phone));
+            } else {
+                return Result.error();
+            }
         }
         // 加密所需盐值
         String salt = CommonsUtils.uuid();
@@ -134,9 +134,9 @@ public class LoginService {
         // 删除缓存
         redisCache.deleteObject(RedisKey.getLoginUserKey(phone));
         boolean flag = userService.updateById(user);
-        if(flag){
+        if (flag) {
             return Result.success(this.returnLoginInitParam(phone));
-        }else {
+        } else {
             return Result.error();
         }
     }
@@ -144,6 +144,7 @@ public class LoginService {
 
     /**
      * 返回登录后初始化参数
+     *
      * @param phone phone
      * @return Map<String, Object>
      */
@@ -164,6 +165,7 @@ public class LoginService {
 
     /**
      * token刷新
+     *
      * @return Result
      */
     public Result tokenRefresh(String refreshToken) {

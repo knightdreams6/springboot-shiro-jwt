@@ -5,13 +5,11 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URLEncoder;
 
 /**
  * 客户端工具类
@@ -57,9 +55,9 @@ public class ServletUtils {
         response.setStatus(HttpStatus.OK.value());
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json;charset=UTF-8");
-        try( PrintWriter writer = response.getWriter()) {
+        try (PrintWriter writer = response.getWriter()) {
             writer.print(string);
-        }catch (IOException e){
+        } catch (IOException e) {
             // ignore
         }
         return null;

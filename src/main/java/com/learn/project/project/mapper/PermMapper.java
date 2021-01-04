@@ -18,6 +18,7 @@ public interface PermMapper extends BaseMapper<Perm> {
 
     /**
      * 根据角色id获取其权限
+     *
      * @param roleId 角色id
      * @return Set<String>
      */

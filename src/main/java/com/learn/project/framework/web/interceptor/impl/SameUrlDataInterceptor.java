@@ -3,9 +3,9 @@ package com.learn.project.framework.web.interceptor.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.learn.project.common.constant.Constant;
 import com.learn.project.common.constant.RedisKey;
-import com.learn.project.framework.web.filter.RepeatedlyRequestWrapper;
 import com.learn.project.common.utils.http.HttpHelper;
 import com.learn.project.common.utils.redis.RedisCache;
+import com.learn.project.framework.web.filter.RepeatedlyRequestWrapper;
 import com.learn.project.framework.web.interceptor.AbstractRepeatSubmitInterceptor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
@@ -27,19 +27,16 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class SameUrlDataInterceptor extends AbstractRepeatSubmitInterceptor implements ApplicationContextAware {
 
-    private final String REPEAT_PARAMS = "repeatParams";
+    private static final String REPEAT_PARAMS = "repeatParams";
 
-    private final String REPEAT_TIME = "repeatTime";
-
+    private static final String REPEAT_TIME = "repeatTime";
+    private static ApplicationContext applicationContext;
     /**
      * 间隔时间，单位:秒
      * <p>
      * 两次相同参数的请求，如果间隔时间大于该参数，系统不会认定为重复提交的数据
      */
-    private int intervalTime = Constant.FORM_REPEAT_TIME;
-
-
-    private static ApplicationContext applicationContext;
+    private final int intervalTime = Constant.FORM_REPEAT_TIME;
 
     @Override
     public void setApplicationContext(ApplicationContext arg0) throws BeansException {

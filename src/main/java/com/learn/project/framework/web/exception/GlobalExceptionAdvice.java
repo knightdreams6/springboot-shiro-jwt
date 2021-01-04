@@ -26,6 +26,7 @@ public class GlobalExceptionAdvice {
 
     /**
      * 通用业务异常
+     *
      * @param e e
      * @return ResponseEntity
      */
@@ -38,6 +39,7 @@ public class GlobalExceptionAdvice {
 
     /**
      * 参数校验异常
+     *
      * @param e e
      * @return ResponseEntity
      */
@@ -50,10 +52,11 @@ public class GlobalExceptionAdvice {
 
     /**
      * 阿里短信发送异常
+     *
      * @return ResponseEntity
      */
     @ExceptionHandler(ClientException.class)
-    public ResponseEntity<String> handleClientException(){
+    public ResponseEntity<String> handleClientException() {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON)
                 .body(JSONObject.toJSONString(Result.error(ErrorState.SEND_SMS_ERROR)));
     }
@@ -61,6 +64,7 @@ public class GlobalExceptionAdvice {
 
     /**
      * shiro权限异常处理
+     *
      * @return ResponseEntity
      */
     @ExceptionHandler(AuthorizationException.class)
@@ -74,7 +78,7 @@ public class GlobalExceptionAdvice {
      * token无效异常
      */
     @ExceptionHandler(IncorrectCredentialsException.class)
-    public ResponseEntity<String> handleTokenException(){
+    public ResponseEntity<String> handleTokenException() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON)
                 .body(JSONObject.toJSONString(Result.error(ErrorState.TOKEN_INVALID)));
     }
@@ -82,10 +86,11 @@ public class GlobalExceptionAdvice {
 
     /**
      * 参数校验(缺少)异常处理
+     *
      * @return ResponseEntity
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<String> handleMissingParameterException(){
+    public ResponseEntity<String> handleMissingParameterException() {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON)
                 .body(JSONObject.toJSONString(Result.error(ErrorState.MISSING_PARAMETER)));
     }

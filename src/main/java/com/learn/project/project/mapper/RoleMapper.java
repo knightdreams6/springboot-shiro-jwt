@@ -1,7 +1,7 @@
 package com.learn.project.project.mapper;
 
-import com.learn.project.project.entity.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.learn.project.project.entity.Role;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -19,6 +19,7 @@ public interface RoleMapper extends BaseMapper<Role> {
 
     /**
      * 根据用户id获取其角色key列表
+     *
      * @param userId userId
      * @return Set<Role>
      */
@@ -27,6 +28,7 @@ public interface RoleMapper extends BaseMapper<Role> {
 
     /**
      * 根据用户id获取其角色id列表
+     *
      * @param userId userId
      * @return Set<Integer>
      */
@@ -36,7 +38,8 @@ public interface RoleMapper extends BaseMapper<Role> {
 
     /**
      * 给用户添加角色
-     * @param userId 用户id
+     *
+     * @param userId  用户id
      * @param roleIds 需要添加的角色
      */
     void addRole(@Param("userId") Integer userId, @Param("roleIds") Integer[] roleIds);

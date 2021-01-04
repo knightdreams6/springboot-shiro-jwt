@@ -16,6 +16,7 @@ public class MybatisConfig {
 
     /**
      * 分页插件，自动识别数据库类型
+     *
      * @return PaginationInterceptor
      */
     @Bean
@@ -26,7 +27,7 @@ public class MybatisConfig {
     }
 
     @Bean
-    public MasterSlaveAutoRoutingPlugin masterSlaveAutoRoutingPlugin(){
+    public MasterSlaveAutoRoutingPlugin masterSlaveAutoRoutingPlugin() {
         return new MasterSlaveAutoRoutingPlugin();
     }
 }

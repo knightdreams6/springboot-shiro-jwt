@@ -1,11 +1,11 @@
 package com.learn.project.project.mapper;
 
-import com.learn.project.project.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.learn.project.project.entity.User;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author knight
