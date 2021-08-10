@@ -4,57 +4,55 @@ package com.learn.project.common.enums;
  * @author knight
  */
 public enum RoleEnums {
-    /**
-     * 管理员
-     */
-    ADMIN(1, "admin", "管理员"),
-    /**
-     * 普通角色
-     */
-    COMMON(2, "common", "普通角色");
 
-    private Integer code;
+	/**
+	 * 管理员
+	 */
+	ADMIN(1, "admin", "管理员"),
+	/**
+	 * 普通角色
+	 */
+	COMMON(2, "common", "普通角色");
 
-    private String name;
+	private Integer code;
 
-    private String msg;
+	private String name;
 
-    RoleEnums(Integer code, String name, String msg) {
-        this.code = code;
-        this.name = name;
-        this.msg = msg;
-    }
+	private String msg;
 
-    public Integer getCode() {
-        return code;
-    }
+	RoleEnums(Integer code, String name, String msg) {
+		this.code = code;
+		this.name = name;
+		this.msg = msg;
+	}
 
-    public void setCode(Integer code) {
-        this.code = code;
-    }
+	public Integer getCode() {
+		return code;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setCode(Integer code) {
+		this.code = code;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getMsg() {
-        return msg;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
+	public String getMsg() {
+		return msg;
+	}
 
-    @Override
-    public String toString() {
-        return "RoleEnums{" +
-                "code=" + code +
-                ", name='" + name + '\'' +
-                ", msg='" + msg + '\'' +
-                '}';
-    }
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
+	@Override
+	public String toString() {
+		return "RoleEnums{" + "code=" + code + ", name='" + name + '\'' + ", msg='" + msg + '\'' + '}';
+	}
+
 }

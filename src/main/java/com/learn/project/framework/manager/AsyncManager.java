@@ -1,7 +1,7 @@
 package com.learn.project.framework.manager;
 
+import cn.hutool.extra.spring.SpringUtil;
 import com.learn.project.common.utils.Threads;
-import com.learn.project.common.utils.spring.SpringUtils;
 
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledExecutorService;
@@ -13,40 +13,41 @@ import java.util.concurrent.TimeUnit;
  */
 public class AsyncManager {
 
-    private static final AsyncManager me = new AsyncManager();
-    /**
-     * 操作延迟10毫秒
-     */
-    private final int OPERATE_DELAY_TIME = 10;
-    /**
-     * 异步操作任务调度线程池
-     */
-    private final ScheduledExecutorService executor = SpringUtils.getBean("scheduledExecutorService");
+	private static final AsyncManager me = new AsyncManager();
 
-    /**
-     * 单例模式
-     */
-    private AsyncManager() {
-    }
+	/**
+	 * 操作延迟10毫秒
+	 */
+	private final int OPERATE_DELAY_TIME = 10;
 
-    public static AsyncManager me() {
-        return me;
-    }
+	/**
+	 * 异步操作任务调度线程池
+	 */
+	private final ScheduledExecutorService executor = SpringUtil.getBean("scheduledExecutorService");
 
-    /**
-     * 执行任务
-     *
-     * @param task 任务
-     */
-    public void execute(TimerTask task) {
-        executor.schedule(task, OPERATE_DELAY_TIME, TimeUnit.MILLISECONDS);
-    }
+	/**
+	 * 单例模式
+	 */
+	private AsyncManager() {
+	}
 
-    /**
-     * 停止任务线程池
-     */
-    public void shutdown() {
-        Threads.shutdownAndAwaitTermination(executor);
-    }
+	public static AsyncManager me() {
+		return me;
+	}
+
+	/**
+	 * 执行任务
+	 * @param task 任务
+	 */
+	public void execute(TimerTask task) {
+		executor.schedule(task, OPERATE_DELAY_TIME, TimeUnit.MILLISECONDS);
+	}
+
+	/**
+	 * 停止任务线程池
+	 */
+	public void shutdown() {
+		Threads.shutdownAndAwaitTermination(executor);
+	}
 
 }

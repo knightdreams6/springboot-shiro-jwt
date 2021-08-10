@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 客户端工具类
@@ -18,49 +20,50 @@ import java.io.PrintWriter;
  */
 public class ServletUtils {
 
-    /**
-     * 获取request
-     */
-    public static HttpServletRequest getRequest() {
-        return getRequestAttributes().getRequest();
-    }
+	/**
+	 * 获取request
+	 */
+	public static HttpServletRequest getRequest() {
+		return getRequestAttributes().getRequest();
+	}
 
-    /**
-     * 获取response
-     */
-    public static HttpServletResponse getResponse() {
-        return getRequestAttributes().getResponse();
-    }
+	/**
+	 * 获取response
+	 */
+	public static HttpServletResponse getResponse() {
+		return getRequestAttributes().getResponse();
+	}
 
-    /**
-     * 获取session
-     */
-    public static HttpSession getSession() {
-        return getRequest().getSession();
-    }
+	/**
+	 * 获取session
+	 */
+	public static HttpSession getSession() {
 
-    public static ServletRequestAttributes getRequestAttributes() {
-        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
-        return (ServletRequestAttributes) attributes;
-    }
+		return getRequest().getSession();
+	}
 
-    /**
-     * 将字符串渲染到客户端
-     *
-     * @param response 渲染对象
-     * @param string   待渲染的字符串
-     * @return null
-     */
-    public static String renderString(HttpServletResponse response, String string) {
-        response.setStatus(HttpStatus.OK.value());
-        response.setCharacterEncoding("utf-8");
-        response.setContentType("application/json;charset=UTF-8");
-        try (PrintWriter writer = response.getWriter()) {
-            writer.print(string);
-        } catch (IOException e) {
-            // ignore
-        }
-        return null;
-    }
+	public static ServletRequestAttributes getRequestAttributes() {
+		RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+		return (ServletRequestAttributes) attributes;
+	}
+
+	/**
+	 * 将字符串渲染到客户端
+	 * @param response 渲染对象
+	 * @param string 待渲染的字符串
+	 * @return null
+	 */
+	public static String renderString(HttpServletResponse response, String string) {
+		response.setStatus(HttpStatus.OK.value());
+		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+		response.setContentType("application/json;charset=UTF-8");
+		try (PrintWriter writer = response.getWriter()) {
+			writer.print(string);
+		}
+		catch (IOException e) {
+			// ignore
+		}
+		return null;
+	}
 
 }

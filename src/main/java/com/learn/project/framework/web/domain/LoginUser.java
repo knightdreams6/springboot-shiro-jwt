@@ -4,6 +4,7 @@ import com.learn.project.project.entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -13,20 +14,23 @@ import java.util.Set;
  */
 @Data
 @NoArgsConstructor
-public class LoginUser {
+public class LoginUser implements Serializable {
 
-    /**
-     * 角色列表
-     */
-    private Set<String> roleSet;
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * 权限列表
-     */
-    private Set<String> permissionsSet;
+	/**
+	 * 角色列表
+	 */
+	private Set<String> roleSet;
 
-    /**
-     * User
-     */
-    private User user;
+	/**
+	 * 权限列表
+	 */
+	private Set<String> permissionsSet;
+
+	/**
+	 * User
+	 */
+	private User user;
+
 }

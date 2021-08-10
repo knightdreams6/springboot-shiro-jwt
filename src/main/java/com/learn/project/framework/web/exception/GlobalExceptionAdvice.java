@@ -1,8 +1,6 @@
 package com.learn.project.framework.web.exception;
 
-
-import com.alibaba.fastjson.JSONObject;
-import com.aliyuncs.exceptions.ClientException;
+import cn.hutool.json.JSONUtil;
 import com.learn.project.common.enums.ErrorState;
 import com.learn.project.framework.web.domain.Result;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
 
-
 /**
  * @author lixiao
  * @date 2019/8/7 11:09
@@ -24,76 +21,74 @@ import javax.validation.ConstraintViolationException;
 @RestControllerAdvice
 public class GlobalExceptionAdvice {
 
-    /**
-     * 通用业务异常
-     *
-     * @param e e
-     * @return ResponseEntity
-     */
-    @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<String> handleServiceException(ServiceException e) {
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
-                .body(e.getMessage());
-    }
+	/**
+	 * 非法参数异常
+	 * @see org.springframework.util.Assert
+	 * @param e e
+	 * @return ResponseEntity
+	 */
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
+		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(e.getMessage());
+	}
 
+	/**
+	 * 通用业务异常
+	 * @param e e
+	 * @return ResponseEntity
+	 */
+	@ExceptionHandler(ServiceException.class)
+	public ResponseEntity<String> handleServiceException(ServiceException e) {
+		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(e.getMessage());
+	}
 
-    /**
-     * 参数校验异常
-     *
-     * @param e e
-     * @return ResponseEntity
-     */
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
-                .body(e.getMessage());
-    }
+	/**
+	 * 参数校验异常
+	 * @param e e
+	 * @return ResponseEntity
+	 */
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
+		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(e.getMessage());
+	}
 
+	/**
+	 * shiro权限异常处理
+	 * @return ResponseEntity
+	 */
+	@ExceptionHandler(AuthorizationException.class)
+	public ResponseEntity<String> handleShiroException() {
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON)
+				.body(JSONUtil.toJsonStr(Result.error(ErrorState.NOT_AUTH)));
+	}
 
-    /**
-     * 阿里短信发送异常
-     *
-     * @return ResponseEntity
-     */
-    @ExceptionHandler(ClientException.class)
-    public ResponseEntity<String> handleClientException() {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON)
-                .body(JSONObject.toJSONString(Result.error(ErrorState.SEND_SMS_ERROR)));
-    }
+	/**
+	 * token无效异常
+	 */
+	@ExceptionHandler(IncorrectCredentialsException.class)
+	public ResponseEntity<String> handleTokenException() {
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON)
+				.body(JSONUtil.toJsonStr(Result.error(ErrorState.TOKEN_INVALID)));
+	}
 
+	/**
+	 * 参数校验(缺少)异常处理
+	 * @return ResponseEntity
+	 */
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	public ResponseEntity<String> handleMissingParameterException() {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON)
+				.body(JSONUtil.toJsonStr(Result.error(ErrorState.MISSING_PARAMETER)));
+	}
 
-    /**
-     * shiro权限异常处理
-     *
-     * @return ResponseEntity
-     */
-    @ExceptionHandler(AuthorizationException.class)
-    public ResponseEntity<String> handleShiroException() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON)
-                .body(JSONObject.toJSONString(Result.error(ErrorState.NOT_AUTH)));
-    }
-
-
-    /**
-     * token无效异常
-     */
-    @ExceptionHandler(IncorrectCredentialsException.class)
-    public ResponseEntity<String> handleTokenException() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON)
-                .body(JSONObject.toJSONString(Result.error(ErrorState.TOKEN_INVALID)));
-    }
-
-
-    /**
-     * 参数校验(缺少)异常处理
-     *
-     * @return ResponseEntity
-     */
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<String> handleMissingParameterException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON)
-                .body(JSONObject.toJSONString(Result.error(ErrorState.MISSING_PARAMETER)));
-    }
-
+	/**
+	 * 处理运行时异常
+	 * @return {@link ResponseEntity<String>}
+	 */
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<String> handleRuntimeException() {
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON)
+				.body(JSONUtil.toJsonStr(Result.error("服务器异常")));
+	}
 
 }

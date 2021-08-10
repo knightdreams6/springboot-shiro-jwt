@@ -2,6 +2,7 @@ package com.learn.project.project.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.learn.project.project.entity.Perm;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Set;
@@ -14,13 +15,14 @@ import java.util.Set;
  * @author lixiao
  * @since 2020-04-15
  */
+@Mapper
 public interface PermMapper extends BaseMapper<Perm> {
 
-    /**
-     * 根据角色id获取其权限
-     *
-     * @param roleId 角色id
-     * @return Set<String>
-     */
-    Set<String> getPermissionsSet(@Param("roleId") Integer roleId);
+	/**
+	 * 根据角色id获取其权限
+	 * @param roleId 角色id
+	 * @return Set<String>
+	 */
+	Set<String> getPermissionsSet(@Param("roleId") Integer roleId);
+
 }

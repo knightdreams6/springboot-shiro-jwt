@@ -29,26 +29,25 @@ import java.time.LocalDateTime;
 @Alias("Role")
 public class Role implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "角色ID")
-    @TableId(value = "role_id", type = IdType.AUTO)
-    private Long roleId;
+	@ApiModelProperty(value = "角色ID")
+	@TableId(value = "role_id", type = IdType.AUTO)
+	private Long roleId;
 
-    @ApiModelProperty(value = "角色名称")
-    private String roleName;
+	@ApiModelProperty(value = "角色名称")
+	private String roleName;
 
-    @ApiModelProperty(value = "角色权限字符串")
-    private String roleKey;
+	@ApiModelProperty(value = "角色权限字符串")
+	private String roleKey;
 
-    @ApiModelProperty(value = "创建时间")
-    private LocalDateTime createTime;
+	@ApiModelProperty(value = "创建时间")
+	private LocalDateTime createTime;
 
-    @ApiModelProperty(value = "更新时间")
-    private LocalDateTime updateTime;
+	@ApiModelProperty(value = "更新时间")
+	private LocalDateTime updateTime;
 
-    @ApiModelProperty(value = "备注")
-    private String remark;
-
+	@ApiModelProperty(value = "备注")
+	private String remark;
 
 }

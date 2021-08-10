@@ -19,16 +19,8 @@ spring:
         min-idle: 0
   cache:
     type: redis
-  mail:
-    host: smtp.163.com
-    default-encoding: UTF-8
-    username: 你的邮箱地址
-    password: 你的授权码
 
 mybatis-plus:
-  # 如果是放在src/main/java目录下 classpath:/com/yourpackage/*/mapper/*Mapper.xml
-  # 如果是放在resource目录 classpath:/mapper/*Mapper.xml
-  mapper-locations: classpath:/mybatis/*/*Mapper.xml
   # 实体扫描，多个package用逗号或者分号分隔
   type-aliases-package: com.learn.project.project.entity
   global-config:
@@ -45,3 +37,48 @@ mybatis-plus:
     cache-enabled: false
     # 配置JdbcTypeForNull, oracle数据库必须配置
     # jdbc-type-for-null: 'null'
+
+---
+server:
+  port: 8080
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://121.41.3.24:3306/sweet?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: xxx
+  redis:
+    host: 121.41.3.24
+    database: 1
+    password: xxx
+    port: 8664
+
+# 日志
+logging:
+  config: classpath:conf/logback-spring-dev.xml
+
+---
+server:
+  port: 8080
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.0.134:3307/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123
+  redis:
+    host: 192.168.0.134
+    database: 0
+    port: 6380
+    password: 123
+
+
+# 日志
+logging:
+  config: classpath:conf/logback-spring-prod.xml

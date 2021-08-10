@@ -31,46 +31,46 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "用户id")
-    @TableId(value = "user_id", type = IdType.AUTO)
-    private Integer userId;
+	@ApiModelProperty(value = "用户id")
+	@TableId(value = "user_id", type = IdType.AUTO)
+	private Integer userId;
 
-    @ApiModelProperty(value = "手机号")
-    private String phone;
+	@ApiModelProperty(value = "手机号")
+	private String phone;
 
-    @ApiModelProperty(value = "盐值", hidden = true)
-    @JsonIgnore
-    private String salt;
+	@ApiModelProperty(value = "盐值", hidden = true)
+	@JsonIgnore
+	private String salt;
 
-    @ApiModelProperty(value = "密码", hidden = true)
-    @JsonIgnore
-    private String password;
+	@ApiModelProperty(value = "密码", hidden = true)
+	@JsonIgnore
+	private String password;
 
-    @ApiModelProperty(value = "头像")
-    private String avatar;
+	@ApiModelProperty(value = "头像")
+	private String avatar;
 
-    @ApiModelProperty(value = "用户名")
-    private String name;
+	@ApiModelProperty(value = "用户名")
+	private String name;
 
-    @ApiModelProperty(value = "性别")
-    private Integer sex;
+	@ApiModelProperty(value = "性别")
+	private Integer sex;
 
-    @ApiModelProperty(value = "出生日期")
-    private LocalDate birth;
+	@ApiModelProperty(value = "出生日期")
+	private LocalDate birth;
 
-    @ApiModelProperty(value = "注册时间")
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
+	@ApiModelProperty(value = "注册时间")
+	@TableField(fill = FieldFill.INSERT)
+	private LocalDateTime createTime;
 
-    @ApiModelProperty(value = "更新时间", hidden = true)
-    @TableField(fill = FieldFill.UPDATE)
-    @JsonIgnore
-    private LocalDateTime updateTime;
+	@ApiModelProperty(value = "更新时间", hidden = true)
+	@TableField(fill = FieldFill.UPDATE)
+	@JsonIgnore
+	private LocalDateTime updateTime;
 
-    @ApiModelProperty(value = "0未删除1已删除", hidden = true)
-    @JsonIgnore
-    private Integer flag;
+	@ApiModelProperty(value = "0未删除1已删除", hidden = true)
+	@JsonIgnore
+	private Integer flag;
 
 }

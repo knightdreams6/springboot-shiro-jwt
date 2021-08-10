@@ -1,6 +1,8 @@
 package com.learn.project.project.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import cn.hutool.core.util.IdUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.learn.project.common.enums.ErrorState;
 import com.learn.project.common.enums.RoleEnums;
@@ -26,55 +28,59 @@ import javax.annotation.Resource;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
-    @Resource
-    private UserMapper userMapper;
+	@Resource
+	private UserMapper userMapper;
 
-    @Resource
-    private PermissionsService permissionsService;
+	@Resource
+	private PermissionsService permissionsService;
 
-    @Resource
-    private TransactionTemplate transactionTemplate;
+	@Resource
+	private TransactionTemplate transactionTemplate;
 
-    @Override
-    public User selectUserByPhone(String phone) {
-        return userMapper.selectOne(new QueryWrapper<User>().eq("phone", phone));
-    }
+	@Override
+	public User selectUserByPhone(String phone) {
+		LambdaQueryWrapper<User> queryWrapper = Wrappers.<User>lambdaQuery()
+				// 根据手机号过滤
+				.eq(User::getPhone, phone).last("limit 1");
+		return userMapper.selectOne(queryWrapper);
+	}
 
-    /**
-     * 用户注册,默认密码为手机号后六位
-     *
-     * @param phone phone
-     */
-    @Override
-    public Boolean register(String phone, String... args) {
-        // 判断是否已存在该用户
-        User db = this.selectUserByPhone(phone);
-        if (db != null) {
-            throw new ServiceException(ErrorState.USER_ALREADY_EXIST.getMsg());
-        }
-        User user = new User();
-        user.setPhone(phone);
-        // 如果有密码，则使用用户输入的密码
-        String salt = CommonsUtils.uuid();
-        String encryptPassword;
-        if (args.length > 0) {
-            encryptPassword = CommonsUtils.encryptPassword(args[0], salt);
-        } else {
-            encryptPassword = CommonsUtils.encryptPassword(phone.substring(5, 11), salt);
-        }
-        user.setPassword(encryptPassword);
-        user.setSalt(salt);
-        return transactionTemplate.execute(status -> {
-            try {
-                userMapper.insert(user);
-                permissionsService.addRole(user.getUserId(), RoleEnums.ADMIN.getCode(), RoleEnums.COMMON.getCode());
-                return Boolean.TRUE;
-            } catch (Exception e) {
-                //回滚
-                status.setRollbackOnly();
-                return Boolean.FALSE;
-            }
-        });
-    }
+	/**
+	 * 用户注册,默认密码为手机号后六位
+	 * @param phone phone
+	 */
+	@Override
+	public Boolean register(String phone, String... args) {
+		// 判断是否已存在该用户
+		User db = this.selectUserByPhone(phone);
+		if (db != null) {
+			throw new ServiceException(ErrorState.USER_ALREADY_EXIST);
+		}
+		User user = new User();
+		user.setPhone(phone);
+		// 如果有密码，则使用用户输入的密码
+		String salt = IdUtil.simpleUUID();
+		String encryptPassword;
+		if (args.length > 0) {
+			encryptPassword = CommonsUtils.encryptPassword(args[0], salt);
+		}
+		else {
+			encryptPassword = CommonsUtils.encryptPassword(phone.substring(5, 11), salt);
+		}
+		user.setPassword(encryptPassword);
+		user.setSalt(salt);
+		return transactionTemplate.execute(status -> {
+			try {
+				userMapper.insert(user);
+				permissionsService.addRole(user.getUserId(), RoleEnums.ADMIN.getCode(), RoleEnums.COMMON.getCode());
+				return Boolean.TRUE;
+			}
+			catch (Exception e) {
+				// 回滚
+				status.setRollbackOnly();
+				return Boolean.FALSE;
+			}
+		});
+	}
 
 }

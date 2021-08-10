@@ -1,6 +1,5 @@
 package com.learn.project.common.annotction;
 
-
 import com.learn.project.common.annotction.validator.PhoneNumberValidator;
 
 import javax.validation.Constraint;
@@ -15,13 +14,14 @@ import java.lang.annotation.Target;
  */
 @Documented
 @Constraint(validatedBy = PhoneNumberValidator.class)
-@Target({ElementType.FIELD, ElementType.PARAMETER})
+@Target({ ElementType.FIELD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PhoneNumber {
 
-    String message() default "手机号无效";
+	String message() default "手机号无效";
 
-    Class[] groups() default {};
+	Class[] groups() default {};
 
-    Class[] payload() default {};
+	Class[] payload() default {};
+
 }

@@ -15,22 +15,24 @@ import javax.annotation.PreDestroy;
 @Component
 public class AppShutDownManager {
 
-    private static final Logger logger = LoggerFactory.getLogger(AppShutDownManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(AppShutDownManager.class);
 
-    @PreDestroy
-    public void destroy() {
-        shutdownAsyncManager();
-    }
+	@PreDestroy
+	public void destroy() {
+		shutdownAsyncManager();
+	}
 
-    /**
-     * 停止异步执行任务
-     */
-    private void shutdownAsyncManager() {
-        try {
-            logger.info("====关闭后台任务任务线程池====");
-            AsyncManager.me().shutdown();
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
+	/**
+	 * 停止异步执行任务
+	 */
+	private void shutdownAsyncManager() {
+		try {
+			logger.info("====关闭后台任务任务线程池====");
+			AsyncManager.me().shutdown();
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+
 }

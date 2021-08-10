@@ -18,21 +18,21 @@ import java.lang.annotation.Target;
  */
 @Documented
 @Inherited
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RequestLimit {
 
-    /**
-     * 默认为5秒内可访问1次
-     */
-    int second() default 5;
+	/**
+	 * 默认为5秒内可访问1次
+	 */
+	int second() default 5;
 
-    int maxCount() default 1;
+	int maxCount() default 1;
 
-    /**
-     * 超出限制后，返回的错误提示
-     *
-     * @return msg
-     */
-    ErrorState msg() default ErrorState.REQUEST_LIMIT;
+	/**
+	 * 超出限制后，返回的错误提示
+	 * @return msg
+	 */
+	ErrorState msg() default ErrorState.REQUEST_LIMIT;
+
 }
