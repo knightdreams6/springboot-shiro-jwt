@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.BearerToken;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.realm.Realm;
 
@@ -26,7 +27,7 @@ public class CustomModularRealmAuthenticator extends ModularRealmAuthenticator {
 		if (token instanceof BearerToken) {
 			finalRealm = SpringUtil.getBean(JwtRealm.class);
 		}
-		else if (token instanceof PasswordRealm) {
+		else if (token instanceof UsernamePasswordToken) {
 			finalRealm = SpringUtil.getBean(PasswordRealm.class);
 		}
 		else {
