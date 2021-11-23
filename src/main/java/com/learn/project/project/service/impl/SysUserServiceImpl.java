@@ -1,6 +1,7 @@
 package com.learn.project.project.service.impl;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -9,40 +10,35 @@ import com.learn.project.common.enums.RoleEnums;
 import com.learn.project.common.utils.CommonsUtils;
 import com.learn.project.framework.shiro.service.PermissionsService;
 import com.learn.project.framework.web.exception.ServiceException;
-import com.learn.project.project.entity.User;
-import com.learn.project.project.mapper.UserMapper;
-import com.learn.project.project.service.IUserService;
+import com.learn.project.project.entity.SysUser;
+import com.learn.project.project.mapper.SysUserMapper;
+import com.learn.project.project.service.ISysUserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.annotation.Resource;
-
 /**
  * <p>
- * 用户服务实现类
+ * 用户信息 服务实现类
  * </p>
  *
  * @author knight
- * @since 2019-12-17
+ * @since 2021-11-23
  */
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+@RequiredArgsConstructor
+public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements ISysUserService {
 
-	@Resource
-	private UserMapper userMapper;
+	private final PermissionsService permissionsService;
 
-	@Resource
-	private PermissionsService permissionsService;
-
-	@Resource
-	private TransactionTemplate transactionTemplate;
+	private final TransactionTemplate transactionTemplate;
 
 	@Override
-	public User selectUserByPhone(String phone) {
-		LambdaQueryWrapper<User> queryWrapper = Wrappers.<User>lambdaQuery()
+	public SysUser selectUserByPhone(String phone) {
+		LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.<SysUser>lambdaQuery()
 				// 根据手机号过滤
-				.eq(User::getPhone, phone).last("limit 1");
-		return userMapper.selectOne(queryWrapper);
+				.eq(SysUser::getSuPhone, phone).last("limit 1");
+		return this.getOne(queryWrapper);
 	}
 
 	/**
@@ -52,12 +48,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 	@Override
 	public Boolean register(String phone, String... args) {
 		// 判断是否已存在该用户
-		User db = this.selectUserByPhone(phone);
-		if (db != null) {
+		SysUser db = this.selectUserByPhone(phone);
+		if (ObjectUtil.isNotNull(db)) {
 			throw new ServiceException(ErrorState.USER_ALREADY_EXIST);
 		}
-		User user = new User();
-		user.setPhone(phone);
+		SysUser user = new SysUser();
+		user.setSuPhone(phone);
 		// 如果有密码，则使用用户输入的密码
 		String salt = IdUtil.simpleUUID();
 		String encryptPassword;
@@ -67,13 +63,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 		else {
 			encryptPassword = CommonsUtils.encryptPassword(phone.substring(5, 11), salt);
 		}
-		user.setPassword(encryptPassword);
-		user.setSalt(salt);
+		user.setSuPassword(encryptPassword);
+		user.setSuSalt(salt);
 		return transactionTemplate.execute(status -> {
 			try {
-				userMapper.insert(user);
-				permissionsService.addRole(user.getUserId(), RoleEnums.ADMIN.getCode(), RoleEnums.COMMON.getCode());
-				return Boolean.TRUE;
+				this.save(user);
+				return permissionsService.addRole(user.getId(), RoleEnums.ADMIN.getCode(), RoleEnums.COMMON.getCode());
 			}
 			catch (Exception e) {
 				// 回滚

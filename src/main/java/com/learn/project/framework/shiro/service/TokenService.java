@@ -11,15 +11,16 @@ import com.learn.project.common.constant.Constant;
 import com.learn.project.common.constant.RedisKey;
 import com.learn.project.common.utils.ServletUtils;
 import com.learn.project.framework.web.domain.LoginUser;
-import com.learn.project.project.entity.User;
-import com.learn.project.project.service.IUserService;
+import com.learn.project.framework.web.domain.UserInfo;
+import com.learn.project.project.entity.SysUser;
+import com.learn.project.project.service.ISysUserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -28,13 +29,14 @@ import java.util.concurrent.TimeUnit;
  * @date 2020/4/15 11:45
  */
 @Service
+@RequiredArgsConstructor
 public class TokenService {
 
-	@Resource
-	private IUserService userService;
+	/** 用户服务 */
+	private final ISysUserService userService;
 
-	@Resource
-	private PermissionsService permissionsService;
+	/** 权限服务 */
+	private final PermissionsService permissionsService;
 
 	@Resource
 	private RedisTemplate<String, LoginUser> redisTemplate;
@@ -55,14 +57,10 @@ public class TokenService {
 		if (cacheObject == null) {
 			LoginUser loginUser = new LoginUser();
 			// 获取当前登录用户
-			User user = userService.selectUserByPhone(phone);
-			loginUser.setUser(user);
-			// 获取当前登录用户所有权限
-			Set<String> permissionsSet = permissionsService.getPermissionsSet(user.getUserId());
-			loginUser.setPermissionsSet(permissionsSet);
-			// 获取当前登录用户所有角色
-			Set<String> roleSet = permissionsService.getRoleSet(user.getUserId());
-			loginUser.setRoleSet(roleSet);
+			SysUser user = userService.selectUserByPhone(phone);
+			loginUser.setUser(new UserInfo(user));
+			// 填充角色与权限
+			permissionsService.addRoleAndPerms(loginUser);
 			// 缓存当前登录用户
 			redisTemplate.opsForValue().set(loginUserKey, loginUser, 15, TimeUnit.MINUTES);
 			return loginUser;
@@ -122,11 +120,10 @@ public class TokenService {
 	 * @param time token的有效时间 单位:毫秒
 	 * @return 加密的token
 	 */
-	public String createToken(String phone, Integer userId, String secret, Long time) {
+	public String createToken(String phone, String userId, String secret, Long time) {
 		Date date = new Date(System.currentTimeMillis() + time);
 		Algorithm algorithm = Algorithm.HMAC256(secret);
-		return JWT.create().withClaim("phone", phone).withClaim("userId", String.valueOf(userId)).withExpiresAt(date)
-				.sign(algorithm);
+		return JWT.create().withClaim("phone", phone).withClaim("userId", userId).withExpiresAt(date).sign(algorithm);
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package com.learn.project.framework.web.domain;
 
+import cn.hutool.json.JSONUtil;
 import com.learn.project.common.enums.ErrorState;
 import org.springframework.http.HttpStatus;
 
@@ -146,6 +147,15 @@ public class Result extends HashMap<String, Object> {
 	 */
 	public static Result error(ErrorState errorState, Object data) {
 		return new Result(errorState.getCode(), errorState.getMsg(), data);
+	}
+
+	/**
+	 * 错误json
+	 * @param errorState 错误状态
+	 * @return {@link String}
+	 */
+	public static String errorJson(ErrorState errorState) {
+		return JSONUtil.toJsonStr(Result.error(errorState));
 	}
 
 }

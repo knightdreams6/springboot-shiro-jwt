@@ -21,40 +21,32 @@ spring:
     type: redis
 
 mybatis-plus:
-  # 实体扫描，多个package用逗号或者分号分隔
-  type-aliases-package: com.learn.project.project.entity
   global-config:
     db-config:
-      id-type: AUTO
-      table-underline: true
-      logic-delete-value: 1
-      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
-      logic-delete-field: flag
+      id-type: ASSIGN_ID
+      logic-delete-field: deleted
 
   configuration:
     # 配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
     map-underscore-to-camel-case: true
     cache-enabled: false
-    # 配置JdbcTypeForNull, oracle数据库必须配置
-    # jdbc-type-for-null: 'null'
 
 ---
 server:
-  port: 8080
+  port: 8082
 spring:
   config:
     activate:
       on-profile: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://121.41.3.24:3306/sweet?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://192.168.50.23:3306/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     username: root
-    password: xxx
+    password: F7FPfW-HBG2Dxwav
   redis:
-    host: 121.41.3.24
-    database: 1
-    password: xxx
-    port: 8664
+    host: 192.168.50.24
+    database: 6
+    port: 6379
 
 # 日志
 logging:

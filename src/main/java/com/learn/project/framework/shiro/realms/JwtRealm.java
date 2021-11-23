@@ -1,12 +1,18 @@
 package com.learn.project.framework.shiro.realms;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.learn.project.framework.shiro.service.TokenService;
 import com.learn.project.framework.web.domain.LoginUser;
-import com.learn.project.project.entity.User;
-import com.learn.project.project.service.IUserService;
+import com.learn.project.project.entity.SysUser;
+import com.learn.project.project.service.ISysUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.BearerToken;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -21,11 +27,13 @@ import javax.annotation.Resource;
 @Slf4j
 public class JwtRealm extends AuthorizingRealm {
 
+	/** 令牌服务 */
 	@Resource
 	private TokenService tokenService;
 
+	/** 用户服务 */
 	@Resource
-	private IUserService userService;
+	private ISysUserService userService;
 
 	@Override
 	public boolean supports(AuthenticationToken token) {
@@ -59,11 +67,11 @@ public class JwtRealm extends AuthorizingRealm {
 		if (StrUtil.isBlank(phone)) {
 			throw new IncorrectCredentialsException();
 		}
-		User user = userService.selectUserByPhone(phone);
-		if (user == null) {
+		SysUser user = userService.selectUserByPhone(phone);
+		if (ObjectUtil.isNull(user)) {
 			throw new IncorrectCredentialsException();
 		}
-		boolean verify = tokenService.verify(token, user.getPassword());
+		boolean verify = tokenService.verify(token, user.getSuPassword());
 		if (!verify) {
 			throw new IncorrectCredentialsException();
 		}

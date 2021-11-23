@@ -1,6 +1,6 @@
 package com.learn.project.common.constant;
 
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import cn.hutool.crypto.digest.MD5;
 
 /**
  * @author lixiao
@@ -21,7 +21,7 @@ public class RedisKey {
 	}
 
 	public static String getRequestLimitKey(String servletPath, String phone) {
-		return "LIMIT:" + servletPath + StringPool.COLON + phone;
+		return "LIMIT:" + MD5.create().digestHex(servletPath + phone);
 	}
 
 }

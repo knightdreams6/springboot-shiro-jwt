@@ -1,17 +1,16 @@
 # springboot-shiro-jwt
 
 #### 介绍
+
 Springboot+Shrio+Jwt前后端分离
 
 #### 软件架构
-Springboot+Shiro+Jwt+MybatisPlus3
-项目构建工具：maven
-数据库：mysql
-Nosql：redis
+
+Springboot+Shiro+Jwt+MybatisPlus3 项目构建工具：maven 数据库：mysql Nosql：redis
 
 #### 前端项目
-[![移动端仿抖音登录功能demo](https://img.shields.io/badge/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%BB%BF%E6%8A%96%E9%9F%B3%E7%99%BB%E5%BD%95-blue.svg)](https://gitee.com/knightdreams/vue-mobile-login-demo)
 
+[![移动端仿抖音登录功能demo](https://img.shields.io/badge/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%BB%BF%E6%8A%96%E9%9F%B3%E7%99%BB%E5%BD%95-blue.svg)](https://gitee.com/knightdreams/vue-mobile-login-demo)
 
 [![vue管理后台](https://img.shields.io/badge/vue%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0-blue.svg)](https://gitee.com/knightdreams/vue-admin-template)
 

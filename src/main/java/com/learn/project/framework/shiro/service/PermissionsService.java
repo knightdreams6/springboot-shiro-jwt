@@ -1,12 +1,17 @@
 package com.learn.project.framework.shiro.service;
 
-import com.learn.project.project.mapper.PermMapper;
-import com.learn.project.project.mapper.RoleMapper;
+import cn.hutool.core.collection.CollUtil;
+import com.learn.project.framework.web.domain.LoginUser;
+import com.learn.project.project.entity.SysRole;
+import com.learn.project.project.service.ISysPermService;
+import com.learn.project.project.service.ISysRoleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author lixiao
@@ -14,54 +19,61 @@ import java.util.Set;
  * @date 2020/4/16 13:50
  */
 @Service
+@RequiredArgsConstructor
 public class PermissionsService {
 
-	@Resource
-	private PermMapper menuMapper;
+	/** 权限服务 */
+	private final ISysPermService permService;
 
-	@Resource
-	private RoleMapper roleMapper;
+	/** 角色服务 */
+	private final ISysRoleService roleService;
 
 	/**
 	 * 根据用户id获取其角色列表
 	 * @param userId userId
 	 * @return Set<Role>
 	 */
-	public Set<String> getRoleSet(Integer userId) {
-		return roleMapper.getRoleSet(userId);
+	public List<SysRole> selectRoleList(String userId) {
+		return roleService.selectRoleList(userId);
 	}
 
 	/**
 	 * 给用户添加角色
+	 * @param userId 用户id
+	 * @param roleIds 角色id
+	 * @return boolean
 	 */
-	public void addRole(Integer userId, Integer... roleIds) {
-		roleMapper.addRole(userId, roleIds);
+	public boolean addRole(String userId, String... roleIds) {
+		return roleService.addRole(userId, roleIds);
 	}
 
 	/**
-	 * 根据用户id获取权限列表
-	 * @param userId userId
-	 * @return Set<Role>
+	 * 通过角色id查询权限列表
+	 * @param roleIds 角色id
+	 * @return {@link Set<String>}
 	 */
-	public Set<String> getPermissionsSet(Integer userId) {
-		Set<Integer> roleIdSet = roleMapper.getRoleIdSet(userId);
-		Set<String> strings = new HashSet<>();
-		for (Integer roleId : roleIdSet) {
-			Set<String> permissionsSetByRoleId = getPermissionsSetByRoleId(roleId);
-			strings.addAll(permissionsSetByRoleId);
+	public Set<String> selectPermSetByRoleIds(Set<String> roleIds) {
+		return permService.selectPermSetByRoleIds(roleIds);
+	}
+
+	/**
+	 * 添加角色和权限
+	 * @param loginUser 登录用户
+	 */
+	public void addRoleAndPerms(LoginUser loginUser) {
+		List<SysRole> sysRoles = this.selectRoleList(loginUser.getUser().getId());
+		if (CollUtil.isEmpty(sysRoles)) {
+			// 填充角色
+			loginUser.setRoleSet(Collections.emptySet());
+			loginUser.setPermissionsSet(Collections.emptySet());
+			return;
 		}
-		// 去除空权限
-		strings.remove("");
-		return strings;
-	}
-
-	/**
-	 * 根据角色id获取权限列表
-	 * @param roleId 角色id
-	 * @return 权限列表
-	 */
-	public Set<String> getPermissionsSetByRoleId(Integer roleId) {
-		return menuMapper.getPermissionsSet(roleId);
+		// 填充角色
+		loginUser.setRoleSet(sysRoles.stream().map(SysRole::getSrKey).collect(Collectors.toSet()));
+		// 构建角色id列表
+		Set<String> roleIds = sysRoles.stream().map(SysRole::getId).collect(Collectors.toSet());
+		// 填充权限
+		loginUser.setPermissionsSet(selectPermSetByRoleIds(roleIds));
 	}
 
 }

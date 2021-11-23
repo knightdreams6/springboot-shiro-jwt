@@ -7,8 +7,9 @@ import com.learn.project.common.enums.ErrorState;
 import com.learn.project.common.utils.CommonsUtils;
 import com.learn.project.framework.shiro.token.PhoneCodeToken;
 import com.learn.project.framework.web.domain.Result;
-import com.learn.project.project.entity.User;
-import com.learn.project.project.service.IUserService;
+import com.learn.project.project.entity.SysUser;
+import com.learn.project.project.service.ISysUserService;
+import lombok.RequiredArgsConstructor;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.ExpiredCredentialsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -18,7 +19,6 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -26,21 +26,26 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author lixiao
- * @version 1.0
  * @date 2020/4/15 16:50
  */
 @Service
+@RequiredArgsConstructor
 public class LoginService {
 
-	@Resource
-	private IUserService userService;
+	/** 用户服务 */
+	private final ISysUserService userService;
 
-	@Resource
-	private StringRedisTemplate stringRedisTemplate;
+	/** redis模板 */
+	private final StringRedisTemplate stringRedisTemplate;
 
-	@Resource
-	private TokenService tokenService;
+	/** 令牌服务 */
+	private final TokenService tokenService;
 
+	/**
+	 * 发送登录验证码
+	 * @param phone 电话
+	 * @return boolean
+	 */
 	public boolean sendLoginCode(String phone) {
 		// 这里使用默认值
 		int code = 6666;
@@ -63,6 +68,12 @@ public class LoginService {
 		return true;
 	}
 
+	/**
+	 * 手机号密码登陆
+	 * @param phone 电话
+	 * @param password 密码
+	 * @return {@link Result}
+	 */
 	public Result loginByPassword(String phone, String password) {
 		// 1.获取Subject
 		Subject subject = SecurityUtils.getSubject();
@@ -81,10 +92,16 @@ public class LoginService {
 		}
 	}
 
+	/**
+	 * 手机号验证码登录
+	 * @param phone 电话
+	 * @param code 代码
+	 * @return {@link Result}
+	 */
 	public Result loginByCode(String phone, String code) {
 		// 1.获取Subject
 		Subject subject = SecurityUtils.getSubject();
-		User sysUser = userService.selectUserByPhone(phone);
+		SysUser sysUser = userService.selectUserByPhone(phone);
 		// 2.验证码登录，如果该用户不存在则创建该用户
 		if (Objects.isNull(sysUser)) {
 			// 2.1 注册
@@ -108,6 +125,13 @@ public class LoginService {
 		}
 	}
 
+	/**
+	 * 修改密码
+	 * @param phone 手机号
+	 * @param code 验证码
+	 * @param password 密码
+	 * @return {@link Result}
+	 */
 	public Result modifyPassword(String phone, String code, String password) {
 		Object modifyCode = stringRedisTemplate.opsForValue().get(RedisKey.getModifyPasswordCodeKey(phone));
 		// 判断redis中是否存在验证码
@@ -118,7 +142,7 @@ public class LoginService {
 		if (!Objects.equals(code, modifyCode.toString())) {
 			return Result.error(ErrorState.CODE_ERROR);
 		}
-		User user = userService.selectUserByPhone(phone);
+		SysUser user = userService.selectUserByPhone(phone);
 		// 如果用户不存在，执行注册
 		if (Objects.isNull(user)) {
 			Boolean flag = userService.register(phone, password);
@@ -133,8 +157,8 @@ public class LoginService {
 		String salt = IdUtil.simpleUUID();
 		// 加密后的密码
 		String encryptPassword = CommonsUtils.encryptPassword(password, salt);
-		user.setSalt(salt);
-		user.setPassword(encryptPassword);
+		user.setSuSalt(salt);
+		user.setSuPassword(encryptPassword);
 		// 删除缓存
 		stringRedisTemplate.delete(RedisKey.getLoginUserKey(phone));
 		boolean flag = userService.updateById(user);
@@ -154,12 +178,11 @@ public class LoginService {
 	private Map<String, Object> returnLoginInitParam(String phone) {
 		Map<String, Object> data = new HashMap<>(4);
 		// 根据手机号查询用户
-		User user = userService.selectUserByPhone(phone);
+		SysUser user = userService.selectUserByPhone(phone);
 		// 生成jwtToken
-		String token = tokenService.createToken(phone, user.getUserId(), user.getPassword(),
-				Constant.TOKEN_EXPIRE_TIME);
+		String token = tokenService.createToken(phone, user.getId(), user.getSuPassword(), Constant.TOKEN_EXPIRE_TIME);
 		// 生成刷新token
-		String refreshToken = tokenService.createToken(phone, user.getUserId(), user.getPassword(),
+		String refreshToken = tokenService.createToken(phone, user.getId(), user.getSuPassword(),
 				Constant.TOKEN_REFRESH_TIME);
 		// token
 		data.put("token", token);
@@ -174,17 +197,17 @@ public class LoginService {
 	 */
 	public Result tokenRefresh(String refreshToken) {
 		String phone = tokenService.getPhone(refreshToken);
-		User user = userService.selectUserByPhone(phone);
-		boolean verify = tokenService.verify(refreshToken, user.getPassword());
+		SysUser user = userService.selectUserByPhone(phone);
+		boolean verify = tokenService.verify(refreshToken, user.getSuPassword());
 		if (!verify) {
 			return Result.error(ErrorState.REFRESH_TOKEN_INVALID);
 		}
 		Map<String, Object> data = new HashMap<>(4);
 		// 生成jwtToken
-		String newToken = tokenService.createToken(phone, user.getUserId(), user.getPassword(),
+		String newToken = tokenService.createToken(phone, user.getId(), user.getSuPassword(),
 				Constant.TOKEN_EXPIRE_TIME);
 		// 生成刷新token
-		String newRefreshToken = tokenService.createToken(phone, user.getUserId(), user.getPassword(),
+		String newRefreshToken = tokenService.createToken(phone, user.getId(), user.getSuPassword(),
 				Constant.TOKEN_REFRESH_TIME);
 		// toke
 		data.put("token", newToken);

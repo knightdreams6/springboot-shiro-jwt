@@ -24,7 +24,7 @@
         <hutool.version>5.7.7</hutool.version>
         <!-- mybatis-plus
              git: https://gitee.com/baomidou/mybatis-plus/blob/3.0/CHANGELOG.md -->
-        <mybatis.plus.version>3.4.3.1</mybatis.plus.version>
+        <mybatis.plus.version>3.4.3.4</mybatis.plus.version>
         <!-- 动态数据源
              git: https://gitee.com/baomidou/dynamic-datasource-spring-boot-starter/tags -->
         <dynamic.datasource.version>3.4.1</dynamic.datasource.version>

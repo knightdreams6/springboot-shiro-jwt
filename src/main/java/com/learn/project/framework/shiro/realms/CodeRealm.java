@@ -1,9 +1,10 @@
 package com.learn.project.framework.shiro.realms;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.learn.project.common.constant.RedisKey;
 import com.learn.project.framework.shiro.token.PhoneCodeToken;
-import com.learn.project.project.entity.User;
-import com.learn.project.project.service.IUserService;
+import com.learn.project.project.entity.SysUser;
+import com.learn.project.project.service.ISysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -26,9 +27,11 @@ import javax.annotation.Resource;
 @Slf4j
 public class CodeRealm extends AuthorizingRealm {
 
+	/** 用户服务 */
 	@Resource
-	private IUserService userService;
+	private ISysUserService userService;
 
+	/** redis模板 */
 	@Resource
 	private StringRedisTemplate stringRedisTemplate;
 
@@ -59,14 +62,14 @@ public class CodeRealm extends AuthorizingRealm {
 		PhoneCodeToken token = (PhoneCodeToken) authenticationToken;
 		log.info(token.getPhone() + " - code auth start...");
 		// 根据手机号查询用户
-		User user = userService.selectUserByPhone(token.getPhone());
-		if (user == null) {
+		SysUser user = userService.selectUserByPhone(token.getPhone());
+		if (ObjectUtil.isNull(user)) {
 			// 抛出账号不存在异常
 			throw new UnknownAccountException();
 		}
 		// 1.principal：认证的实体信息，可以是手机号，也可以是数据表对应的用户的实体类对象
 		// 2.从redis中获取登录验证码
-		Object credentials = stringRedisTemplate.opsForValue().get(RedisKey.getLoginCodeKey(user.getPhone()));
+		Object credentials = stringRedisTemplate.opsForValue().get(RedisKey.getLoginCodeKey(user.getSuPhone()));
 		if (credentials == null) {
 			throw new ExpiredCredentialsException();
 		}

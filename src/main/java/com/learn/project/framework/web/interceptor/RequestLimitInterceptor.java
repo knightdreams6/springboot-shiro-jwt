@@ -33,9 +33,10 @@ public class RequestLimitInterceptor implements HandlerInterceptor {
 	 * isAssignableFrom()方法是判断是否为某个类的父类 instanceof关键字是判断是否某个类的子类
 	 */
 	@Override
-	public boolean preHandle(@NonNull HttpServletRequest request,@NonNull HttpServletResponse response, Object handler) {
-		log.info("接口请求限制拦截器执行了...");
+	public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+			Object handler) {
 		if (handler.getClass().isAssignableFrom(HandlerMethod.class)) {
+			log.info("接口请求限制拦截器执行了...");
 			// HandlerMethod 封装方法定义相关的信息,如类,方法,参数等
 			HandlerMethod handlerMethod = (HandlerMethod) handler;
 			Method method = handlerMethod.getMethod();
