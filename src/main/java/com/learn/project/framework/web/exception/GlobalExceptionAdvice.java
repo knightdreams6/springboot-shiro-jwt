@@ -1,6 +1,5 @@
 package com.learn.project.framework.web.exception;
 
-import cn.hutool.json.JSONUtil;
 import com.learn.project.common.enums.ErrorState;
 import com.learn.project.framework.web.domain.Result;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -28,8 +27,9 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
-		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(e.getMessage());
+	public ResponseEntity<Result> handleIllegalArgumentException(IllegalArgumentException e) {
+		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
+				.body(Result.error(e.getMessage()));
 	}
 
 	/**
@@ -38,8 +38,9 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(ServiceException.class)
-	public ResponseEntity<String> handleServiceException(ServiceException e) {
-		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(e.getMessage());
+	public ResponseEntity<Result> handleServiceException(ServiceException e) {
+		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
+				.body(Result.error(e.getErrorState()));
 	}
 
 	/**
@@ -48,8 +49,9 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
-		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(e.getMessage());
+	public ResponseEntity<Result> handleConstraintViolationException(ConstraintViolationException e) {
+		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
+				.body(Result.error(e.getMessage()));
 	}
 
 	/**
@@ -57,18 +59,18 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(AuthorizationException.class)
-	public ResponseEntity<String> handleShiroException() {
+	public ResponseEntity<Result> handleShiroException() {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON)
-				.body(JSONUtil.toJsonStr(Result.error(ErrorState.NOT_AUTH)));
+				.body(Result.error(ErrorState.NOT_AUTH));
 	}
 
 	/**
 	 * token无效异常
 	 */
 	@ExceptionHandler(IncorrectCredentialsException.class)
-	public ResponseEntity<String> handleTokenException() {
+	public ResponseEntity<Result> handleTokenException() {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON)
-				.body(JSONUtil.toJsonStr(Result.error(ErrorState.TOKEN_INVALID)));
+				.body(Result.error(ErrorState.TOKEN_INVALID));
 	}
 
 	/**
@@ -76,9 +78,9 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(MissingServletRequestParameterException.class)
-	public ResponseEntity<String> handleMissingParameterException() {
+	public ResponseEntity<Result> handleMissingParameterException() {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON)
-				.body(JSONUtil.toJsonStr(Result.error(ErrorState.MISSING_PARAMETER)));
+				.body(Result.error(ErrorState.MISSING_PARAMETER));
 	}
 
 	/**
@@ -86,9 +88,9 @@ public class GlobalExceptionAdvice {
 	 * @return {@link ResponseEntity<String>}
 	 */
 	@ExceptionHandler(RuntimeException.class)
-	public ResponseEntity<String> handleRuntimeException() {
+	public ResponseEntity<Result> handleRuntimeException() {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON)
-				.body(JSONUtil.toJsonStr(Result.error("服务器异常")));
+				.body(Result.error("服务器异常"));
 	}
 
 }

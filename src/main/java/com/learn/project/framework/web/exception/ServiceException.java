@@ -1,8 +1,6 @@
 package com.learn.project.framework.web.exception;
 
-import cn.hutool.json.JSONUtil;
 import com.learn.project.common.enums.ErrorState;
-import com.learn.project.framework.web.domain.Result;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,10 +15,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ServiceException extends RuntimeException {
 
-	private String message;
+	private ErrorState errorState;
 
 	public ServiceException(ErrorState errorState) {
-		this.message = JSONUtil.toJsonStr(Result.error(errorState));
+		this.errorState = errorState;
 	}
 
 }
