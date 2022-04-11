@@ -6,7 +6,7 @@ spring:
       repositories:
         enabled: false
   redis:
-    ## 连接超时时间（毫秒）
+    # 连接超时时间（毫秒）
     timeout: 5000
     lettuce:
       pool:
@@ -43,6 +43,43 @@ spring:
     url: jdbc:mysql://192.168.3.222:3306/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     username: root
     password: 123
+    hikari:
+      # 此属性控制从池返回的连接的默认自动提交行为。 默认值：真
+      auto-commit: true
+      # 此属性控制客户端（即您）将等待来自池的连接的最大毫秒数。
+      # 如果在没有可用连接的情况下超过此时间，将引发 SQLException。可接受的最低连接超时为 250 毫秒。 默认值：30000（30 秒）
+      connection-timeout: 30000
+      # 此属性控制允许连接在池中空闲的最长时间。 此设置仅在minimumIdle定义为小于时适用maximumPoolSize。
+      # 一旦池达到连接， 空闲连接将不会minimumIdle被淘汰。连接是否因空闲而退出取决于最大变化为 +30 秒，平均变化为 +15 秒。在此超时之前，连接永远不会因为空闲而退出。
+      # 值 0 表示永远不会从池中删除空闲连接。允许的最小值为 10000 毫秒（10 秒）。 默认值：600000（10 分钟）
+      idle-timeout: 600000
+      # 此属性控制 HikariCP 尝试保持连接活动的频率，以防止它被数据库或网络基础设施超时。
+      # 该值必须小于该 maxLifetime值。“keepalive”只会发生在空闲连接上。当针对给定连接的“keepalive”时间到达时，该连接将从池中删除，
+      # “ping”，然后返回到池中。“ping”是以下之一：调用 JDBC4isValid()方法，或执行 connectionTestQuery. 通常，池外的持续时间应该以个位数毫秒甚至亚毫秒为单位测量，
+      # 因此应该对性能影响很小或没有明显影响。允许的最小值为 30000 毫秒（30 秒）， 默认值：0（禁用）
+      keepalive-time: 0
+      # 此属性控制池中连接的最大生命周期。使用中的连接永远不会被淘汰，只有当它关闭时才会被删除。
+      # 在逐个连接的基础上，应用较小的负衰减以避免池中的大规模灭绝。
+      # 我们强烈建议设置此值，它应该比任何数据库或基础设施强加的连接时间限制短几秒钟。 值 0 表示没有最大生命周期（无限生命周期），
+      # 当然取决于idleTimeout设置。允许的最小值为 30000 毫秒（30 秒）。 默认值：1800000（30 分钟）
+      max-lifetime: 1800000
+      # 此属性控制HikariCP 尝试在池中维护的最小空闲连接数。如果空闲连接低于此值并且池中的总连接数小于maximumPoolSize，
+      # HikariCP 将尽最大努力快速有效地添加额外的连接。但是，为了获得最大性能和对峰值需求的响应，
+      # 我们建议不要设置此值，而是允许 HikariCP 充当固定大小的连接池。 默认值：与 maximumPoolSize 相同
+      minimum-idle: 10
+      # 此属性控制池允许达到的最大大小，包括空闲和使用中的连接。
+      # 基本上，此值将确定与数据库后端的实际连接的最大数量。一个合理的值最好由您的执行环境确定。
+      # connectionTimeout当池达到这个大小并且没有可用的空闲连接时，
+      # 对 getConnection() 的调用将在超时之前阻塞长达几毫秒。请阅读有关池大小的信息。 默认值：10
+      maximum-pool-size: 10
+      # 此属性仅可通过编程配置或 IoC 容器使用。此属性允许您指定Codahale/Dropwizard MetricRegistry的实例，以供池用于记录各种指标。
+      # 有关详细信息，请参阅度量 wiki 页面。 默认值：无
+      #      metric-registry:
+      # 此属性仅可通过编程配置或 IoC 容器使用。此属性允许您指定Codahale/Dropwizard HealthCheckRegistry的实例，供池用于报告当前的健康信息。
+      # 有关详细信息，请参阅运行状况检查 wiki 页面。 默认值：无
+      #      health-check-properties:
+      # 此属性表示连接池的用户定义名称，主要出现在日志记录和 JMX 管理控制台中，以识别池和池配置。 默认值：自动生成
+      pool-name: hikari-pool
   redis:
     host: 192.168.3.222
     database: 1
