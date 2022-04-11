@@ -35,7 +35,7 @@ public class LoginController extends BaseController {
 
 	private final LoginService loginService;
 
-	@RequestLimit(second = 60 * 60 * 24, maxCount = 5)
+	@RequestLimit(second = 60 * 60, maxCount = 10)
 	@ApiOperation(value = "发送登录验证码")
 	@ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query", dataTypeClass = String.class)
 	@GetMapping("/code")

@@ -9,10 +9,10 @@ import com.knight.entity.enums.ErrorState;
 import com.knight.entity.enums.RoleEnums;
 import com.knight.entity.orm.SysUser;
 import com.knight.exception.ServiceException;
-import com.knight.shiro.service.PermissionsService;
-import com.knight.utils.CommonsUtils;
 import com.knight.mapper.SysUserMapper;
 import com.knight.service.ISysUserService;
+import com.knight.shiro.service.PermissionsService;
+import com.knight.utils.CommonsUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -29,8 +29,10 @@ import org.springframework.transaction.support.TransactionTemplate;
 @RequiredArgsConstructor
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements ISysUserService {
 
+	/** 权限服务 */
 	private final PermissionsService permissionsService;
 
+	/** 事务模板 */
 	private final TransactionTemplate transactionTemplate;
 
 	@Override

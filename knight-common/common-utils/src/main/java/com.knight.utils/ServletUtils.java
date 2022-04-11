@@ -50,9 +50,8 @@ public class ServletUtils {
 	 * 将字符串渲染到客户端
 	 * @param response 渲染对象
 	 * @param string 待渲染的字符串
-	 * @return null
 	 */
-	public static String renderString(HttpServletResponse response, String string) {
+	public static void renderString(HttpServletResponse response, String string) {
 		response.setStatus(HttpStatus.OK.value());
 		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 		response.setContentType("application/json;charset=UTF-8");
@@ -62,7 +61,6 @@ public class ServletUtils {
 		catch (IOException e) {
 			// ignore
 		}
-		return null;
 	}
 
 }
