@@ -30,6 +30,17 @@ public @interface RequestLimit {
 	int maxCount() default 1;
 
 	/**
+	 * limit key
+	 * @return {@link String}
+	 */
+	String key() default "";
+
+	/**
+	 * 自定义limitKey生成器 {@link com.knight.interceptor.LimitKeyGenerator} 与key属性互斥
+	 */
+	String keyGenerator() default "";
+
+	/**
 	 * 超出限制后，返回的错误提示
 	 * @return msg
 	 */
