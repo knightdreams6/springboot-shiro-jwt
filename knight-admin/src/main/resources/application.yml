@@ -33,14 +33,14 @@ mybatis-plus:
 
 ---
 server:
-  port: 8082
+  port: 8888
 spring:
   config:
     activate:
       on-profile: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.3.222:3306/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
+    url: jdbc:mysql://127.0.0.1:3306/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true
     username: root
     password: 123
     hikari:
@@ -81,8 +81,8 @@ spring:
       # 此属性表示连接池的用户定义名称，主要出现在日志记录和 JMX 管理控制台中，以识别池和池配置。 默认值：自动生成
       pool-name: hikari-pool
   redis:
-    host: 192.168.3.222
-    database: 1
+    host: 127.0.0.1
+    database: 0
     port: 6379
 
 # 日志

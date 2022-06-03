@@ -31,7 +31,7 @@ public class GlobalExceptionAdvice {
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<Result> handleIllegalArgumentException(IllegalArgumentException e) {
 		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
-				.body(Result.error(e.getMessage()));
+				.body(Result.error(ErrorState.ILLEGAL_PARAM_EXCEPTION));
 	}
 
 	/**
@@ -52,8 +52,7 @@ public class GlobalExceptionAdvice {
 	 */
 	@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<Result> handleConstraintViolationException(ConstraintViolationException e) {
-		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
-				.body(Result.error(e.getMessage()));
+		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(Result.error());
 	}
 
 	/**
