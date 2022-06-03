@@ -36,6 +36,11 @@
             <artifactId>common-utils</artifactId>
         </dependency>
 
+        <dependency>
+            <artifactId>common-mybatis-plus</artifactId>
+            <groupId>com.knight</groupId>
+        </dependency>
+
     </dependencies>
 
 

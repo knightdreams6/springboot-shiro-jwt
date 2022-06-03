@@ -74,7 +74,7 @@ public class LoginService {
 	 * @param password 密码
 	 * @return {@link Result}
 	 */
-	public Result loginByPassword(String phone, String password) {
+	public Result<Object> loginByPassword(String phone, String password) {
 		// 1.获取Subject
 		Subject subject = SecurityUtils.getSubject();
 		// 2.封装用户数据
@@ -98,7 +98,7 @@ public class LoginService {
 	 * @param code 代码
 	 * @return {@link Result}
 	 */
-	public Result loginByCode(String phone, String code) {
+	public Result<Object> loginByCode(String phone, String code) {
 		// 1.获取Subject
 		Subject subject = SecurityUtils.getSubject();
 		SysUser sysUser = userService.selectUserByPhone(phone);
@@ -132,7 +132,7 @@ public class LoginService {
 	 * @param password 密码
 	 * @return {@link Result}
 	 */
-	public Result modifyPassword(String phone, String code, String password) {
+	public Result<Object> modifyPassword(String phone, String code, String password) {
 		Object modifyCode = stringRedisTemplate.opsForValue().get(RedisKey.getModifyPasswordCodeKey(phone));
 		// 判断redis中是否存在验证码
 		if (Objects.isNull(modifyCode)) {
@@ -195,7 +195,7 @@ public class LoginService {
 	 * token刷新
 	 * @return Result
 	 */
-	public Result tokenRefresh(String refreshToken) {
+	public Result<Object> tokenRefresh(String refreshToken) {
 		String phone = tokenService.getPhone(refreshToken);
 		SysUser user = userService.selectUserByPhone(phone);
 		boolean verify = tokenService.verify(refreshToken, user.getSuPassword());

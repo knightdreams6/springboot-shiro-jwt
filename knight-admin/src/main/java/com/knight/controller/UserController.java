@@ -8,6 +8,7 @@ import com.knight.entity.orm.SysUser;
 import com.knight.service.ISysUserService;
 import com.knight.shiro.service.TokenService;
 import com.knight.valid.annotation.PhoneNumber;
+import com.knight.vo.SysUserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -16,15 +17,10 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * <p>
@@ -39,7 +35,7 @@ import javax.validation.constraints.NotNull;
 @RequestMapping("/user")
 @Validated
 @RequiredArgsConstructor
-public class UserController extends BaseController {
+public class UserController {
 
 	/** 用户服务 */
 	private final ISysUserService userService;
@@ -50,14 +46,14 @@ public class UserController extends BaseController {
 	@ApiOperation("添加用户")
 	@ApiImplicitParam(name = "phone", value = "手机号", paramType = "query", dataTypeClass = String.class)
 	@PostMapping("/register")
-	public Result register(@PhoneNumber String phone) {
-		return super.result(userService.register(phone));
+	public Result<Object> register(@PhoneNumber String phone) {
+		return Result.bool(userService.register(phone));
 	}
 
 	@RequiresUser
 	@ApiOperation(value = "获取当前用户基本信息")
 	@GetMapping("/info")
-	public Result info() {
+	public Result<LoginUser> info() {
 		LoginUser loginUser = tokenService.getLoginUser();
 		return Result.success(loginUser);
 	}
@@ -65,30 +61,30 @@ public class UserController extends BaseController {
 	@RequiresPermissions("system:user:remove")
 	@ApiOperation("删除用户")
 	@DeleteMapping("/{userId}")
-	public Result deleted(@PathVariable @NotNull(message = "userId不能为空") Integer userId) {
-		return super.result(userService.removeById(userId));
+	public Result<Object> deleted(@PathVariable @NotNull(message = "userId不能为空") Integer userId) {
+		return Result.bool(userService.removeById(userId));
 	}
 
 	@RequiresPermissions("system:user:update")
 	@ApiOperation("修改用户")
-	@PutMapping("/{userId}")
-	public Result update(SysUser user) {
-		return super.result(userService.updateById(user));
+	@PutMapping
+	public Result<Object> update(SysUser user) {
+		return Result.bool(userService.updateById(user));
 	}
 
 	@RequiresPermissions(value = { "system:user:list" })
 	@ApiOperation(value = "获取所有用户 [system:user:list]权限")
 	@GetMapping
-	public Result users() {
-		return Result.success(userService.list());
+	public Result<List<SysUserVo>> users() {
+		return Result.list(userService.list(), SysUserVo::new);
 	}
 
 	@RequiresRoles(value = { "admin" })
 	@ApiOperation(value = "分页获取用户 [admin]角色权限")
 	@GetMapping("/page")
-	public Result user(@NotNull Integer pageNum, @NotNull Integer pageSize) {
+	public Result<IPage<SysUserVo>> user(@NotNull Integer pageNum, @NotNull Integer pageSize) {
 		IPage<SysUser> page = new Page<>(pageNum, pageSize);
-		return Result.success(userService.page(page));
+		return Result.page(userService.page(page), SysUserVo::new);
 	}
 
 }
