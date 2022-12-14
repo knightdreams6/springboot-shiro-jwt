@@ -8,6 +8,8 @@ Springboot+Shrio+Jwt前后端分离
 
 Springboot+Shiro+Jwt+MybatisPlus3 项目构建工具：maven 数据库：mysql Nosql：redis
 
+接口文档地址：http://localhost:8888/doc.html#/home
+
 #### 前端项目
 
 [![移动端仿抖音登录功能demo](https://img.shields.io/badge/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%BB%BF%E6%8A%96%E9%9F%B3%E7%99%BB%E5%BD%95-blue.svg)](https://gitee.com/knightdreams/vue-mobile-login-demo)

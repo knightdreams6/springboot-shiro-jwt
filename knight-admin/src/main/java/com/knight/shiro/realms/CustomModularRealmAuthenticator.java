@@ -25,7 +25,7 @@ public class CustomModularRealmAuthenticator extends ModularRealmAuthenticator {
 		Realm finalRealm;
 		// 匹配Realm名称
 		if (token instanceof BearerToken) {
-			finalRealm = SpringUtil.getBean(JwtRealm.class);
+			finalRealm = SpringUtil.getBean(OauthRealm.class);
 		}
 		else if (token instanceof UsernamePasswordToken) {
 			finalRealm = SpringUtil.getBean(PasswordRealm.class);

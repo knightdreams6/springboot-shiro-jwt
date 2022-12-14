@@ -3,7 +3,6 @@ package com.knight.exception;
 import com.knight.entity.base.Result;
 import com.knight.entity.enums.ErrorState;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -60,18 +59,9 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(AuthorizationException.class)
-	public ResponseEntity<Result> handleShiroException() {
+	public ResponseEntity<Result> handleShiroException(AuthorizationException authorizationException) {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON)
 				.body(Result.error(ErrorState.NOT_AUTH));
-	}
-
-	/**
-	 * token无效异常
-	 */
-	@ExceptionHandler(IncorrectCredentialsException.class)
-	public ResponseEntity<Result> handleTokenException() {
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON)
-				.body(Result.error(ErrorState.TOKEN_INVALID));
 	}
 
 	/**

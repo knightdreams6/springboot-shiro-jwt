@@ -28,7 +28,7 @@ public enum ErrorState {
 	CODE_ERROR(1003, "验证码不正确", "incorrect verification code"),
 
 	/** 用户名不存在 */
-	USERNAME_NOT_EXIST(1004, "用户名不存在", "username does not exist"),
+	USERNAME_NOT_EXIST(1004, "用户名或密码错误", "wrong username or password"),
 
 	/** 密码错误 *///
 	PASSWORD_ERROR(1005, "密码不正确", "wrong password"),
@@ -37,7 +37,7 @@ public enum ErrorState {
 	NOT_AUTH(1006, "没有相关权限", "no relevant permissions"),
 
 	/** 令牌无效 */
-	TOKEN_INVALID(1007, "token failure!"),
+	ACCESS_TOKEN_INVALID(1007, "无效的访问令牌", "invalid access token"),
 
 	/** 缺少相应参数 */
 	MISSING_PARAMETER(1008, "参数绑定失败:缺少参数", "parameter binding failed: missing parameter"),

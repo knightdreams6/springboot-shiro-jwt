@@ -69,10 +69,13 @@ public class CodeRealm extends AuthorizingRealm {
 		}
 		// 1.principal：认证的实体信息，可以是手机号，也可以是数据表对应的用户的实体类对象
 		// 2.从redis中获取登录验证码
-		Object credentials = stringRedisTemplate.opsForValue().get(RedisKey.getLoginCodeKey(user.getSuPhone()));
+		String loginCodeKey = RedisKey.getLoginCodeKey(user.getSuPhone());
+		Object credentials = stringRedisTemplate.opsForValue().get(loginCodeKey);
 		if (credentials == null) {
 			throw new ExpiredCredentialsException();
 		}
+		// 移除验证码
+		stringRedisTemplate.delete(loginCodeKey);
 		// 3.realmName：当前realm对象的name，调用父类的getName()方法即可
 		String realmName = super.getName();
 		// 4.盐,取用户信息中唯一的字段来生成盐值，避免由于两个用户原始密码相同，加密后的密码也相同

@@ -1,6 +1,5 @@
 package com.knight.shiro.service;
 
-import cn.hutool.core.util.StrUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
@@ -9,17 +8,15 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.knight.entity.base.LoginUser;
 import com.knight.entity.base.UserInfo;
-import com.knight.entity.constans.Constant;
 import com.knight.entity.constans.RedisKey;
 import com.knight.entity.orm.SysUser;
 import com.knight.service.ISysUserService;
-import com.knight.utils.ServletUtils;
+import com.knight.utils.OauthUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -47,7 +44,7 @@ public class TokenService {
 	 */
 	public LoginUser getLoginUser() {
 		// 获取token
-		String token = getToken(ServletUtils.getRequest());
+		String token = getAccessToken();
 		// 获取手机号
 		String phone = getPhone(token);
 		// 获取缓存loginUserKey
@@ -100,17 +97,10 @@ public class TokenService {
 
 	/**
 	 * 获取当前登录用户的token,如果token为null则获取refreshToken
-	 * @param request HttpServletRequest
 	 * @return token
 	 */
-	public String getToken(HttpServletRequest request) {
-		String token = request.getHeader(Constant.TOKEN_HEADER_NAME);
-		if (StrUtil.isBlank(token)) {
-			return request.getParameter("refreshToken");
-		}
-		else {
-			return token;
-		}
+	public String getAccessToken() {
+		return OauthUtils.getToken();
 	}
 
 	/**

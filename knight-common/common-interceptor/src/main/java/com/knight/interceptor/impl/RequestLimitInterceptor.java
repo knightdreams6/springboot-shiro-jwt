@@ -47,7 +47,6 @@ public class RequestLimitInterceptor implements HandlerInterceptor {
 	public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
 			Object handler) {
 		if (handler.getClass().isAssignableFrom(HandlerMethod.class)) {
-			log.info("接口请求限制拦截器执行了...");
 			// HandlerMethod 封装方法定义相关的信息,如类,方法,参数等
 			HandlerMethod handlerMethod = (HandlerMethod) handler;
 			Method method = handlerMethod.getMethod();
@@ -58,6 +57,7 @@ public class RequestLimitInterceptor implements HandlerInterceptor {
 			// 如果方法上有注解就优先使用方法上的注解的参数，否则使用类上的
 			RequestLimit requestLimit = methodAnnotation != null ? methodAnnotation : classAnnotation;
 			if (requestLimit != null) {
+				log.info("接口请求限制拦截器执行了...");
 				if (isLimit(request, handlerMethod, requestLimit)) {
 					// 返回请求限制错误
 					ServletUtils.renderString(response, JSONUtil.toJsonStr(Result.error(requestLimit.msg())));

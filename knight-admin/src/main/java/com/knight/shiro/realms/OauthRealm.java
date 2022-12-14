@@ -23,9 +23,11 @@ import javax.annotation.Resource;
 /**
  * @author lixiao
  * @date 2019/8/6 10:02
+ *
+ * @see org.apache.shiro.web.filter.authc.BearerHttpAuthenticationFilter
  */
 @Slf4j
-public class JwtRealm extends AuthorizingRealm {
+public class OauthRealm extends AuthorizingRealm {
 
 	/** 令牌服务 */
 	@Resource
