@@ -27,7 +27,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysPermServiceImpl extends ServiceImpl<SysPermMapper, SysPerm> implements ISysPermService {
 
-	/** 角色权限服务 */
+	/**
+	 * 角色权限服务
+	 */
 	private final ISysRolePermService rolePermService;
 
 	@Override

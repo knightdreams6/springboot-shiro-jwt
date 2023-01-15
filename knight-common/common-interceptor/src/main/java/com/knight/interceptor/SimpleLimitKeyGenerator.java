@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
  */
 public class SimpleLimitKeyGenerator implements LimitKeyGenerator {
 
-	/** 限制key前缀 */
+	/**
+	 * 限制key前缀
+	 */
 	private static final String LIMIT_KEY_PREFIX = "LIMIT:";
 
 	@Override

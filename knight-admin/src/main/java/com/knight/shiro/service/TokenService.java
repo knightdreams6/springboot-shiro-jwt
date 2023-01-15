@@ -29,10 +29,14 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class TokenService {
 
-	/** 用户服务 */
+	/**
+	 * 用户服务
+	 */
 	private final ISysUserService userService;
 
-	/** 权限服务 */
+	/**
+	 * 权限服务
+	 */
 	private final PermissionsService permissionsService;
 
 	@Resource

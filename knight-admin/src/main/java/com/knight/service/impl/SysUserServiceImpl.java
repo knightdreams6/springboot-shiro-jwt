@@ -5,7 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.knight.entity.enums.ErrorState;
+import com.knight.entity.enums.CommonResultConstants;
 import com.knight.entity.enums.RoleEnums;
 import com.knight.entity.orm.SysUser;
 import com.knight.exception.ServiceException;
@@ -29,10 +29,14 @@ import org.springframework.transaction.support.TransactionTemplate;
 @RequiredArgsConstructor
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements ISysUserService {
 
-	/** 权限服务 */
+	/**
+	 * 权限服务
+	 */
 	private final PermissionsService permissionsService;
 
-	/** 事务模板 */
+	/**
+	 * 事务模板
+	 */
 	private final TransactionTemplate transactionTemplate;
 
 	@Override
@@ -52,7 +56,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		// 判断是否已存在该用户
 		SysUser db = this.selectUserByPhone(phone);
 		if (ObjectUtil.isNotNull(db)) {
-			throw new ServiceException(ErrorState.USER_ALREADY_EXIST);
+			throw new ServiceException(CommonResultConstants.USER_ALREADY_EXIST);
 		}
 		SysUser user = new SysUser();
 		user.setSuPhone(phone);

@@ -16,12 +16,14 @@ import org.apache.shiro.authc.AuthenticationToken;
 @NoArgsConstructor
 public class PhoneCodeToken implements AuthenticationToken {
 
-	/** 手机号 */
+	/**
+	 * 手机号
+	 */
 	private String phone;
 
 	/**
 	 * 验证码 为什么使用char[]? 参考:
-	 * https://docs.oracle.com/javase/1.5.0/docs/guide/security/jce/JCERefGuide.html#PBEEx
+	 * <a href="https://docs.oracle.com/javase/1.5.0/docs/guide/security/jce/JCERefGuide.html#PBEEx">...</a>
 	 */
 	private char[] code;
 

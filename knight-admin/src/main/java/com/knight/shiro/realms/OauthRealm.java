@@ -7,12 +7,7 @@ import com.knight.entity.orm.SysUser;
 import com.knight.service.ISysUserService;
 import com.knight.shiro.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.BearerToken;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -23,17 +18,20 @@ import javax.annotation.Resource;
 /**
  * @author lixiao
  * @date 2019/8/6 10:02
- *
  * @see org.apache.shiro.web.filter.authc.BearerHttpAuthenticationFilter
  */
 @Slf4j
 public class OauthRealm extends AuthorizingRealm {
 
-	/** 令牌服务 */
+	/**
+	 * 令牌服务
+	 */
 	@Resource
 	private TokenService tokenService;
 
-	/** 用户服务 */
+	/**
+	 * 用户服务
+	 */
 	@Resource
 	private ISysUserService userService;
 

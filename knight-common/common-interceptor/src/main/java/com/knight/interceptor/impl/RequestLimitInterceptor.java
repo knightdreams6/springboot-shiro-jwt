@@ -3,7 +3,7 @@ package com.knight.interceptor.impl;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONUtil;
-import com.knight.entity.base.Result;
+import com.knight.entity.base.R;
 import com.knight.interceptor.LimitKeyGenerator;
 import com.knight.interceptor.SimpleLimitKeyGenerator;
 import com.knight.interceptor.annotation.RequestLimit;
@@ -32,7 +32,9 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RequestLimitInterceptor implements HandlerInterceptor {
 
-	/** 限制键生成器 */
+	/**
+	 * 限制键生成器
+	 */
 	private final SingletonSupplier<LimitKeyGenerator> simpleLimitKeyGenerator = SingletonSupplier
 			.of(SimpleLimitKeyGenerator::new);
 
@@ -60,7 +62,7 @@ public class RequestLimitInterceptor implements HandlerInterceptor {
 				log.info("接口请求限制拦截器执行了...");
 				if (isLimit(request, handlerMethod, requestLimit)) {
 					// 返回请求限制错误
-					ServletUtils.renderString(response, JSONUtil.toJsonStr(Result.error(requestLimit.msg())));
+					ServletUtils.renderString(response, JSONUtil.toJsonStr(R.failed(requestLimit.msg())));
 					return false;
 				}
 			}

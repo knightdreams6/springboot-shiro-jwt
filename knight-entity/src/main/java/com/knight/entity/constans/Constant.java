@@ -25,5 +25,4 @@ public class Constant {
 	 */
 	public static Long TOKEN_REFRESH_TIME = TimeUnit.DAYS.toMillis(7);
 
-
 }

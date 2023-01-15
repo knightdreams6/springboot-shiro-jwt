@@ -15,19 +15,29 @@ import java.time.LocalDateTime;
 @Slf4j
 public class CustomizeMetaObjectHandler implements MetaObjectHandler {
 
-	/** 删除日期字段 */
+	/**
+	 * 删除日期字段
+	 */
 	public static final String DELETE_DATE = "deleteDate";
 
-	/** 删除字段 */
+	/**
+	 * 删除字段
+	 */
 	public static final String DELETED = "deleted";
 
-	/** 更新日期字段 */
+	/**
+	 * 更新日期字段
+	 */
 	public static final String UPDATE_DATE = "updateDate";
 
-	/** 创建日期字段 */
+	/**
+	 * 创建日期字段
+	 */
 	public static final String CREATE_DATE = "createDate";
 
-	/** 删除标记 */
+	/**
+	 * 删除标记
+	 */
 	public static final int DELETED_FLAG = 1;
 
 	@Override

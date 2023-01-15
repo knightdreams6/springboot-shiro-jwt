@@ -1,13 +1,8 @@
 package com.knight.interceptor.annotation;
 
-import com.knight.entity.enums.ErrorState;
+import com.knight.entity.enums.CommonResultConstants;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * 请求限制，接口防刷
@@ -44,6 +39,6 @@ public @interface RequestLimit {
 	 * 超出限制后，返回的错误提示
 	 * @return msg
 	 */
-	ErrorState msg() default ErrorState.REQUEST_LIMIT;
+	CommonResultConstants msg() default CommonResultConstants.REQUEST_LIMIT;
 
 }

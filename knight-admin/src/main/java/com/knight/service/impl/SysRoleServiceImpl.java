@@ -30,7 +30,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements ISysRoleService {
 
-	/** 用户角色服务 */
+	/**
+	 * 用户角色服务
+	 */
 	private final ISysUserRoleService userRoleService;
 
 	@Override

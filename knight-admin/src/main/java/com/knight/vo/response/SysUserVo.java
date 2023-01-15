@@ -1,4 +1,4 @@
-package com.knight.vo;
+package com.knight.vo.response;
 
 import com.knight.entity.orm.SysUser;
 import io.swagger.annotations.ApiModelProperty;

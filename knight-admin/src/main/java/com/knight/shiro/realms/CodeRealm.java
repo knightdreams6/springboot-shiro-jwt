@@ -6,12 +6,7 @@ import com.knight.entity.orm.SysUser;
 import com.knight.service.ISysUserService;
 import com.knight.shiro.token.PhoneCodeToken;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.ExpiredCredentialsException;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -27,11 +22,15 @@ import javax.annotation.Resource;
 @Slf4j
 public class CodeRealm extends AuthorizingRealm {
 
-	/** 用户服务 */
+	/**
+	 * 用户服务
+	 */
 	@Resource
 	private ISysUserService userService;
 
-	/** redis模板 */
+	/**
+	 * redis模板
+	 */
 	@Resource
 	private StringRedisTemplate stringRedisTemplate;
 

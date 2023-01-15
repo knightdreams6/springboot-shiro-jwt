@@ -1,14 +1,15 @@
 package com.knight.shiro.service;
 
 import cn.hutool.core.util.IdUtil;
-import com.knight.entity.base.Result;
+import com.knight.entity.base.R;
 import com.knight.entity.constans.Constant;
 import com.knight.entity.constans.RedisKey;
-import com.knight.entity.enums.ErrorState;
+import com.knight.entity.enums.CommonResultConstants;
 import com.knight.entity.orm.SysUser;
 import com.knight.service.ISysUserService;
 import com.knight.shiro.token.PhoneCodeToken;
 import com.knight.utils.CommonsUtils;
+import com.knight.vo.request.LoginPasswordReqVo;
 import lombok.RequiredArgsConstructor;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.ExpiredCredentialsException;
@@ -32,13 +33,19 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class LoginService {
 
-	/** 用户服务 */
+	/**
+	 * 用户服务
+	 */
 	private final ISysUserService userService;
 
-	/** redis模板 */
+	/**
+	 * redis模板
+	 */
 	private final StringRedisTemplate stringRedisTemplate;
 
-	/** 令牌服务 */
+	/**
+	 * 令牌服务
+	 */
 	private final TokenService tokenService;
 
 	/**
@@ -68,27 +75,21 @@ public class LoginService {
 		return true;
 	}
 
-	/**
-	 * 手机号密码登陆
-	 * @param phone 电话
-	 * @param password 密码
-	 * @return {@link Result}
-	 */
-	public Result<Object> loginByPassword(String phone, String password) {
+	public R<Object> loginByPassword(LoginPasswordReqVo reqVo) {
 		// 1.获取Subject
 		Subject subject = SecurityUtils.getSubject();
 		// 2.封装用户数据
-		UsernamePasswordToken token = new UsernamePasswordToken(phone, password);
+		UsernamePasswordToken token = new UsernamePasswordToken(reqVo.getUsername(), reqVo.getPassword());
 		// 3.执行登录方法
 		try {
 			subject.login(token);
-			return Result.success(returnLoginInitParam(phone));
+			return R.ok(returnLoginInitParam(reqVo.getUsername()));
 		}
 		catch (UnknownAccountException e) {
-			return Result.error(ErrorState.USERNAME_NOT_EXIST);
+			return R.failed(CommonResultConstants.USERNAME_NOT_EXIST);
 		}
 		catch (IncorrectCredentialsException e) {
-			return Result.error(ErrorState.PASSWORD_ERROR);
+			return R.failed(CommonResultConstants.PASSWORD_ERROR);
 		}
 	}
 
@@ -96,9 +97,9 @@ public class LoginService {
 	 * 手机号验证码登录
 	 * @param phone 电话
 	 * @param code 代码
-	 * @return {@link Result}
+	 * @return {@link R}
 	 */
-	public Result<Object> loginByCode(String phone, String code) {
+	public R<Object> loginByCode(String phone, String code) {
 		// 1.获取Subject
 		Subject subject = SecurityUtils.getSubject();
 		SysUser sysUser = userService.selectUserByPhone(phone);
@@ -112,16 +113,16 @@ public class LoginService {
 		// 4.执行登录方法
 		try {
 			subject.login(token);
-			return Result.success(returnLoginInitParam(phone));
+			return R.ok(returnLoginInitParam(phone));
 		}
 		catch (UnknownAccountException e) {
-			return Result.error(ErrorState.USERNAME_NOT_EXIST);
+			return R.failed(CommonResultConstants.USERNAME_NOT_EXIST);
 		}
 		catch (ExpiredCredentialsException e) {
-			return Result.error(ErrorState.CODE_EXPIRE);
+			return R.failed(CommonResultConstants.CODE_EXPIRE);
 		}
 		catch (IncorrectCredentialsException e) {
-			return Result.error(ErrorState.CODE_ERROR);
+			return R.failed(CommonResultConstants.CODE_ERROR);
 		}
 	}
 
@@ -130,27 +131,27 @@ public class LoginService {
 	 * @param phone 手机号
 	 * @param code 验证码
 	 * @param password 密码
-	 * @return {@link Result}
+	 * @return {@link R}
 	 */
-	public Result<Object> modifyPassword(String phone, String code, String password) {
+	public R<Object> modifyPassword(String phone, String code, String password) {
 		Object modifyCode = stringRedisTemplate.opsForValue().get(RedisKey.getModifyPasswordCodeKey(phone));
 		// 判断redis中是否存在验证码
 		if (Objects.isNull(modifyCode)) {
-			return Result.error(ErrorState.CODE_EXPIRE);
+			return R.failed(CommonResultConstants.CODE_EXPIRE);
 		}
 		// 判断redis中code与传递过来的code 是否相等
 		if (!Objects.equals(code, modifyCode.toString())) {
-			return Result.error(ErrorState.CODE_ERROR);
+			return R.failed(CommonResultConstants.CODE_ERROR);
 		}
 		SysUser user = userService.selectUserByPhone(phone);
 		// 如果用户不存在，执行注册
 		if (Objects.isNull(user)) {
 			Boolean flag = userService.register(phone, password);
 			if (flag) {
-				return Result.success(this.returnLoginInitParam(phone));
+				return R.ok(this.returnLoginInitParam(phone));
 			}
 			else {
-				return Result.error();
+				return R.failed();
 			}
 		}
 		// 加密所需盐值
@@ -163,11 +164,9 @@ public class LoginService {
 		stringRedisTemplate.delete(RedisKey.getLoginUserKey(phone));
 		boolean flag = userService.updateById(user);
 		if (flag) {
-			return Result.success(this.returnLoginInitParam(phone));
+			return R.ok(this.returnLoginInitParam(phone));
 		}
-		else {
-			return Result.error();
-		}
+		return R.failed();
 	}
 
 	/**
@@ -195,12 +194,12 @@ public class LoginService {
 	 * token刷新
 	 * @return Result
 	 */
-	public Result<Object> tokenRefresh(String refreshToken) {
+	public R<Object> tokenRefresh(String refreshToken) {
 		String phone = tokenService.getPhone(refreshToken);
 		SysUser user = userService.selectUserByPhone(phone);
 		boolean verify = tokenService.verify(refreshToken, user.getSuPassword());
 		if (!verify) {
-			return Result.error(ErrorState.REFRESH_TOKEN_INVALID);
+			return R.failed(CommonResultConstants.REFRESH_TOKEN_INVALID);
 		}
 		Map<String, Object> data = new HashMap<>(4);
 		// 生成jwtToken
@@ -213,7 +212,7 @@ public class LoginService {
 		data.put("token", newToken);
 		// 刷新时所需token
 		data.put("refreshToken", newRefreshToken);
-		return Result.success(data);
+		return R.ok(data);
 	}
 
 }

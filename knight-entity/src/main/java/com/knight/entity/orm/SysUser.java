@@ -44,7 +44,7 @@ public class SysUser extends BaseBean {
 	@ApiModelProperty("用户名")
 	private String suName;
 
-	@ApiModelProperty("性别0男1女")
+	@ApiModelProperty("性别0女1男")
 	private Integer suSex;
 
 	@ApiModelProperty("出生日期")

@@ -17,13 +17,19 @@ public class LoginUser implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	/** 角色列表 */
+	/**
+	 * 角色列表
+	 */
 	private Set<String> roleSet;
 
-	/** 权限列表 */
+	/**
+	 * 权限列表
+	 */
 	private Set<String> permissionsSet;
 
-	/** 用户信息 */
+	/**
+	 * 用户信息
+	 */
 	private UserInfo user;
 
 }

@@ -1,7 +1,7 @@
 package com.knight.exception;
 
-import com.knight.entity.base.Result;
-import com.knight.entity.enums.ErrorState;
+import com.knight.entity.base.R;
+import com.knight.entity.enums.CommonResultConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.http.HttpStatus;
@@ -23,14 +23,13 @@ public class GlobalExceptionAdvice {
 
 	/**
 	 * 非法参数异常
-	 * @see org.springframework.util.Assert
-	 * @param e e
 	 * @return ResponseEntity
+	 * @see org.springframework.util.Assert
 	 */
 	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<Result> handleIllegalArgumentException(IllegalArgumentException e) {
+	public ResponseEntity<R<Object>> handleIllegalArgumentException() {
 		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
-				.body(Result.error(ErrorState.ILLEGAL_PARAM_EXCEPTION));
+				.body(R.failed(CommonResultConstants.ILLEGAL_PARAM_EXCEPTION));
 	}
 
 	/**
@@ -39,9 +38,9 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(ServiceException.class)
-	public ResponseEntity<Result> handleServiceException(ServiceException e) {
+	public ResponseEntity<R<Object>> handleServiceException(ServiceException e) {
 		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
-				.body(Result.error(e.getErrorState()));
+				.body(R.failed(e.getErrorState()));
 	}
 
 	/**
@@ -50,8 +49,9 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<Result> handleConstraintViolationException(ConstraintViolationException e) {
-		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(Result.error());
+	public ResponseEntity<R<Object>> handleConstraintViolationException(ConstraintViolationException e) {
+		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
+				.body(R.failed(e.getLocalizedMessage()));
 	}
 
 	/**
@@ -59,9 +59,9 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(AuthorizationException.class)
-	public ResponseEntity<Result> handleShiroException(AuthorizationException authorizationException) {
+	public ResponseEntity<R<Object>> handleShiroException() {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON)
-				.body(Result.error(ErrorState.NOT_AUTH));
+				.body(R.failed(CommonResultConstants.NOT_AUTH));
 	}
 
 	/**
@@ -69,9 +69,9 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(MissingServletRequestParameterException.class)
-	public ResponseEntity<Result> handleMissingParameterException() {
+	public ResponseEntity<R<Object>> handleMissingParameterException() {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON)
-				.body(Result.error(ErrorState.MISSING_PARAMETER));
+				.body(R.failed(CommonResultConstants.MISSING_PARAMETER));
 	}
 
 }

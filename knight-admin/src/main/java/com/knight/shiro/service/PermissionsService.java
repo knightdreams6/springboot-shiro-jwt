@@ -22,10 +22,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PermissionsService {
 
-	/** 权限服务 */
+	/**
+	 * 权限服务
+	 */
 	private final ISysPermService permService;
 
-	/** 角色服务 */
+	/**
+	 * 角色服务
+	 */
 	private final ISysRoleService roleService;
 
 	/**

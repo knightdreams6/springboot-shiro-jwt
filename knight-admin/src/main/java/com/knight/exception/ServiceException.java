@@ -1,6 +1,6 @@
 package com.knight.exception;
 
-import com.knight.entity.enums.ErrorState;
+import com.knight.entity.enums.CommonResultConstants;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,9 +15,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ServiceException extends RuntimeException {
 
-	private ErrorState errorState;
+	private CommonResultConstants errorState;
 
-	public ServiceException(ErrorState errorState) {
+	public ServiceException(CommonResultConstants errorState) {
 		this.errorState = errorState;
 	}
 

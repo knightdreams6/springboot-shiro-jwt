@@ -21,22 +21,34 @@ public class UserInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	/** id */
+	/**
+	 * id
+	 */
 	private String id;
 
-	/** 电话 */
+	/**
+	 * 电话
+	 */
 	private String phone;
 
-	/** 头像 */
+	/**
+	 * 头像
+	 */
 	private String avatar;
 
-	/** 姓名 */
+	/**
+	 * 姓名
+	 */
 	private String name;
 
-	/** 性别 */
-	private Integer sex;
+	/**
+	 * 性别
+	 */
+	private Integer gender;
 
-	/** 出生日期 */
+	/**
+	 * 出生日期
+	 */
 	private LocalDate birth;
 
 	public UserInfo(SysUser user) {
@@ -44,7 +56,7 @@ public class UserInfo implements Serializable {
 		this.phone = user.getSuPhone();
 		this.avatar = user.getSuAvatar();
 		this.name = user.getSuName();
-		this.sex = user.getSuSex();
+		this.gender = user.getSuSex();
 		this.birth = user.getSuBirth();
 	}
 

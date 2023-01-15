@@ -3,12 +3,15 @@ package com.knight;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.knight.entity.enums.ErrorState;
+import com.knight.entity.enums.CommonResultConstants;
 import lombok.NonNull;
 import org.springframework.context.support.AbstractMessageSource;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -20,22 +23,28 @@ import java.util.stream.Collectors;
  */
 public class CustomMessageSource extends AbstractMessageSource {
 
-	/** 中文消息 */
+	/**
+	 * 中文消息
+	 */
 	private final Map<String, String> zhMessage;
 
-	/** 区域代码消息映射 */
+	/**
+	 * 区域代码消息映射
+	 */
 	private final Map<Locale, Map<String, String>> localeCodeMessageMap = new HashMap<>(4);
 
-	/** 代码区域消息映射 */
+	/**
+	 * 代码区域消息映射
+	 */
 	private final Map<String, Map<Locale, MessageFormat>> codeLocaleMessageMap = new ConcurrentHashMap<>();
 
 	public CustomMessageSource() {
-		this.zhMessage = Arrays.stream(ErrorState.values())
-				.collect(Collectors.toMap(errorState -> String.valueOf(errorState.getCode()), ErrorState::getMsg));
+		this.zhMessage = Arrays.stream(CommonResultConstants.values()).collect(
+				Collectors.toMap(errorState -> String.valueOf(errorState.getCode()), CommonResultConstants::getMsg));
 		// 英文消息
-		Map<String, String> enMessage = Arrays.stream(ErrorState.values()).collect(Collectors.toMap(
+		Map<String, String> enMessage = Arrays.stream(CommonResultConstants.values()).collect(Collectors.toMap(
 				errorState -> String.valueOf(errorState.getCode()),
-				errorState -> StrUtil.isBlank(errorState.getEnMsg()) ? errorState.getMsg() : errorState.getEnMsg()));
+				errorState -> StrUtil.isBlank(errorState.enMsg()) ? errorState.getMsg() : errorState.getEnMsg()));
 		this.localeCodeMessageMap.put(Locale.SIMPLIFIED_CHINESE, zhMessage);
 		this.localeCodeMessageMap.put(Locale.CHINESE, zhMessage);
 		this.localeCodeMessageMap.put(Locale.ENGLISH, enMessage);

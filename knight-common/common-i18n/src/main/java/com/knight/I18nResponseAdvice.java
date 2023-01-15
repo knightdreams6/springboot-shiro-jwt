@@ -1,7 +1,7 @@
 package com.knight;
 
 import cn.hutool.core.util.ClassUtil;
-import com.knight.entity.base.Result;
+import com.knight.entity.base.R;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.context.MessageSource;
@@ -22,21 +22,22 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  */
 @RestControllerAdvice
 @AllArgsConstructor
-public class I18nResponseAdvice implements ResponseBodyAdvice<Result> {
+public class I18nResponseAdvice implements ResponseBodyAdvice<R> {
 
-	/** 消息来源 */
+	/**
+	 * 消息来源
+	 */
 	private final MessageSource messageSource;
 
 	@Override
 	public boolean supports(@NonNull MethodParameter returnType,
 			@NonNull Class<? extends HttpMessageConverter<?>> converterType) {
 		// 校验返回值类型是否为 Result
-		return ClassUtil.isAssignable(returnType.getParameterType(), Result.class);
+		return ClassUtil.isAssignable(returnType.getParameterType(), R.class);
 	}
 
 	@Override
-	public Result beforeBodyWrite(Result body, @NonNull MethodParameter returnType,
-			@NonNull MediaType selectedContentType,
+	public R beforeBodyWrite(R body, @NonNull MethodParameter returnType, @NonNull MediaType selectedContentType,
 			@NonNull Class<? extends HttpMessageConverter<?>> selectedConverterType, @NonNull ServerHttpRequest request,
 			@NonNull ServerHttpResponse response) {
 		if (body == null) {
