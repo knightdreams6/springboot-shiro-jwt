@@ -49,6 +49,15 @@ INSERT INTO `sys_perm`
 VALUES ('4', '添加用户权限', 'system:user:insert', '', '2020-11-02 09:16:31', NULL, NULL, 0);
 INSERT INTO `sys_perm`
 VALUES ('5', '用户所有权限', 'system:user:*', '', '2020-11-02 09:16:31', NULL, NULL, 0);
+INSERT INTO `sys_perm` (id, sp_name, sp_key, sp_remark, create_date, update_date, delete_date, deleted)
+VALUES ('6', '上传附件', 'attachment:insert', '', '2020-11-02 09:16:31', null, null, 0);
+INSERT INTO `sys_perm` (id, sp_name, sp_key, sp_remark, create_date, update_date, delete_date, deleted)
+VALUES ('7', '下载附件', 'attachment:get', '', '2020-11-02 09:16:31', null, null, 0);
+INSERT INTO `sys_perm` (id, sp_name, sp_key, sp_remark, create_date, update_date, delete_date, deleted)
+VALUES ('8', '删除附件', 'attachment:remove', '', '2020-11-02 09:16:31', null, null, 0);
+INSERT INTO `sys_perm` (id, sp_name, sp_key, sp_remark, create_date, update_date, delete_date, deleted)
+VALUES ('9', '附件所有权限', 'attachment:*', '', '2020-11-02 09:16:31', null, null, 0);
+
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -95,6 +104,9 @@ CREATE TABLE `sys_role_perm`
 -- ----------------------------
 INSERT INTO `sys_role_perm`
 VALUES ('', '1', '5', '2021-11-23 17:49:28');
+INSERT INTO `sys_role_perm` (id, role_id, perm_id, create_date)
+VALUES ('2', '1', '9', '2023-01-20 19:41:07');
+
 
 -- ----------------------------
 -- Table structure for sys_user

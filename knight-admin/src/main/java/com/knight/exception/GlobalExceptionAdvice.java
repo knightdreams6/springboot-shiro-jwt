@@ -27,7 +27,8 @@ public class GlobalExceptionAdvice {
 	 * @see org.springframework.util.Assert
 	 */
 	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<R<Object>> handleIllegalArgumentException() {
+	public ResponseEntity<R<Object>> handleIllegalArgumentException(IllegalArgumentException e) {
+		log.error("IllegalArgumentException: {}", e.getLocalizedMessage());
 		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
 				.body(R.failed(CommonResultConstants.ILLEGAL_PARAM_EXCEPTION));
 	}
@@ -59,7 +60,7 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(AuthorizationException.class)
-	public ResponseEntity<R<Object>> handleShiroException() {
+	public ResponseEntity<R<Object>> handleShiroException(AuthorizationException e) {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON)
 				.body(R.failed(CommonResultConstants.NOT_AUTH));
 	}

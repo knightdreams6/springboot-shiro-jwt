@@ -93,6 +93,12 @@
         </dependency>
 
         <dependency>
+            <artifactId>common-storage-minio</artifactId>
+            <groupId>com.knight</groupId>
+        </dependency>
+
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
