@@ -45,7 +45,9 @@
 
         <mica.auto.version>2.3.1</mica.auto.version>
 
-        <springboot.version>2.5.3</springboot.version>
+        <springboot.version>2.7.7</springboot.version>
+
+        <minio.version>8.5.1</minio.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -61,6 +63,12 @@
 
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
 
             <!-- SpringBoot的依赖配置-->
             <dependency>
@@ -139,6 +147,17 @@
                 <version>${knight.version}</version>
             </dependency>
 
+            <dependency>
+                <artifactId>common-storage-minio</artifactId>
+                <groupId>com.knight</groupId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <artifactId>common-storage-facade</artifactId>
+                <groupId>com.knight</groupId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
 
             <dependency>
                 <artifactId>common-interceptor</artifactId>
