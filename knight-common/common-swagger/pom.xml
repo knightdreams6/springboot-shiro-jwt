@@ -12,12 +12,13 @@
     <artifactId>common-swagger</artifactId>
 
     <dependencies>
+
         <!-- 接口文档 -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-spring-boot-starter</artifactId>
-            <version>${knife4j.version}</version>
         </dependency>
+
     </dependencies>
 
 </project>

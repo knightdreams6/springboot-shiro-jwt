@@ -9,46 +9,21 @@
     <name>project</name>
     <description>基于SpringBoot+shiro+jwt的前后端分离的单体架构设计</description>
     <packaging>pom</packaging>
+
     <modules>
         <module>knight-entity</module>
         <module>knight-common</module>
         <module>knight-admin</module>
+        <module>knight-bom</module>
     </modules>
 
     <properties>
         <!-- jdk版本 -->
         <java.version>1.8</java.version>
-        <!-- hutool工具类
-             git: https://gitee.com/dromara/hutool/blob/v5-master/CHANGELOG.md -->
-        <hutool.version>5.7.7</hutool.version>
-        <!-- mybatis-plus
-             git: https://gitee.com/baomidou/mybatis-plus/blob/3.0/CHANGELOG.md -->
-        <mybatis.plus.version>3.4.3.4</mybatis.plus.version>
-        <!-- 动态数据源
-             git: https://gitee.com/baomidou/dynamic-datasource-spring-boot-starter/tags -->
-        <dynamic.datasource.version>3.4.1</dynamic.datasource.version>
-        <!-- jwt
-             git: https://github.com/auth0/java-jwt/tags-->
-        <jwt.version>3.18.1</jwt.version>
-        <!-- swagger   -->
-        <swagger.version>3.0.0</swagger.version>
-        <!-- shiro-spring-boot -->
-        <shiro-spring-boot.version>1.7.1</shiro-spring-boot.version>
         <!-- SpringFormat版本 -->
         <javaformat.plugin.version>0.0.28</javaformat.plugin.version>
 
-        <knife4j.version>3.0.3</knife4j.version>
-
         <knight.version>0.0.1-SNAPSHOT</knight.version>
-
-        <swagger.annotation.version>1.5.22</swagger.annotation.version>
-
-        <mica.auto.version>2.3.1</mica.auto.version>
-
-        <springboot.version>2.7.7</springboot.version>
-
-        <minio.version>8.5.1</minio.version>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -64,141 +39,13 @@
     <dependencyManagement>
         <dependencies>
 
-            <dependency>
-                <groupId>io.minio</groupId>
-                <artifactId>minio</artifactId>
-                <version>${minio.version}</version>
-            </dependency>
-
             <!-- SpringBoot的依赖配置-->
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${springboot.version}</version>
+                <groupId>com.knight</groupId>
+                <artifactId>knight-bom</artifactId>
+                <version>${project.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>net.dreamlu</groupId>
-                <artifactId>mica-auto</artifactId>
-                <version>${mica.auto.version}</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.shiro</groupId>
-                <artifactId>shiro-core</artifactId>
-                <version>${shiro-spring-boot.version}</version>
-                <scope>compile</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>io.swagger</groupId>
-                <artifactId>swagger-annotations</artifactId>
-                <version>${swagger.annotation.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-annotation</artifactId>
-                <version>${mybatis.plus.version}</version>
-            </dependency>
-
-            <!--JWT-->
-            <dependency>
-                <groupId>com.auth0</groupId>
-                <artifactId>java-jwt</artifactId>
-                <version>${jwt.version}</version>
-            </dependency>
-
-            <!-- 接口文档 -->
-            <dependency>
-                <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-spring-boot-starter</artifactId>
-                <version>${knife4j.version}</version>
-            </dependency>
-
-            <!-- hutool -->
-            <dependency>
-                <groupId>cn.hutool</groupId>
-                <artifactId>hutool-all</artifactId>
-                <version>${hutool.version}</version>
-            </dependency>
-
-            <!-- shiro -->
-            <dependency>
-                <groupId>org.apache.shiro</groupId>
-                <artifactId>shiro-spring-boot-starter</artifactId>
-                <version>${shiro-spring-boot.version}</version>
-            </dependency>
-
-            <!--  mybatis-plus -->
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis.plus.version}</version>
-            </dependency>
-
-            <!-- common  -->
-            <dependency>
-                <artifactId>knight-common</artifactId>
-                <groupId>com.knight</groupId>
-                <version>${knight.version}</version>
-            </dependency>
-
-            <dependency>
-                <artifactId>common-storage-minio</artifactId>
-                <groupId>com.knight</groupId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <artifactId>common-storage-facade</artifactId>
-                <groupId>com.knight</groupId>
-                <version>0.0.1-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <artifactId>common-interceptor</artifactId>
-                <groupId>com.knight</groupId>
-                <version>${knight.version}</version>
-            </dependency>
-
-            <dependency>
-                <artifactId>common-mybatis-plus</artifactId>
-                <groupId>com.knight</groupId>
-                <version>${knight.version}</version>
-            </dependency>
-
-            <dependency>
-                <artifactId>common-swagger</artifactId>
-                <groupId>com.knight</groupId>
-                <version>${knight.version}</version>
-            </dependency>
-
-            <dependency>
-                <artifactId>common-utils</artifactId>
-                <groupId>com.knight</groupId>
-                <version>${knight.version}</version>
-            </dependency>
-
-            <dependency>
-                <artifactId>common-i18n</artifactId>
-                <groupId>com.knight</groupId>
-                <version>${knight.version}</version>
-            </dependency>
-
-            <dependency>
-                <artifactId>common-valid</artifactId>
-                <groupId>com.knight</groupId>
-                <version>${knight.version}</version>
-            </dependency>
-
-            <dependency>
-                <artifactId>knight-entity</artifactId>
-                <groupId>com.knight</groupId>
-                <version>${knight.version}</version>
             </dependency>
 
         </dependencies>
