@@ -22,8 +22,8 @@ public class PhoneCodeToken implements AuthenticationToken {
 	private String phone;
 
 	/**
-	 * 验证码 为什么使用char[]? 参考:
-	 * <a href="https://docs.oracle.com/javase/1.5.0/docs/guide/security/jce/JCERefGuide.html#PBEEx">...</a>
+	 * 验证码 为什么使用char[]? 参考: <a href=
+	 * "https://docs.oracle.com/javase/1.5.0/docs/guide/security/jce/JCERefGuide.html#PBEEx">...</a>
 	 */
 	private char[] code;
 

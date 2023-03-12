@@ -17,6 +17,7 @@
         <module>common-mybatis-plus</module>
         <module>common-swagger</module>
         <module>common-i18n</module>
+        <module>common-websocket</module>
     </modules>
 
     <artifactId>knight-common</artifactId>

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.Set;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Set;
  */
 @Data
 @NoArgsConstructor
-public class LoginUser implements Serializable {
+public class LoginUser implements Serializable, Principal {
 
 	private static final long serialVersionUID = 1L;
 
@@ -31,5 +32,10 @@ public class LoginUser implements Serializable {
 	 * 用户信息
 	 */
 	private UserInfo user;
+
+	@Override
+	public String getName() {
+		return user.getPhone();
+	}
 
 }

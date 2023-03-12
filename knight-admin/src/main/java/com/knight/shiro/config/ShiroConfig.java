@@ -118,6 +118,10 @@ public class ShiroConfig {
 		filterMap.put("/v2/**", "anon");
 		filterMap.put("/webjars/**", "anon");
 		filterMap.put("/images/**", "anon");
+		filterMap.put("/websocket/**", "anon");
+		filterMap.put("/*.js", "anon");
+		filterMap.put("/*.html", "anon");
+		filterMap.put("/*.css", "anon");
 
 		// 添加oauth授权过滤器
 		Map<String, Filter> filter = new LinkedHashMap<>(1);

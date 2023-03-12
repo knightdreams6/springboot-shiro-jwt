@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @UtilityClass
 public class OauthUtils {
 
-	final String AUTHORIZATION_HEADER = "Authorization";
+	public static final String AUTHORIZATION_HEADER = "Authorization";
 
 	/**
 	 * 获取令牌
@@ -31,7 +31,7 @@ public class OauthUtils {
 			return null;
 		}
 		String[] authTokens = authorizationHeader.split(" ");
-		if (authTokens == null || authTokens.length < 2) {
+		if (authTokens.length < 2) {
 			return null;
 		}
 		return authTokens[1];

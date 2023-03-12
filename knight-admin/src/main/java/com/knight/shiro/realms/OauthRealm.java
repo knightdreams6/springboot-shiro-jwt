@@ -75,7 +75,7 @@ public class OauthRealm extends AuthorizingRealm {
 		if (!verify) {
 			throw new IncorrectCredentialsException();
 		}
-		return new SimpleAuthenticationInfo(token, token, getName());
+		return new SimpleAuthenticationInfo(phone, token, getName());
 	}
 
 }

@@ -28,30 +28,30 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class AttachmentController {
 
-    /**
-     * 存储模板
-     */
-    private final StorageTemplate storageTemplate;
+	/**
+	 * 存储模板
+	 */
+	private final StorageTemplate storageTemplate;
 
-    @ApiOperation(value = "上传附件")
-    @PostMapping
-    @RequiresPermissions(value = "attachment:insert")
-    public R<OssUploadR> upload(@RequestPart MultipartFile attachment) {
-        return storageTemplate.upload(attachment);
-    }
+	@ApiOperation(value = "上传附件")
+	@PostMapping
+	@RequiresPermissions(value = "attachment:insert")
+	public R<OssUploadR> upload(@RequestPart MultipartFile attachment) {
+		return storageTemplate.upload(attachment);
+	}
 
-    @ApiOperation(value = "下载附件")
-    @GetMapping
-    @RequiresPermissions(value = "attachment:get")
-    public R<String> download(@RequestParam String objectName) {
-        return storageTemplate.getUrl(objectName);
-    }
+	@ApiOperation(value = "下载附件")
+	@GetMapping
+	@RequiresPermissions(value = "attachment:get")
+	public R<String> download(@RequestParam String objectName) {
+		return storageTemplate.getUrl(objectName);
+	}
 
-    @ApiOperation(value = "删除附件")
-    @DeleteMapping
-    @RequiresPermissions(value = "attachment:remove")
-    public R<Object> delete(@RequestParam String objectName) {
-        return storageTemplate.remove(objectName);
-    }
+	@ApiOperation(value = "删除附件")
+	@DeleteMapping
+	@RequiresPermissions(value = "attachment:remove")
+	public R<Object> delete(@RequestParam String objectName) {
+		return storageTemplate.remove(objectName);
+	}
 
 }

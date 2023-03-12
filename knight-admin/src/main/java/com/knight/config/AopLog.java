@@ -29,7 +29,7 @@ public class AopLog {
 	/**
 	 * 切入点
 	 */
-	@Pointcut("execution(public * com.knight.controller.*Controller.*(..))")
+	@Pointcut("@annotation(org.springframework.web.bind.annotation.RestController)")
 	public void pointCut() {
 	}
 

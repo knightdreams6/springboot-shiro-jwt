@@ -3,10 +3,9 @@ package com.knight.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -63,8 +62,15 @@ public class ThreadPoolConfig {
 	}
 
 	@Bean
-	protected ScheduledExecutorService scheduledExecutorService() {
-		return new ScheduledThreadPoolExecutor(corePoolSize);
+	public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
+		// 核心线程数
+		int corePoolSize = Runtime.getRuntime().availableProcessors();
+		ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+		// 池数量
+		threadPoolTaskScheduler.setPoolSize(corePoolSize);
+		// 拒绝策略
+		threadPoolTaskScheduler.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+		return threadPoolTaskScheduler;
 	}
 
 }
