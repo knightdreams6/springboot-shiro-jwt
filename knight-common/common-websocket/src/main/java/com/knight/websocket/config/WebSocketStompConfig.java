@@ -50,7 +50,9 @@ public class WebSocketStompConfig implements WebSocketMessageBrokerConfigurer {
 		// 客户端发送消息队列前缀
 		config.setApplicationDestinationPrefixes("/app");
 		// 客户端订阅/服务端推送地址前缀
-		config.enableSimpleBroker("/topic");
+		config.enableSimpleBroker("/topic", "/queue");
+		// 指定用户发送订阅前缀
+		config.setUserDestinationPrefix("/user");
 	}
 
 	@Override
