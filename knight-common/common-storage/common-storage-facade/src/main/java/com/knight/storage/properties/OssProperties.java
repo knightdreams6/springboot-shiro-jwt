@@ -15,24 +15,24 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "storage")
 public class OssProperties {
 
-    /**
-     * 端点
-     */
-    private String endpoint;
+	/**
+	 * 端点
+	 */
+	private String endpoint;
 
-    /**
-     * 访问密钥
-     */
-    private String accessKey;
+	/**
+	 * 访问密钥
+	 */
+	private String accessKey;
 
-    /**
-     * 秘密密钥
-     */
-    private String secretKey;
+	/**
+	 * 秘密密钥
+	 */
+	private String secretKey;
 
-    /**
-     * 默认桶
-     */
-    private String defaultBucket;
+	/**
+	 * 默认桶
+	 */
+	private String defaultBucket;
 
 }

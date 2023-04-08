@@ -11,24 +11,24 @@ import lombok.Data;
 @Data
 public class OssUploadR {
 
-    /**
-     * etag
-     */
-    private String etag;
+	/**
+	 * etag
+	 */
+	private String etag;
 
-    /**
-     * 版本标识
-     */
-    private String versionId;
+	/**
+	 * 版本标识
+	 */
+	private String versionId;
 
-    /**
-     * 桶
-     */
-    private String bucket;
+	/**
+	 * 桶
+	 */
+	private String bucket;
 
-    /**
-     * 对象
-     */
-    private String objectName;
+	/**
+	 * 对象
+	 */
+	private String objectName;
 
 }

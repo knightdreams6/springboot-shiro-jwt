@@ -103,7 +103,8 @@ public class ShiroConfig {
 	 * @see org.apache.shiro.web.filter.mgt.DefaultFilter
 	 **/
 	@Bean
-	public ShiroFilterFactoryBean shiroFilter(@Qualifier("sessionsSecurityManager") SecurityManager securityManager) {
+	public ShiroFilterFactoryBean shiroFilterFactoryBean(
+			@Qualifier("sessionsSecurityManager") SecurityManager securityManager) {
 		ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
 		// 设置 SecurityManager
 		bean.setSecurityManager(securityManager);

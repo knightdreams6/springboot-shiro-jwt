@@ -2,117 +2,117 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>project</artifactId>
-        <groupId>com.knight</groupId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>project</artifactId>
+    <groupId>com.knight</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>knight-admin</artifactId>
-
-
-    <dependencies>
-
-        <!--JWT-->
-        <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-        </dependency>
-
-        <!-- shiro -->
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-        </dependency>
-
-        <!--  aop -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-
-        <!--  redis -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
+  <artifactId>knight-admin</artifactId>
 
 
-        <!--  web -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+  <dependencies>
 
-        <!--  mysql driver -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
-        </dependency>
+    <!--JWT-->
+    <dependency>
+      <groupId>com.auth0</groupId>
+      <artifactId>java-jwt</artifactId>
+    </dependency>
 
-        <dependency>
-            <artifactId>common-interceptor</artifactId>
-            <groupId>com.knight</groupId>
-        </dependency>
+    <!-- shiro -->
+    <dependency>
+      <groupId>org.apache.shiro</groupId>
+      <artifactId>shiro-spring-boot-starter</artifactId>
+    </dependency>
 
-        <dependency>
-            <artifactId>common-mybatis-plus</artifactId>
-            <groupId>com.knight</groupId>
-        </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-pool2</artifactId>
+    </dependency>
 
-        <dependency>
-            <artifactId>common-swagger</artifactId>
-            <groupId>com.knight</groupId>
-        </dependency>
+    <!--  aop -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-aop</artifactId>
+    </dependency>
 
-        <dependency>
-            <artifactId>common-utils</artifactId>
-            <groupId>com.knight</groupId>
-        </dependency>
+    <!--  redis -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
 
-        <dependency>
-            <artifactId>common-i18n</artifactId>
-            <groupId>com.knight</groupId>
-        </dependency>
 
-        <dependency>
-            <artifactId>common-valid</artifactId>
-            <groupId>com.knight</groupId>
-        </dependency>
+    <!--  web -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
 
-        <dependency>
-            <artifactId>knight-entity</artifactId>
-            <groupId>com.knight</groupId>
-        </dependency>
+    <!--  mysql driver -->
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <scope>runtime</scope>
+    </dependency>
 
-        <dependency>
-            <artifactId>common-storage-minio</artifactId>
-            <groupId>com.knight</groupId>
-        </dependency>
+    <dependency>
+      <artifactId>common-interceptor</artifactId>
+      <groupId>com.knight</groupId>
+    </dependency>
 
-        <dependency>
-            <artifactId>common-websocket</artifactId>
-            <groupId>com.knight</groupId>
-        </dependency>
+    <dependency>
+      <artifactId>common-mybatis-plus</artifactId>
+      <groupId>com.knight</groupId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-    </dependencies>
+    <dependency>
+      <artifactId>common-swagger</artifactId>
+      <groupId>com.knight</groupId>
+    </dependency>
+
+    <dependency>
+      <artifactId>common-utils</artifactId>
+      <groupId>com.knight</groupId>
+    </dependency>
+
+    <dependency>
+      <artifactId>common-i18n</artifactId>
+      <groupId>com.knight</groupId>
+    </dependency>
+
+    <dependency>
+      <artifactId>common-valid</artifactId>
+      <groupId>com.knight</groupId>
+    </dependency>
+
+    <dependency>
+      <artifactId>knight-entity</artifactId>
+      <groupId>com.knight</groupId>
+    </dependency>
+
+    <dependency>
+      <artifactId>common-storage-minio</artifactId>
+      <groupId>com.knight</groupId>
+    </dependency>
+
+    <dependency>
+      <artifactId>common-websocket</artifactId>
+      <groupId>com.knight</groupId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.junit.vintage</groupId>
+          <artifactId>junit-vintage-engine</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
 
 </project>

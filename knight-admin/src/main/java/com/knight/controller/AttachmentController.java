@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author knight
  * @since 2023/01/15
  */
-@Api("【attachment】附件")
+@Api(tags = "【attachment】附件")
 @RestController
 @RequestMapping("/attachment")
 @RequiredArgsConstructor

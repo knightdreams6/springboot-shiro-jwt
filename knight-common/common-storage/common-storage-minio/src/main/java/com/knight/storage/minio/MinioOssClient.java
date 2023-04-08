@@ -25,70 +25,55 @@ import java.io.InputStream;
 @Component
 public class MinioOssClient implements OssClient {
 
-    /**
-     * minio客户端
-     */
-    private MinioClient minioClient;
+	/**
+	 * minio客户端
+	 */
+	private MinioClient minioClient;
 
-    @Override
-    public void init(OssProperties ossProperties) {
-        minioClient = MinioClient.builder()
-                .endpoint(ossProperties.getEndpoint())
-                .credentials(ossProperties.getAccessKey(), ossProperties.getSecretKey())
-                .build();
-        // 如果默认桶不存在则创建
-        createBucketIfNotExist(ossProperties.getDefaultBucket());
-    }
+	@Override
+	public void init(OssProperties ossProperties) {
+		minioClient = MinioClient.builder().endpoint(ossProperties.getEndpoint())
+				.credentials(ossProperties.getAccessKey(), ossProperties.getSecretKey()).build();
+		// 如果默认桶不存在则创建
+		createBucketIfNotExist(ossProperties.getDefaultBucket());
+	}
 
-    /**
-     * 创建桶(如果不存在)
-     *
-     * @param bucketName bucket名称
-     */
-    @SneakyThrows
-    private void createBucketIfNotExist(String bucketName) {
-        if (!minioClient.bucketExists(BucketExistsArgs.builder()
-                .bucket(bucketName).build())) {
-            minioClient.makeBucket(MakeBucketArgs.builder()
-                    .bucket(bucketName)
-                    .build());
-        }
-    }
+	/**
+	 * 创建桶(如果不存在)
+	 * @param bucketName bucket名称
+	 */
+	@SneakyThrows
+	private void createBucketIfNotExist(String bucketName) {
+		if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
+			minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+		}
+	}
 
-    @SneakyThrows
-    @Override
-    public OssUploadR upload(String bucketName, String objectName, InputStream inputStream) {
-        createBucketIfNotExist(bucketName);
-        ObjectWriteResponse objectWriteResponse = minioClient.putObject(PutObjectArgs.builder()
-                .bucket(bucketName).object(objectName)
-                .stream(inputStream, inputStream.available(), -1)
-                .build());
-        OssUploadR ossUploadR = new OssUploadR();
-        ossUploadR.setBucket(objectWriteResponse.bucket());
-        ossUploadR.setObjectName(objectWriteResponse.object());
-        ossUploadR.setEtag(objectWriteResponse.etag());
-        ossUploadR.setVersionId(objectWriteResponse.versionId());
-        return ossUploadR;
-    }
+	@SneakyThrows
+	@Override
+	public OssUploadR upload(String bucketName, String objectName, InputStream inputStream) {
+		createBucketIfNotExist(bucketName);
+		ObjectWriteResponse objectWriteResponse = minioClient.putObject(PutObjectArgs.builder().bucket(bucketName)
+				.object(objectName).stream(inputStream, inputStream.available(), -1).build());
+		OssUploadR ossUploadR = new OssUploadR();
+		ossUploadR.setBucket(objectWriteResponse.bucket());
+		ossUploadR.setObjectName(objectWriteResponse.object());
+		ossUploadR.setEtag(objectWriteResponse.etag());
+		ossUploadR.setVersionId(objectWriteResponse.versionId());
+		return ossUploadR;
+	}
 
-    @SneakyThrows
-    @Override
-    public String getUrl(String bucketName, String objectName, Integer expireSeconds) {
-        return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
-                .bucket(bucketName)
-                .object(objectName)
-                .method(Method.GET)
-                .expiry(expireSeconds)
-                .build());
-    }
+	@SneakyThrows
+	@Override
+	public String getUrl(String bucketName, String objectName, Integer expireSeconds) {
+		return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder().bucket(bucketName)
+				.object(objectName).method(Method.GET).expiry(expireSeconds).build());
+	}
 
-    @SneakyThrows
-    @Override
-    public void remove(String bucketName, String objectName) {
-        minioClient.removeObject(RemoveObjectArgs.builder()
-                .bucket(bucketName)
-                .object(objectName)
-                .build());
-    }
+	@SneakyThrows
+	@Override
+	public void remove(String bucketName, String objectName) {
+		minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucketName).object(objectName).build());
+	}
 
 }
