@@ -130,8 +130,10 @@ public class TokenService {
 		try {
 			// 根据密码生成JWT效验器
 			Algorithm algorithm = Algorithm.HMAC256(secret);
-			JWTVerifier verifier = JWT.require(algorithm).withClaim("phone", getPhone(token))
-					.withClaim("userId", getUserId(token)).build();
+			JWTVerifier verifier = JWT.require(algorithm)
+				.withClaim("phone", getPhone(token))
+				.withClaim("userId", getUserId(token))
+				.build();
 			// 效验TOKEN
 			verifier.verify(token);
 			return true;

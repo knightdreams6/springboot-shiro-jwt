@@ -29,8 +29,9 @@ public class GlobalExceptionAdvice {
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<R<Object>> handleIllegalArgumentException(IllegalArgumentException e) {
 		log.error("IllegalArgumentException: {}", e.getLocalizedMessage());
-		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
-				.body(R.failed(CommonResultConstants.ILLEGAL_PARAM_EXCEPTION));
+		return ResponseEntity.status(HttpStatus.OK)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(R.failed(CommonResultConstants.ILLEGAL_PARAM_EXCEPTION));
 	}
 
 	/**
@@ -40,8 +41,9 @@ public class GlobalExceptionAdvice {
 	 */
 	@ExceptionHandler(ServiceException.class)
 	public ResponseEntity<R<Object>> handleServiceException(ServiceException e) {
-		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
-				.body(R.failed(e.getErrorState()));
+		return ResponseEntity.status(HttpStatus.OK)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(R.failed(e.getErrorState()));
 	}
 
 	/**
@@ -51,8 +53,9 @@ public class GlobalExceptionAdvice {
 	 */
 	@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<R<Object>> handleConstraintViolationException(ConstraintViolationException e) {
-		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON)
-				.body(R.failed(e.getLocalizedMessage()));
+		return ResponseEntity.status(HttpStatus.OK)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(R.failed(e.getLocalizedMessage()));
 	}
 
 	/**
@@ -61,8 +64,9 @@ public class GlobalExceptionAdvice {
 	 */
 	@ExceptionHandler(AuthorizationException.class)
 	public ResponseEntity<R<Object>> handleShiroException(AuthorizationException e) {
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON)
-				.body(R.failed(CommonResultConstants.NOT_AUTH));
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(R.failed(CommonResultConstants.NOT_AUTH));
 	}
 
 	/**
@@ -71,8 +75,9 @@ public class GlobalExceptionAdvice {
 	 */
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public ResponseEntity<R<Object>> handleMissingParameterException() {
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON)
-				.body(R.failed(CommonResultConstants.MISSING_PARAMETER));
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(R.failed(CommonResultConstants.MISSING_PARAMETER));
 	}
 
 }

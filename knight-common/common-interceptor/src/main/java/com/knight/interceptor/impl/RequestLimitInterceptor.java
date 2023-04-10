@@ -36,7 +36,7 @@ public class RequestLimitInterceptor implements HandlerInterceptor {
 	 * 限制键生成器
 	 */
 	private final SingletonSupplier<LimitKeyGenerator> simpleLimitKeyGenerator = SingletonSupplier
-			.of(SimpleLimitKeyGenerator::new);
+		.of(SimpleLimitKeyGenerator::new);
 
 	@Resource(name = "intRedisTemplate")
 	private RedisTemplate<String, Integer> redisTemplate;

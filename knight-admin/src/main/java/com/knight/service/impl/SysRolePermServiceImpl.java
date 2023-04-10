@@ -25,10 +25,10 @@ public class SysRolePermServiceImpl extends ServiceImpl<SysRolePermMapper, SysRo
 	@Override
 	public Set<String> selectPermIdsByRoleIds(Set<String> roleIds) {
 		LambdaQueryWrapper<SysRolePerm> queryWrapper = Wrappers.<SysRolePerm>lambdaQuery()
-				// 查询权限id
-				.select(SysRolePerm::getPermId)
-				// 根据角色id过滤
-				.in(SysRolePerm::getRoleId, roleIds);
+			// 查询权限id
+			.select(SysRolePerm::getPermId)
+			// 根据角色id过滤
+			.in(SysRolePerm::getRoleId, roleIds);
 		return this.list(queryWrapper).stream().map(SysRolePerm::getPermId).collect(Collectors.toSet());
 	}
 

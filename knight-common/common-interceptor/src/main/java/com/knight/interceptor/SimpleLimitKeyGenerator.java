@@ -25,8 +25,11 @@ public class SimpleLimitKeyGenerator implements LimitKeyGenerator {
 		// 接口地址
 		String servletPath = request.getServletPath();
 		// 参数列表
-		String params = request.getParameterMap().values().stream().flatMap(Arrays::stream)
-				.collect(Collectors.joining());
+		String params = request.getParameterMap()
+			.values()
+			.stream()
+			.flatMap(Arrays::stream)
+			.collect(Collectors.joining());
 		// 接口地址 + 参数列表
 		String key = servletPath + params;
 		// md5

@@ -35,14 +35,14 @@ public class WebSocketStompConfig implements WebSocketMessageBrokerConfigurer {
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		registry
-				// 设置端点
-				.addEndpoint("/websocket")
-				// 配置跨域
-				.setAllowedOriginPatterns("*")
-				// 启用 SockJS
-				.withSockJS()
-				// SockJS 心跳的调度程序
-				.setTaskScheduler(threadPoolTaskScheduler);
+			// 设置端点
+			.addEndpoint("/websocket")
+			// 配置跨域
+			.setAllowedOriginPatterns("*")
+			// 启用 SockJS
+			.withSockJS()
+			// SockJS 心跳的调度程序
+			.setTaskScheduler(threadPoolTaskScheduler);
 	}
 
 	@Override
@@ -58,17 +58,17 @@ public class WebSocketStompConfig implements WebSocketMessageBrokerConfigurer {
 	@Override
 	public void configureClientInboundChannel(ChannelRegistration registration) {
 		registration
-				// 消息入站拦截器
-				.interceptors(new ConnectAuthorizationInterceptor(securityManager))
-				// 入站消息通道线程池
-				.taskExecutor(threadPoolTaskExecutor);
+			// 消息入站拦截器
+			.interceptors(new ConnectAuthorizationInterceptor(securityManager))
+			// 入站消息通道线程池
+			.taskExecutor(threadPoolTaskExecutor);
 	}
 
 	@Override
 	public void configureClientOutboundChannel(ChannelRegistration registration) {
 		registration
-				// 出站消息通道线程池
-				.taskExecutor(threadPoolTaskExecutor);
+			// 出站消息通道线程池
+			.taskExecutor(threadPoolTaskExecutor);
 	}
 
 }

@@ -39,12 +39,13 @@ public class CustomMessageSource extends AbstractMessageSource {
 	private final Map<String, Map<Locale, MessageFormat>> codeLocaleMessageMap = new ConcurrentHashMap<>();
 
 	public CustomMessageSource() {
-		this.zhMessage = Arrays.stream(CommonResultConstants.values()).collect(
-				Collectors.toMap(errorState -> String.valueOf(errorState.getCode()), CommonResultConstants::getMsg));
+		this.zhMessage = Arrays.stream(CommonResultConstants.values())
+			.collect(Collectors.toMap(errorState -> String.valueOf(errorState.getCode()),
+					CommonResultConstants::getMsg));
 		// 英文消息
-		Map<String, String> enMessage = Arrays.stream(CommonResultConstants.values()).collect(Collectors.toMap(
-				errorState -> String.valueOf(errorState.getCode()),
-				errorState -> StrUtil.isBlank(errorState.enMsg()) ? errorState.getMsg() : errorState.getEnMsg()));
+		Map<String, String> enMessage = Arrays.stream(CommonResultConstants.values())
+			.collect(Collectors.toMap(errorState -> String.valueOf(errorState.getCode()),
+					errorState -> StrUtil.isBlank(errorState.enMsg()) ? errorState.getMsg() : errorState.getEnMsg()));
 		this.localeCodeMessageMap.put(Locale.SIMPLIFIED_CHINESE, zhMessage);
 		this.localeCodeMessageMap.put(Locale.CHINESE, zhMessage);
 		this.localeCodeMessageMap.put(Locale.ENGLISH, enMessage);

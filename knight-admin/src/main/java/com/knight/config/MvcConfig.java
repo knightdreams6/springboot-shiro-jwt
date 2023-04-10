@@ -17,15 +17,19 @@ public class MvcConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-				// 设置允许跨域请求的域名
-				.allowedOrigins("*").allowCredentials(false).allowedMethods("*").maxAge(3600);
+			// 设置允许跨域请求的域名
+			.allowedOrigins("*")
+			.allowCredentials(false)
+			.allowedMethods("*")
+			.maxAge(3600);
 	}
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(requestLimitInterceptor())
-				.excludePathPatterns("/webjars/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/**", "/images/**")
-				.addPathPatterns("/**").order(Integer.MAX_VALUE - 1);
+			.excludePathPatterns("/webjars/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/**", "/images/**")
+			.addPathPatterns("/**")
+			.order(Integer.MAX_VALUE - 1);
 	}
 
 	@Bean

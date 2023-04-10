@@ -60,8 +60,8 @@ public class LoginService {
 
 		// 将验证码加密后存储到redis中
 		String encryptCode = CommonsUtils.encryptPassword(String.valueOf(code), phone);
-		stringRedisTemplate.opsForValue().set(RedisKey.getLoginCodeKey(phone), encryptCode, Constant.CODE_EXPIRE_TIME,
-				TimeUnit.MINUTES);
+		stringRedisTemplate.opsForValue()
+			.set(RedisKey.getLoginCodeKey(phone), encryptCode, Constant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
 		return true;
 	}
 
@@ -70,8 +70,8 @@ public class LoginService {
 		// todo 此处为发送验证码代码
 		// 将验证码加密后存储到redis中
 		String encryptCode = CommonsUtils.encryptPassword(String.valueOf(code), phone);
-		stringRedisTemplate.opsForValue().set(RedisKey.getModifyPasswordCodeKey(phone), encryptCode,
-				Constant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
+		stringRedisTemplate.opsForValue()
+			.set(RedisKey.getModifyPasswordCodeKey(phone), encryptCode, Constant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
 		return true;
 	}
 

@@ -26,10 +26,10 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
 	@Override
 	public Set<String> selectRoleIdByUserId(String userId) {
 		LambdaQueryWrapper<SysUserRole> queryWrapper = Wrappers.<SysUserRole>lambdaQuery()
-				// 查询角色id
-				.select(SysUserRole::getRoleId)
-				// 根据用户id
-				.eq(SysUserRole::getUserId, userId);
+			// 查询角色id
+			.select(SysUserRole::getRoleId)
+			// 根据用户id
+			.eq(SysUserRole::getUserId, userId);
 		List<SysUserRole> userRoles = this.list(queryWrapper);
 		return userRoles.stream().map(SysUserRole::getRoleId).collect(Collectors.toSet());
 	}

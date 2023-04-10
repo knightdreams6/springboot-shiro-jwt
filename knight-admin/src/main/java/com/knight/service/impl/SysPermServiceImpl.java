@@ -39,10 +39,10 @@ public class SysPermServiceImpl extends ServiceImpl<SysPermMapper, SysPerm> impl
 			return Collections.emptySet();
 		}
 		LambdaQueryWrapper<SysPerm> queryWrapper = Wrappers.<SysPerm>lambdaQuery()
-				// 查询权限值
-				.select(SysPerm::getSpKey)
-				// 根据权限id列表
-				.in(SysPerm::getId, permIds);
+			// 查询权限值
+			.select(SysPerm::getSpKey)
+			// 根据权限id列表
+			.in(SysPerm::getId, permIds);
 		return this.list(queryWrapper).stream().map(SysPerm::getSpKey).collect(Collectors.toSet());
 	}
 

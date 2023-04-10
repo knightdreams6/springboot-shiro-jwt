@@ -43,10 +43,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 			return Collections.emptyList();
 		}
 		LambdaQueryWrapper<SysRole> queryWrapper = Wrappers.<SysRole>lambdaQuery()
-				// 查询角色id,name,key
-				.select(SysRole::getId, SysRole::getSrName, SysRole::getSrKey)
-				// 根据角色id列表过滤
-				.in(SysRole::getId, roleIds);
+			// 查询角色id,name,key
+			.select(SysRole::getId, SysRole::getSrName, SysRole::getSrKey)
+			// 根据角色id列表过滤
+			.in(SysRole::getId, roleIds);
 		return this.list(queryWrapper);
 	}
 

@@ -21,14 +21,18 @@ public class SwaggerConfig {
 	@Bean
 	public Docket createRestApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
-				.apiInfo(new ApiInfoBuilder().title("SpringBoot+Shiro+Jwt前后端分离脚手架").description("接口文档")
-						.termsOfServiceUrl("").version("1.0.0").build())
-				// 设置哪些接口暴露给Swagger展示
-				.select()
-				// 指定扫描有Api注解的包
-				.apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
-				// 扫描指定包中的swagger注解
-				.paths(PathSelectors.any()).build();
+			.apiInfo(new ApiInfoBuilder().title("SpringBoot+Shiro+Jwt前后端分离脚手架")
+				.description("接口文档")
+				.termsOfServiceUrl("")
+				.version("1.0.0")
+				.build())
+			// 设置哪些接口暴露给Swagger展示
+			.select()
+			// 指定扫描有Api注解的包
+			.apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+			// 扫描指定包中的swagger注解
+			.paths(PathSelectors.any())
+			.build();
 	}
 
 }

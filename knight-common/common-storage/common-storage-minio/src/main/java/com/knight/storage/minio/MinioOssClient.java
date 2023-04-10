@@ -32,8 +32,10 @@ public class MinioOssClient implements OssClient {
 
 	@Override
 	public void init(OssProperties ossProperties) {
-		minioClient = MinioClient.builder().endpoint(ossProperties.getEndpoint())
-				.credentials(ossProperties.getAccessKey(), ossProperties.getSecretKey()).build();
+		minioClient = MinioClient.builder()
+			.endpoint(ossProperties.getEndpoint())
+			.credentials(ossProperties.getAccessKey(), ossProperties.getSecretKey())
+			.build();
 		// 如果默认桶不存在则创建
 		createBucketIfNotExist(ossProperties.getDefaultBucket());
 	}
@@ -53,8 +55,11 @@ public class MinioOssClient implements OssClient {
 	@Override
 	public OssUploadR upload(String bucketName, String objectName, InputStream inputStream) {
 		createBucketIfNotExist(bucketName);
-		ObjectWriteResponse objectWriteResponse = minioClient.putObject(PutObjectArgs.builder().bucket(bucketName)
-				.object(objectName).stream(inputStream, inputStream.available(), -1).build());
+		ObjectWriteResponse objectWriteResponse = minioClient.putObject(PutObjectArgs.builder()
+			.bucket(bucketName)
+			.object(objectName)
+			.stream(inputStream, inputStream.available(), -1)
+			.build());
 		OssUploadR ossUploadR = new OssUploadR();
 		ossUploadR.setBucket(objectWriteResponse.bucket());
 		ossUploadR.setObjectName(objectWriteResponse.object());
@@ -66,8 +71,12 @@ public class MinioOssClient implements OssClient {
 	@SneakyThrows
 	@Override
 	public String getUrl(String bucketName, String objectName, Integer expireSeconds) {
-		return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder().bucket(bucketName)
-				.object(objectName).method(Method.GET).expiry(expireSeconds).build());
+		return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
+			.bucket(bucketName)
+			.object(objectName)
+			.method(Method.GET)
+			.expiry(expireSeconds)
+			.build());
 	}
 
 	@SneakyThrows
