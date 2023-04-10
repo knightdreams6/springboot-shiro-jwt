@@ -21,7 +21,7 @@
     <!-- jdk版本 -->
     <java.version>17</java.version>
     <!-- SpringFormat版本 -->
-    <javaformat.plugin.version>0.0.28</javaformat.plugin.version>
+    <javaformat.plugin.version>0.0.38</javaformat.plugin.version>
 
     <knight.version>0.0.1-SNAPSHOT</knight.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -68,6 +68,15 @@
         <groupId>io.spring.javaformat</groupId>
         <artifactId>spring-javaformat-maven-plugin</artifactId>
         <version>${javaformat.plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <inherited>true</inherited>
+            <goals>
+              <goal>validate</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
     <resources>
