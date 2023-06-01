@@ -1,5 +1,6 @@
 package com.knight.storage.client;
 
+import com.knight.storage.enums.OssPlatformTypeEnums;
 import com.knight.storage.properties.OssProperties;
 import com.knight.storage.vo.response.OssUploadR;
 
@@ -12,6 +13,12 @@ import java.io.InputStream;
  * @since 2023/01/15
  */
 public interface OssClient {
+
+	/**
+	 * 平台
+	 * @return {@link OssPlatformTypeEnums}
+	 */
+	OssPlatformTypeEnums platform();
 
 	/**
 	 * 初始化

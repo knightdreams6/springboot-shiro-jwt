@@ -3,19 +3,26 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>knight-common</artifactId>
+    <artifactId>common-storage</artifactId>
     <groupId>com.knight</groupId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>common-storage</artifactId>
-  <packaging>pom</packaging>
+  <artifactId>common-storage-aliyun</artifactId>
 
-  <modules>
-    <module>common-storage-facade</module>
-    <module>common-storage-minio</module>
-    <module>common-storage-aliyun</module>
-  </modules>
+  <dependencies>
+
+    <dependency>
+      <groupId>com.aliyun.oss</groupId>
+      <artifactId>aliyun-sdk-oss</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.knight</groupId>
+      <artifactId>common-storage-facade</artifactId>
+    </dependency>
+
+  </dependencies>
 
 </project>

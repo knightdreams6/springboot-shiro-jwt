@@ -100,14 +100,14 @@ public class UserController {
 		return R.bool(userService.updateById(user));
 	}
 
-	@RequiresPermissions(value = {"system:user:list"})
+	@RequiresPermissions(value = { "system:user:list" })
 	@ApiOperation(value = "获取所有用户 [system:user:list]权限")
 	@GetMapping
 	public R<List<SysUserVo>> users() {
 		return R.list(userService.list(), SysUserVo::new);
 	}
 
-	@RequiresRoles(value = {"admin"})
+	@RequiresRoles(value = { "admin" })
 	@ApiOperation(value = "分页获取用户 [admin]角色权限")
 	@GetMapping("/page")
 	public R<IPage<SysUserVo>> user(@NotNull Integer pageNum, @NotNull Integer pageSize) {

@@ -19,7 +19,7 @@
 
   <properties>
     <!-- jdk版本 -->
-    <java.version>17</java.version>
+    <java.version>11</java.version>
     <!-- SpringFormat版本 -->
     <javaformat.plugin.version>0.0.38</javaformat.plugin.version>
 

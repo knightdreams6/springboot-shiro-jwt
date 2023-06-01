@@ -1,6 +1,7 @@
 package com.knight.storage.minio;
 
 import com.knight.storage.client.OssClient;
+import com.knight.storage.enums.OssPlatformTypeEnums;
 import com.knight.storage.properties.OssProperties;
 import com.knight.storage.vo.response.OssUploadR;
 import io.minio.BucketExistsArgs;
@@ -12,6 +13,7 @@ import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
 import io.minio.http.Method;
 import lombok.SneakyThrows;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -23,12 +25,18 @@ import java.io.InputStream;
  * @since 2023/01/15
  */
 @Component
+@ConditionalOnClass(MinioOssClient.class)
 public class MinioOssClient implements OssClient {
 
 	/**
 	 * minio客户端
 	 */
 	private MinioClient minioClient;
+
+	@Override
+	public OssPlatformTypeEnums platform() {
+		return OssPlatformTypeEnums.MINIO;
+	}
 
 	@Override
 	public void init(OssProperties ossProperties) {
@@ -60,12 +68,12 @@ public class MinioOssClient implements OssClient {
 			.object(objectName)
 			.stream(inputStream, inputStream.available(), -1)
 			.build());
-		OssUploadR ossUploadR = new OssUploadR();
-		ossUploadR.setBucket(objectWriteResponse.bucket());
-		ossUploadR.setObjectName(objectWriteResponse.object());
-		ossUploadR.setEtag(objectWriteResponse.etag());
-		ossUploadR.setVersionId(objectWriteResponse.versionId());
-		return ossUploadR;
+		return OssUploadR.builder()
+			.bucket(objectWriteResponse.bucket())
+			.objectName(objectWriteResponse.object())
+			.etag(objectWriteResponse.etag())
+			.versionId(objectWriteResponse.versionId())
+			.build();
 	}
 
 	@SneakyThrows

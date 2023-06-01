@@ -40,6 +40,10 @@
             https://gitee.com/xiaoym/knife4j/releases  -->
     <knife4j.version>3.0.3</knife4j.version>
 
+    <!-- aliyun oss
+            https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss-->
+    <oss.aliyun.version>3.16.3</oss.aliyun.version>
+
     <swagger.annotation.version>1.5.22</swagger.annotation.version>
     <knight.version>0.0.1-SNAPSHOT</knight.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -47,6 +51,12 @@
 
   <dependencyManagement>
     <dependencies>
+
+      <dependency>
+        <groupId>com.aliyun.oss</groupId>
+        <artifactId>aliyun-sdk-oss</artifactId>
+        <version>${oss.aliyun.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>io.minio</groupId>
@@ -133,6 +143,12 @@
 
       <dependency>
         <artifactId>common-websocket</artifactId>
+        <groupId>com.knight</groupId>
+        <version>${knight.version}</version>
+      </dependency>
+
+      <dependency>
+        <artifactId>common-storage-aliyun</artifactId>
         <groupId>com.knight</groupId>
         <version>${knight.version}</version>
       </dependency>

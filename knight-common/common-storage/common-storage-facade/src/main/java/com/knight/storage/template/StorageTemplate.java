@@ -53,8 +53,8 @@ public class StorageTemplate implements InitializingBean {
 	 * @return {@link R}<{@link Object}>
 	 */
 	public R<OssUploadR> upload(String objectName, MultipartFile multipartFile) {
-		try {
-			return R.ok(ossClient.upload(ossProperties.getDefaultBucket(), objectName, multipartFile.getInputStream()));
+		try (InputStream inputStream = multipartFile.getInputStream()) {
+			return upload(objectName, inputStream);
 		}
 		catch (IOException e) {
 			log.error("StorageTemplate#upload() {}", e.getLocalizedMessage());
@@ -69,7 +69,7 @@ public class StorageTemplate implements InitializingBean {
 	 * @return {@link R}<{@link Object}>
 	 */
 	public R<OssUploadR> upload(String objectName, InputStream inputStream) {
-		return R.ok(ossClient.upload(objectName, ossProperties.getDefaultBucket(), inputStream));
+		return upload(ossProperties.getDefaultBucket(), objectName, inputStream);
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package com.knight.storage.properties;
 
+import com.knight.storage.enums.OssPlatformTypeEnums;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,11 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "storage")
 public class OssProperties {
+
+	/**
+	 * oss平台类型
+	 */
+	private OssPlatformTypeEnums platformType;
 
 	/**
 	 * 端点

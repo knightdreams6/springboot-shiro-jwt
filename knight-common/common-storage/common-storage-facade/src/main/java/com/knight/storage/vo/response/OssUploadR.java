@@ -1,6 +1,9 @@
 package com.knight.storage.vo.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * oss返回值
@@ -9,6 +12,9 @@ import lombok.Data;
  * @since 2023/01/15
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class OssUploadR {
 
 	/**
