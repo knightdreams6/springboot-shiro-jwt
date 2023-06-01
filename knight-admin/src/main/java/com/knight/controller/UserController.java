@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.authz.annotation.RequiresUser;
+import org.springframework.messaging.simp.user.SimpUser;
+import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +25,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
+import java.security.Principal;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -52,6 +58,19 @@ public class UserController {
 	 * 令牌服务
 	 */
 	private final TokenService tokenService;
+
+	/**
+	 * websocket用户注册表
+	 */
+	private final SimpUserRegistry simpUserRegistry;
+
+	@RequiresRoles("admin")
+	@ApiOperation(value = "获取链接的websocket用户列表")
+	@GetMapping("/ws/list")
+	@ResponseBody
+	public R<Set<Principal>> websocketUsers() {
+		return R.ok(simpUserRegistry.getUsers().stream().map(SimpUser::getPrincipal).collect(Collectors.toSet()));
+	}
 
 	@RequiresUser
 	@ApiOperation(value = "获取当前用户基本信息")
@@ -81,14 +100,14 @@ public class UserController {
 		return R.bool(userService.updateById(user));
 	}
 
-	@RequiresPermissions(value = { "system:user:list" })
+	@RequiresPermissions(value = {"system:user:list"})
 	@ApiOperation(value = "获取所有用户 [system:user:list]权限")
 	@GetMapping
 	public R<List<SysUserVo>> users() {
 		return R.list(userService.list(), SysUserVo::new);
 	}
 
-	@RequiresRoles(value = { "admin" })
+	@RequiresRoles(value = {"admin"})
 	@ApiOperation(value = "分页获取用户 [admin]角色权限")
 	@GetMapping("/page")
 	public R<IPage<SysUserVo>> user(@NotNull Integer pageNum, @NotNull Integer pageSize) {
