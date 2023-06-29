@@ -20,8 +20,9 @@
   <properties>
     <!-- jdk版本 -->
     <java.version>11</java.version>
-    <!-- SpringFormat版本 -->
-    <javaformat.plugin.version>0.0.38</javaformat.plugin.version>
+    <!-- SpringFormat版本
+            https://github.com/spring-io/spring-javaformat/releases -->
+    <javaformat.plugin.version>0.0.39</javaformat.plugin.version>
 
     <knight.version>0.0.1-SNAPSHOT</knight.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
