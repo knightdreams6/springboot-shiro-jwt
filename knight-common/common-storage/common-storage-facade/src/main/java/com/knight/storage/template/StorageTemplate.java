@@ -79,7 +79,7 @@ public class StorageTemplate implements InitializingBean {
 	 * @return {@link R}<{@link Object}>
 	 */
 	public R<OssUploadR> upload(String bucketName, String objectName, InputStream inputStream) {
-		return R.ok(ossClient.upload(objectName, bucketName, inputStream));
+		return R.ok(ossClient.upload(bucketName, objectName, inputStream));
 	}
 
 	/**
