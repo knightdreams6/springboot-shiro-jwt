@@ -176,3 +176,39 @@ VALUES ('1', '1', '1', '2021-11-23 17:29:53');
 
 SET
   FOREIGN_KEY_CHECKS = 1;
+
+
+create table multipart_files
+(
+    id             varchar(20)                          not null comment 'id'
+        primary key,
+    mf_bucket_name varchar(200)                         not null comment '桶名称',
+    mf_object_name varchar(200)                         not null comment '对象名称',
+    mf_upload_id   varchar(100)                         not null comment '上传唯一id',
+    mf_hash        varchar(200)                         not null comment '文件的hash值',
+    mf_size        bigint                               not null comment '文件大小',
+    mf_chunks      bigint                               not null comment '分片数量',
+    mf_state       tinyint(1) default 0                 not null comment '0待合并1成功2失败',
+    create_date    datetime   default CURRENT_TIMESTAMP not null,
+    update_date    datetime                             null on update CURRENT_TIMESTAMP,
+    delete_date    datetime                             null,
+    deleted        int(1)     default 0                 not null
+)
+    comment '分片文件记录';
+
+create table multipart_chunk_files
+(
+    id              varchar(20)                        not null comment 'id'
+        primary key,
+    mcf_bucket_name varchar(200)                       not null comment '桶名称',
+    mcf_object_name varchar(200)                       not null comment '对象名称',
+    mcf_upload_id   varchar(100)                       not null comment '上传唯一id',
+    mcf_part_number int                                not null comment '分片位置',
+    mcf_part_size   bigint                             not null comment '分片大小',
+    mcf_e_tag       varchar(100)                       not null comment '分片eTag',
+    create_date     datetime default CURRENT_TIMESTAMP not null,
+    update_date     datetime                           null on update CURRENT_TIMESTAMP,
+    delete_date     datetime                           null,
+    deleted         int(1)   default 0                 not null
+)
+    comment '分片块文件记录';

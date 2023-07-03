@@ -27,7 +27,9 @@ spring:
       # 设置临时文件目录
       location: /tmp
       # 上传最大文件大小
-      max-file-size: 500MB
+      max-file-size: 10MB
+      # 请求体最大限制
+      max-request-size: 15MB
 
 mybatis-plus:
   global-config:

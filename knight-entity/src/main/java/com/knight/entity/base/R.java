@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author lixiao
- * @date 2019/7/31 14:46
+ * @since 2019/7/31 14:46
  */
 @Data
 @NoArgsConstructor
@@ -119,8 +119,8 @@ public class R<T> implements Serializable {
 	 * @param errorState 错误信息枚举类
 	 * @return 警告消息
 	 */
-	public static <T> R<T> failed(CommonResultConstants errorState) {
-		return new R<>(errorState.getCode(), errorState.getMsg());
+	public static <T> R<T> failed(IResultConstants errorState) {
+		return new R<>(errorState.code(), errorState.msg());
 	}
 
 	public static <T> R<T> failed(T data, IResultConstants resultConstants) {

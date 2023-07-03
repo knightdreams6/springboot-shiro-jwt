@@ -4,19 +4,17 @@ import com.knight.storage.client.OssClient;
 import com.knight.storage.enums.OssPlatformTypeEnums;
 import com.knight.storage.properties.OssProperties;
 import com.knight.storage.vo.response.OssUploadR;
-import io.minio.BucketExistsArgs;
-import io.minio.GetPresignedObjectUrlArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.ObjectWriteResponse;
-import io.minio.PutObjectArgs;
-import io.minio.RemoveObjectArgs;
+import com.knight.storage.vo.response.UploadPartVo;
+import io.minio.*;
 import io.minio.http.Method;
+import io.minio.messages.InitiateMultipartUploadResult;
+import io.minio.messages.Part;
 import lombok.SneakyThrows;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * minio oss客户端
@@ -25,13 +23,13 @@ import java.io.InputStream;
  * @since 2023/01/15
  */
 @Component
-@ConditionalOnClass(MinioOssClient.class)
+@ConditionalOnClass(S3Base.class)
 public class MinioOssClient implements OssClient {
 
 	/**
 	 * minio客户端
 	 */
-	private MinioClient minioClient;
+	private MinioOssMultipartClient minioClient;
 
 	@Override
 	public OssPlatformTypeEnums platform() {
@@ -40,10 +38,7 @@ public class MinioOssClient implements OssClient {
 
 	@Override
 	public void init(OssProperties ossProperties) {
-		minioClient = MinioClient.builder()
-			.endpoint(ossProperties.getEndpoint())
-			.credentials(ossProperties.getAccessKey(), ossProperties.getSecretKey())
-			.build();
+		minioClient = new MinioOssMultipartClient(ossProperties);
 		// 如果默认桶不存在则创建
 		createBucketIfNotExist(ossProperties.getDefaultBucket());
 	}
@@ -54,8 +49,8 @@ public class MinioOssClient implements OssClient {
 	 */
 	@SneakyThrows
 	private void createBucketIfNotExist(String bucketName) {
-		if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
-			minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+		if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build()).get()) {
+			minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build()).get();
 		}
 	}
 
@@ -63,11 +58,13 @@ public class MinioOssClient implements OssClient {
 	@Override
 	public OssUploadR upload(String bucketName, String objectName, InputStream inputStream) {
 		createBucketIfNotExist(bucketName);
-		ObjectWriteResponse objectWriteResponse = minioClient.putObject(PutObjectArgs.builder()
-			.bucket(bucketName)
-			.object(objectName)
-			.stream(inputStream, inputStream.available(), -1)
-			.build());
+		ObjectWriteResponse objectWriteResponse = minioClient
+			.putObject(PutObjectArgs.builder()
+				.bucket(bucketName)
+				.object(objectName)
+				.stream(inputStream, inputStream.available(), -1)
+				.build())
+			.get();
 		return OssUploadR.builder()
 			.bucket(objectWriteResponse.bucket())
 			.objectName(objectWriteResponse.object())
@@ -90,7 +87,38 @@ public class MinioOssClient implements OssClient {
 	@SneakyThrows
 	@Override
 	public void remove(String bucketName, String objectName) {
-		minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucketName).object(objectName).build());
+		minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucketName).object(objectName).build()).get();
+	}
+
+	@SneakyThrows
+	@Override
+	public String initiateMultipartUpload(String bucketName, String objectName) {
+		CreateMultipartUploadResponse createMultipartUploadResponse = minioClient.initiateMultipartUpload(bucketName,
+				objectName);
+		InitiateMultipartUploadResult result = createMultipartUploadResponse.result();
+		return result.uploadId();
+	}
+
+	@SneakyThrows
+	@Override
+	public UploadPartVo uploadPart(String bucketName, String objectName, String uploadId, Integer partNumber,
+			InputStream partStream, long partSize) {
+		UploadPartResponse uploadPartResponse = minioClient.uploadPart(bucketName, objectName, uploadId, partNumber,
+				partStream, partSize);
+		return UploadPartVo.builder()
+			.etag(uploadPartResponse.etag())
+			.partNumber(uploadPartResponse.partNumber())
+			.build();
+	}
+
+	@SneakyThrows
+	@Override
+	public void completeMultipartUpload(String bucketName, String objectName, String uploadId,
+			List<UploadPartVo> partVos) {
+		Part[] partArray = partVos.stream()
+			.map(uploadPartVo -> new Part(uploadPartVo.getPartNumber(), uploadPartVo.getEtag()))
+			.toArray(Part[]::new);
+		minioClient.completeMultipartUpload(bucketName, objectName, uploadId, partArray);
 	}
 
 }

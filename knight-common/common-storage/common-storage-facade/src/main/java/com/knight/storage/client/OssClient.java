@@ -3,8 +3,10 @@ package com.knight.storage.client;
 import com.knight.storage.enums.OssPlatformTypeEnums;
 import com.knight.storage.properties.OssProperties;
 import com.knight.storage.vo.response.OssUploadR;
+import com.knight.storage.vo.response.UploadPartVo;
 
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * oss客户端
@@ -49,5 +51,41 @@ public interface OssClient {
 	 * @param objectName 对象名称
 	 */
 	void remove(String bucketName, String objectName);
+
+	/**
+	 * 启动分片上传
+	 * @param bucketName bucket名称
+	 * @param objectName 对象名称
+	 * @return {@link String} 标识上传的唯一id
+	 */
+	default String initiateMultipartUpload(String bucketName, String objectName) {
+		return null;
+	}
+
+	/**
+	 * 上传分片
+	 * @param bucketName bucket名称
+	 * @param objectName 对象名称
+	 * @param uploadId 上传id
+	 * @param partNumber 分片号
+	 * @param partStream 分片流
+	 * @param partSize 分片大小
+	 * @return {@link UploadPartVo}
+	 */
+	default UploadPartVo uploadPart(String bucketName, String objectName, String uploadId, Integer partNumber,
+			InputStream partStream, long partSize) {
+		return null;
+	}
+
+	/**
+	 * 完成分片上传
+	 * @param bucketName bucket名称
+	 * @param objectName 对象名称
+	 * @param uploadId 上传id
+	 * @param partVos 分片vo列表
+	 */
+	default void completeMultipartUpload(String bucketName, String objectName, String uploadId,
+			List<UploadPartVo> partVos) {
+	}
 
 }

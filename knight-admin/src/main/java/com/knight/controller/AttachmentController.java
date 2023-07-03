@@ -2,18 +2,16 @@ package com.knight.controller;
 
 import com.knight.entity.base.R;
 import com.knight.storage.template.StorageTemplate;
+import com.knight.storage.vo.response.CreateMultipartUploadVo;
 import com.knight.storage.vo.response.OssUploadR;
+import com.knight.storage.vo.response.UploadPartVo;
+import com.knight.vo.request.MultipartStartReqVo;
+import com.knight.vo.request.UploadPartReqVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -52,6 +50,29 @@ public class AttachmentController {
 	@RequiresPermissions(value = "attachment:remove")
 	public R<Object> delete(@RequestParam String objectName) {
 		return storageTemplate.remove(objectName);
+	}
+
+	@ApiOperation(value = "开始分片上传")
+	@PostMapping("/multipart/start")
+	@RequiresPermissions(value = "attachment:insert")
+	public R<CreateMultipartUploadVo> multipartStart(@RequestBody MultipartStartReqVo multipartStartReqVo) {
+		return storageTemplate.initiateMultipartUpload(multipartStartReqVo.getFileName(),
+				multipartStartReqVo.getFileHash(), multipartStartReqVo.getChunks(), multipartStartReqVo.getSize());
+	}
+
+	@ApiOperation(value = "分片上传")
+	@PostMapping("/multipart/part")
+	@RequiresPermissions(value = "attachment:insert")
+	public R<UploadPartVo> multipartUpload(UploadPartReqVo uploadPartReqVo) {
+		return storageTemplate.uploadPart(uploadPartReqVo.getUploadId(), uploadPartReqVo.getPartNumber(),
+				uploadPartReqVo.getPartFile());
+	}
+
+	@ApiOperation(value = "完成分片上传")
+	@PostMapping("/multipart/complete")
+	@RequiresPermissions(value = "attachment:insert")
+	public R<Object> multipartComplete(@RequestParam String uploadId) {
+		return storageTemplate.completeMultipartUpload(uploadId);
 	}
 
 }
