@@ -17,6 +17,7 @@
 * knife4j https://gitee.com/xiaoym/knife4j/releases
 * mica-auto https://github.com/lets-mica/mica-auto/releases
 * spring-javaformat https://github.com/spring-io/spring-javaformat/releases
+* reflections https://github.com/ronmamo/reflections/releases
 
 #### 使用说明
 

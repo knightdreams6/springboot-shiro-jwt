@@ -1,17 +1,18 @@
 package com.knight;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.knight.entity.enums.CommonResultConstants;
+import com.knight.entity.enums.IResultConstants;
 import lombok.NonNull;
+import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
+import org.reflections.util.ConfigurationBuilder;
 import org.springframework.context.support.AbstractMessageSource;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
  * 自定义消息来源
  *
  * @author lixiao
- * @date 2022/06/03
+ * @since 2022/06/03
  */
 public class CustomMessageSource extends AbstractMessageSource {
 
@@ -39,13 +40,23 @@ public class CustomMessageSource extends AbstractMessageSource {
 	private final Map<String, Map<Locale, MessageFormat>> codeLocaleMessageMap = new ConcurrentHashMap<>();
 
 	public CustomMessageSource() {
-		this.zhMessage = Arrays.stream(CommonResultConstants.values())
-			.collect(Collectors.toMap(errorState -> String.valueOf(errorState.getCode()),
-					CommonResultConstants::getMsg));
+		Reflections reflections = new Reflections(
+				new ConfigurationBuilder().forPackage("com.knight").setScanners(Scanners.SubTypes));
+		Set<Class<? extends IResultConstants>> resultClasses = reflections.getSubTypesOf(IResultConstants.class);
+
+		List<? extends IResultConstants> iResultConstants = resultClasses.stream()
+			// 过滤掉枚举常量为空的class
+			.filter(aClass -> ArrayUtil.isNotEmpty(aClass.getEnumConstants()))
+			// 合并
+			.flatMap(aClass -> Arrays.stream(aClass.getEnumConstants()))
+			.collect(Collectors.toList());
+
+		this.zhMessage = iResultConstants.stream()
+			.collect(Collectors.toMap(errorState -> String.valueOf(errorState.code()), IResultConstants::msg));
 		// 英文消息
-		Map<String, String> enMessage = Arrays.stream(CommonResultConstants.values())
-			.collect(Collectors.toMap(errorState -> String.valueOf(errorState.getCode()),
-					errorState -> StrUtil.isBlank(errorState.enMsg()) ? errorState.getMsg() : errorState.getEnMsg()));
+		Map<String, String> enMessage = iResultConstants.stream()
+			.collect(Collectors.toMap(errorState -> String.valueOf(errorState.code()),
+					errorState -> StrUtil.isBlank(errorState.enMsg()) ? errorState.msg() : errorState.enMsg()));
 		this.localeCodeMessageMap.put(Locale.SIMPLIFIED_CHINESE, zhMessage);
 		this.localeCodeMessageMap.put(Locale.CHINESE, zhMessage);
 		this.localeCodeMessageMap.put(Locale.ENGLISH, enMessage);

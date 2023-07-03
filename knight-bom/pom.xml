@@ -44,6 +44,10 @@
             https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss -->
     <oss.aliyun.version>3.17.0</oss.aliyun.version>
 
+    <!-- reflections
+        https://github.com/ronmamo/reflections/releases -->
+    <reflections.version>0.10.2</reflections.version>
+
     <swagger.annotation.version>1.5.22</swagger.annotation.version>
     <knight.version>0.0.1-SNAPSHOT</knight.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -51,6 +55,12 @@
 
   <dependencyManagement>
     <dependencies>
+
+      <dependency>
+        <groupId>org.reflections</groupId>
+        <artifactId>reflections</artifactId>
+        <version>${reflections.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>com.aliyun.oss</groupId>

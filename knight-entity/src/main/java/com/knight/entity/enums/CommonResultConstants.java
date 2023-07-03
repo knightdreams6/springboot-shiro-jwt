@@ -4,7 +4,7 @@ import lombok.Getter;
 
 /**
  * @author lixiao
- * @date 2019/8/5 17:16
+ * @since 2019/8/5 17:16
  */
 @Getter
 public enum CommonResultConstants implements IResultConstants {
@@ -28,11 +28,6 @@ public enum CommonResultConstants implements IResultConstants {
 	 * 无数据 列表
 	 */
 	EMPTY_LIST(-2, "无数据", "Empty Data"),
-
-	/**
-	 * 短信发送失败
-	 */
-	SEND_SMS_ERROR(10001, "短信发送失败", "message failed to send"),
 
 	/**
 	 * 用户名已存在
