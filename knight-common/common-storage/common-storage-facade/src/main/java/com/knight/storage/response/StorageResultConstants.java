@@ -27,6 +27,11 @@ public enum StorageResultConstants implements IResultConstants {
 	 */
 	MULTIPART_START_FAIL(3, "分片上传开始失败"),
 
+	/**
+	 * 存储服务异常
+	 */
+	OSS_EXCEPTION(4, "存储服务异常"),
+
 	;
 
 	private final Integer code;
