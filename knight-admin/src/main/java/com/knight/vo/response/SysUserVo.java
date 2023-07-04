@@ -10,7 +10,7 @@ import java.time.LocalDate;
  * sys用户vo
  *
  * @author lixiao
- * @date 2022/06/03
+ * @since 2022/06/03
  */
 @Data
 public class SysUserVo {

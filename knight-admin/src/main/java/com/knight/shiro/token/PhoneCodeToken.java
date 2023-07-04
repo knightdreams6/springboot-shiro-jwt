@@ -9,7 +9,7 @@ import org.apache.shiro.authc.AuthenticationToken;
  * 手机号验证码登录token
  *
  * @author knight
- * @date 2021/08/03
+ * @since 2021/08/03
  */
 @Getter
 @Setter

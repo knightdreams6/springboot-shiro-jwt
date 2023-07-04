@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author lixiao
  * @version 1.0
- * @date 2020/6/22 9:30
+ * @since 2020/6/22 9:30
  */
 @Slf4j
 public class RequestLimitInterceptor implements HandlerInterceptor {

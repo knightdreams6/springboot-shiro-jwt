@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author lixiao
- * @date 2020/6/21 20:55
+ * @since 2020/6/21 20:55
  */
 public class AsyncManager {
 

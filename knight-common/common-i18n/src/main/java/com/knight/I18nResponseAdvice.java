@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * i18n响应
  *
  * @author lixiao
- * @date 2022/06/03
+ * @since 2022/06/03
  */
 @RestControllerAdvice
 @AllArgsConstructor

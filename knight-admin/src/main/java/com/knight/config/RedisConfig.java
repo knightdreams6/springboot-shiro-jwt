@@ -11,7 +11,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * redis配置
  *
  * @author knight
- * @date 2022/04/11
+ * @since 2022/04/11
  */
 @Configuration
 public class RedisConfig {

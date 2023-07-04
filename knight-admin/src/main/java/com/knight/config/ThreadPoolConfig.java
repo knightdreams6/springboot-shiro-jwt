@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author lixiao
- * @date 2020/6/21 19:54 线程池相关配置
+ * @since 2020/6/21 19:54 线程池相关配置
  */
 @Configuration
 public class ThreadPoolConfig {

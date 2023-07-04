@@ -26,7 +26,7 @@ import javax.validation.constraints.NotEmpty;
 /**
  * @author lixiao
  * @version 1.0
- * @date 2020/4/15 16:51
+ * @since 2020/4/15 16:51
  */
 @Api(tags = "【user】登录")
 @RestController

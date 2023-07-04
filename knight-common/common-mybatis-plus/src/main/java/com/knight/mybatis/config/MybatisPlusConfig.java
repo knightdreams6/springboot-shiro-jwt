@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * mybatis-plus配置
  *
  * @author knight
- * @date 2021/11/23
+ * @since 2021/11/23
  */
 @Configuration
 public class MybatisPlusConfig {

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * 简单限制key生成器
  *
  * @author knight
- * @date 2022/04/11
+ * @since 2022/04/11
  */
 public class SimpleLimitKeyGenerator implements LimitKeyGenerator {
 

@@ -14,7 +14,7 @@ import java.util.Locale;
  * i18n配置
  *
  * @author lixiao
- * @date 2022/06/03
+ * @since 2022/06/03
  */
 @AutoConfigureBefore(value = { WebMvcAutoConfiguration.class })
 @Configuration

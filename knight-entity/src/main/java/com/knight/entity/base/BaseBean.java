@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * 基础bean
  *
  * @author knight
- * @date 2021/11/23
+ * @since 2021/11/23
  */
 @Getter
 @Setter

@@ -8,7 +8,7 @@ import javax.validation.ConstraintValidatorContext;
 
 /**
  * @author lixiao
- * @date 2019/12/13 15:35
+ * @since 2019/12/13 15:35
  */
 public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, String> {
 

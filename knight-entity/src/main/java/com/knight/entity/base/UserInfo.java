@@ -12,7 +12,7 @@ import java.time.LocalDate;
  * 用户信息
  *
  * @author knight
- * @date 2021/11/23
+ * @since 2021/11/23
  */
 @NoArgsConstructor
 @Getter

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
  * 限制key生成器
  *
  * @author knight
- * @date 2022/04/11
+ * @since 2022/04/11
  */
 @FunctionalInterface
 public interface LimitKeyGenerator {

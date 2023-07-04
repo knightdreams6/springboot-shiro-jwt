@@ -10,7 +10,7 @@ import javax.annotation.PreDestroy;
  * 确保应用退出时能关闭后台线程
  *
  * @author lixiao
- * @date 2020/6/21 21:05
+ * @since 2020/6/21 21:05
  */
 @Component
 public class AppShutDownManager {

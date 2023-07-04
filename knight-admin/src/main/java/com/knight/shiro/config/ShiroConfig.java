@@ -30,7 +30,7 @@ import java.util.Map;
 
 /**
  * @author lixiao
- * @date 2019/10/3 15:39
+ * @since 2019/10/3 15:39
  */
 @Configuration
 @AutoConfigureBefore(value = ShiroAutoConfiguration.class)
