@@ -4,8 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import com.knight.config.ProjectConfigurationProperties;
 import com.knight.entity.base.LoginUser;
 import com.knight.entity.base.UserInfo;
 import com.knight.entity.constans.RedisKey;
@@ -14,15 +14,24 @@ import com.knight.service.ISysUserService;
 import com.knight.utils.OauthUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
+import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 令牌服务
+ *
  * @author lixiao
- * @version 1.0
  * @since 2020/4/15 11:45
  */
 @Service
@@ -39,8 +48,30 @@ public class TokenService {
 	 */
 	private final PermissionsService permissionsService;
 
+	/**
+	 * 项目属性
+	 */
+	private final ProjectConfigurationProperties projectProperties;
+
+	/**
+	 * redis模板
+	 */
 	@Resource
 	private RedisTemplate<String, LoginUser> redisTemplate;
+
+	/**
+	 * hmac秘钥生成
+	 * @return {@link String}
+	 * @throws NoSuchAlgorithmException 未找到算法异常
+	 */
+	private static String hmacSecretGenerate() throws NoSuchAlgorithmException {
+		KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
+		// 密钥长度为 256 位
+		keyGenerator.init(256);
+		SecretKey key = keyGenerator.generateKey();
+		byte[] keyBytes = key.getEncoded();
+		return Base64.getEncoder().encodeToString(keyBytes);
+	}
 
 	/**
 	 * 获取当前登录的User对象
@@ -50,7 +81,7 @@ public class TokenService {
 		// 获取token
 		String token = getAccessToken();
 		// 获取手机号
-		String phone = getPhone(token);
+		String phone = getSubject(token);
 		// 获取缓存loginUserKey
 		String loginUserKey = RedisKey.getLoginUserKey(phone);
 		// 获取缓存loginUser
@@ -70,36 +101,6 @@ public class TokenService {
 	}
 
 	/**
-	 * 获得token中的信息无需secret解密也能获得
-	 * @param token token
-	 * @return token中包含的用户手机号
-	 */
-	public String getPhone(String token) {
-		try {
-			DecodedJWT jwt = JWT.decode(token);
-			return jwt.getClaim("phone").asString();
-		}
-		catch (JWTDecodeException e) {
-			return null;
-		}
-	}
-
-	/**
-	 * 获得token中的信息无需secret解密也能获得
-	 * @param token token
-	 * @return token中包含的用户id
-	 */
-	public String getUserId(String token) {
-		try {
-			DecodedJWT jwt = JWT.decode(token);
-			return jwt.getClaim("userId").asString();
-		}
-		catch (JWTDecodeException e) {
-			return null;
-		}
-	}
-
-	/**
 	 * 获取当前登录用户的token,如果token为null则获取refreshToken
 	 * @return token
 	 */
@@ -108,33 +109,69 @@ public class TokenService {
 	}
 
 	/**
-	 * @param phone 用户名/手机号
-	 * @param userId 用户id
-	 * @param secret 用户的密码
-	 * @param time token的有效时间 单位:毫秒
-	 * @return 加密的token
+	 * 创建访问令牌
+	 * @param subject 当前用户唯一标识
+	 * @return {@link String}
 	 */
-	public String createToken(String phone, String userId, String secret, Long time) {
-		Date date = new Date(System.currentTimeMillis() + time);
-		Algorithm algorithm = Algorithm.HMAC256(secret);
-		return JWT.create().withClaim("phone", phone).withClaim("userId", userId).withExpiresAt(date).sign(algorithm);
+	public String createAccessToken(String subject) {
+		ProjectConfigurationProperties.JwtProperties jwtProperties = projectProperties.getJwt();
+		Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getHmacSecret());
+		// 令牌发行时间
+		Instant iat = LocalDateTime.now().toInstant(ZoneOffset.ofHours(8));
+		// 过期时间
+		Instant exp = iat.plus(jwtProperties.getAccessTokenTimeToLive(), ChronoUnit.MINUTES);
+		return JWT.create()
+			.withIssuer(jwtProperties.getIssuer())
+			.withSubject(subject)
+			.withIssuedAt(iat)
+			.withExpiresAt(exp)
+			.sign(algorithm);
 	}
 
 	/**
-	 * 校验token是否正确
-	 * @param token 密钥
-	 * @param secret 用户的密码
-	 * @return 是否正确
+	 * 创建刷新令牌
+	 * @param subject 当前用户唯一标识
+	 * @return {@link String}
 	 */
-	public boolean verify(String token, String secret) {
+	public String createRefreshToken(String subject) {
+		ProjectConfigurationProperties.JwtProperties jwtProperties = projectProperties.getJwt();
+		Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getHmacSecret());
+		// 令牌发行时间
+		Instant iat = LocalDateTime.now().toInstant(ZoneOffset.ofHours(8));
+		// 过期时间
+		Instant exp = iat.plus(jwtProperties.getRefreshTokenTimeToLive(), ChronoUnit.MINUTES);
+		return JWT.create()
+			.withIssuer(jwtProperties.getIssuer())
+			.withSubject(subject)
+			.withIssuedAt(iat)
+			.withExpiresAt(exp)
+			.sign(algorithm);
+	}
+
+	/**
+	 * 获取令牌中的Subject
+	 * @param token 令牌
+	 * @return {@link String}
+	 */
+	@Nullable
+	public String getSubject(String token) {
 		try {
-			// 根据密码生成JWT效验器
-			Algorithm algorithm = Algorithm.HMAC256(secret);
-			JWTVerifier verifier = JWT.require(algorithm)
-				.withClaim("phone", getPhone(token))
-				.withClaim("userId", getUserId(token))
-				.build();
-			// 效验TOKEN
+			return JWT.decode(token).getSubject();
+		}
+		catch (JWTDecodeException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * 令牌验证
+	 * @param token 令牌
+	 * @return 是否有效
+	 */
+	public boolean verify(String token) {
+		try {
+			Algorithm algorithm = Algorithm.HMAC256(projectProperties.getJwt().getHmacSecret());
+			JWTVerifier verifier = JWT.require(algorithm).build();
 			verifier.verify(token);
 			return true;
 		}

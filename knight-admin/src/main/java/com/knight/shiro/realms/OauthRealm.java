@@ -66,7 +66,7 @@ public class OauthRealm extends AuthorizingRealm {
 		// 获取jwtToken
 		String token = bearerToken.getToken();
 		// 获得phone
-		String phone = tokenService.getPhone(token);
+		String phone = tokenService.getSubject(token);
 		log.info(phone + " - token auth start...");
 		// 如果获取到的手机号为空
 		if (StrUtil.isBlank(phone)) {
@@ -76,7 +76,7 @@ public class OauthRealm extends AuthorizingRealm {
 		if (ObjectUtil.isNull(user)) {
 			throw new IncorrectCredentialsException();
 		}
-		boolean verify = tokenService.verify(token, user.getSuPassword());
+		boolean verify = tokenService.verify(token);
 		if (!verify) {
 			throw new IncorrectCredentialsException();
 		}

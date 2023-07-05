@@ -171,18 +171,15 @@ public class LoginService {
 
 	/**
 	 * 返回登录后初始化参数
-	 * @param phone phone
+	 * @param username 用户名
 	 * @return Map<String, Object>
 	 */
-	private Map<String, Object> returnLoginInitParam(String phone) {
+	private Map<String, Object> returnLoginInitParam(String username) {
 		Map<String, Object> data = new HashMap<>(4);
-		// 根据手机号查询用户
-		SysUser user = userService.selectUserByPhone(phone);
-		// 生成jwtToken
-		String token = tokenService.createToken(phone, user.getId(), user.getSuPassword(), Constant.TOKEN_EXPIRE_TIME);
+		// 生成访问Token
+		String token = tokenService.createAccessToken(username);
 		// 生成刷新token
-		String refreshToken = tokenService.createToken(phone, user.getId(), user.getSuPassword(),
-				Constant.TOKEN_REFRESH_TIME);
+		String refreshToken = tokenService.createRefreshToken(username);
 		// token
 		data.put("token", token);
 		// 刷新时所需token
@@ -191,25 +188,23 @@ public class LoginService {
 	}
 
 	/**
-	 * token刷新
-	 * @return Result
+	 * 令牌刷新
+	 * @param refreshToken 刷新令牌
+	 * @return {@link R}<{@link Object}>
 	 */
 	public R<Object> tokenRefresh(String refreshToken) {
-		String phone = tokenService.getPhone(refreshToken);
-		SysUser user = userService.selectUserByPhone(phone);
-		boolean verify = tokenService.verify(refreshToken, user.getSuPassword());
+		boolean verify = tokenService.verify(refreshToken);
 		if (!verify) {
 			return R.failed(CommonResultConstants.REFRESH_TOKEN_INVALID);
 		}
+		String subject = tokenService.getSubject(refreshToken);
 		Map<String, Object> data = new HashMap<>(4);
-		// 生成jwtToken
-		String newToken = tokenService.createToken(phone, user.getId(), user.getSuPassword(),
-				Constant.TOKEN_EXPIRE_TIME);
+		// 生成访问Token
+		String token = tokenService.createAccessToken(subject);
 		// 生成刷新token
-		String newRefreshToken = tokenService.createToken(phone, user.getId(), user.getSuPassword(),
-				Constant.TOKEN_REFRESH_TIME);
+		String newRefreshToken = tokenService.createRefreshToken(subject);
 		// toke
-		data.put("token", newToken);
+		data.put("token", token);
 		// 刷新时所需token
 		data.put("refreshToken", newRefreshToken);
 		return R.ok(data);

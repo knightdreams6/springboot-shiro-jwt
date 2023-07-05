@@ -8,8 +8,7 @@ spring:
     redis:
       repositories:
         enabled: false
-  redis:
-    # 连接超时时间（毫秒）
+  redis: # 连接超时时间（毫秒）
     timeout: 5000
     lettuce:
       pool:
@@ -23,8 +22,7 @@ spring:
   cache:
     type: redis
   servlet:
-    multipart:
-      # 设置临时文件目录
+    multipart: # 设置临时文件目录
       location: /tmp
       # 上传最大文件大小
       max-file-size: 10MB
@@ -37,8 +35,7 @@ mybatis-plus:
       id-type: ASSIGN_ID
       logic-delete-field: deleted
 
-  configuration:
-    # 配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
+  configuration: # 配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
     map-underscore-to-camel-case: true
     cache-enabled: false
 
@@ -54,8 +51,7 @@ spring:
     url: jdbc:mysql://192.168.50.44:3306/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true
     username: root
     password: F7FPfW-HBG2Dxwav
-    hikari:
-      # 此属性控制从池返回的连接的默认自动提交行为。 默认值：真
+    hikari: # 此属性控制从池返回的连接的默认自动提交行为。 默认值：真
       auto-commit: true
       # 此属性控制客户端（即您）将等待来自池的连接的最大毫秒数。
       # 如果在没有可用连接的情况下超过此时间，将引发 SQLException。可接受的最低连接超时为 250 毫秒。 默认值：30000（30 秒）
@@ -105,6 +101,13 @@ storage:
   access-key: 'minioadmin'
   secret-key: 'minioadmin'
   default-bucket: 'default-bucket'
+
+project:
+  jwt:
+    issuer: http://localhost:${server.port}
+    hmac-secret: Ys5QZMQXey40wpE6IQNziJsZwx+SIEsTeLJxZQXRKpE=
+    access-token-time-to-live: 30
+    refresh-token-time-to-live: 60
 
 ---
 server:
