@@ -59,6 +59,11 @@
       <artifactId>spring-boot-starter-websocket</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>com.knight</groupId>
+      <artifactId>knight-entity</artifactId>
+    </dependency>
+
   </dependencies>
 
 </project>

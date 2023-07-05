@@ -1,4 +1,4 @@
-package com.knight.controller.demo.websocket;
+package com.knight.websocket.endpoint;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

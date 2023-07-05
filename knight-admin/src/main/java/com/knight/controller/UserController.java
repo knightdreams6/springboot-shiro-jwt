@@ -16,23 +16,11 @@ import lombok.RequiredArgsConstructor;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.authz.annotation.RequiresUser;
-import org.springframework.messaging.simp.user.SimpUser;
-import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.security.Principal;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -58,19 +46,6 @@ public class UserController {
 	 * 令牌服务
 	 */
 	private final TokenService tokenService;
-
-	/**
-	 * websocket用户注册表
-	 */
-	private final SimpUserRegistry simpUserRegistry;
-
-	@RequiresRoles("admin")
-	@ApiOperation(value = "获取链接的websocket用户列表")
-	@GetMapping("/ws/list")
-	@ResponseBody
-	public R<Set<Principal>> websocketUsers() {
-		return R.ok(simpUserRegistry.getUsers().stream().map(SimpUser::getPrincipal).collect(Collectors.toSet()));
-	}
 
 	@RequiresUser
 	@ApiOperation(value = "获取当前用户基本信息")

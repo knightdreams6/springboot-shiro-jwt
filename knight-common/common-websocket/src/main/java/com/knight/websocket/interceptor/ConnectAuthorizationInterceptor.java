@@ -20,12 +20,17 @@ import org.springframework.messaging.support.MessageHeaderAccessor;
 /**
  * 连接授权拦截器
  *
+ * @see <a href=
+ * "https://docs.spring.io/spring-framework/reference/web/websocket/stomp/authentication-token-based.html">...</a>
  * @author knight
  * @since 2023/03/12
  */
 @RequiredArgsConstructor
 public class ConnectAuthorizationInterceptor implements ChannelInterceptor {
 
+	/**
+	 * 安全管理器
+	 */
 	private final SecurityManager securityManager;
 
 	@Override

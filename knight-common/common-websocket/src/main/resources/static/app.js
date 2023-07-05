@@ -14,7 +14,7 @@ function setConnected(connected) {
 function connect() {
   var socket = new SockJS('http://127.0.0.1:8888/websocket');
   stompClient = Stomp.over(socket);
-  stompClient.connect({"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZSI6IjE4NzM1MTgyMjg1IiwidXNlcklkIjoiMSIsImV4cCI6MTY4MDk0NjM1NX0.FYDiMtcDvosixoCBzn1KrOiZLGqm5uZdkbncpfG8wvA"}, function (frame) {
+  stompClient.connect({"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0Ojg4ODgiLCJzdWIiOiIxODczNTE4MjI4NSIsImlhdCI6MTY4ODU0ODYyMiwiZXhwIjoxNjg4NTUwNDIyfQ.fi2jGGyHgdiuNh7bLf71omJtGeeWEGeIZpdCak3856E"}, function (frame) {
     setConnected(true);
     console.log('Connected: ' + frame);
     stompClient.subscribe('/topic/outgoing', function (greeting) {
