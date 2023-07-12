@@ -7,6 +7,7 @@ import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -56,6 +57,18 @@ public class GlobalExceptionAdvice {
 		return ResponseEntity.status(HttpStatus.OK)
 			.contentType(MediaType.APPLICATION_JSON)
 			.body(R.failed(e.getLocalizedMessage()));
+	}
+
+	/**
+	 * 参数校验异常
+	 * @param e e
+	 * @return ResponseEntity
+	 */
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<R<Object>> handleConstraintViolationException(MethodArgumentNotValidException e) {
+		return ResponseEntity.status(HttpStatus.OK)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(R.failed(e.getAllErrors().get(0).getDefaultMessage()));
 	}
 
 	/**

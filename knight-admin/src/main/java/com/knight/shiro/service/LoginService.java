@@ -69,9 +69,9 @@ public class LoginService {
 		int code = 6666;
 		// todo 此处为发送验证码代码
 		// 将验证码加密后存储到redis中
-		String encryptCode = CommonsUtils.encryptPassword(String.valueOf(code), phone);
 		stringRedisTemplate.opsForValue()
-			.set(RedisKey.getModifyPasswordCodeKey(phone), encryptCode, Constant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
+			.set(RedisKey.getModifyPasswordCodeKey(phone), String.valueOf(code), Constant.CODE_EXPIRE_TIME,
+					TimeUnit.MINUTES);
 		return true;
 	}
 
@@ -128,27 +128,27 @@ public class LoginService {
 
 	/**
 	 * 修改密码
-	 * @param phone 手机号
+	 * @param username 用户名
 	 * @param code 验证码
 	 * @param password 密码
 	 * @return {@link R}
 	 */
-	public R<Object> modifyPassword(String phone, String code, String password) {
-		Object modifyCode = stringRedisTemplate.opsForValue().get(RedisKey.getModifyPasswordCodeKey(phone));
+	public R<Object> modifyPassword(String username, String code, String password) {
+		String modifyCode = stringRedisTemplate.opsForValue().get(RedisKey.getModifyPasswordCodeKey(username));
 		// 判断redis中是否存在验证码
 		if (Objects.isNull(modifyCode)) {
 			return R.failed(CommonResultConstants.CODE_EXPIRE);
 		}
 		// 判断redis中code与传递过来的code 是否相等
-		if (!Objects.equals(code, modifyCode.toString())) {
+		if (!Objects.equals(code, modifyCode)) {
 			return R.failed(CommonResultConstants.CODE_ERROR);
 		}
-		SysUser user = userService.selectUserByPhone(phone);
+		SysUser user = userService.selectUserByPhone(username);
 		// 如果用户不存在，执行注册
 		if (Objects.isNull(user)) {
-			Boolean flag = userService.register(phone, password);
+			Boolean flag = userService.register(username, password);
 			if (flag) {
-				return R.ok(this.returnLoginInitParam(phone));
+				return R.ok(this.returnLoginInitParam(username));
 			}
 			else {
 				return R.failed();
@@ -161,10 +161,10 @@ public class LoginService {
 		user.setSuSalt(salt);
 		user.setSuPassword(encryptPassword);
 		// 删除缓存
-		stringRedisTemplate.delete(RedisKey.getLoginUserKey(phone));
+		stringRedisTemplate.delete(RedisKey.getModifyPasswordCodeKey(username));
 		boolean flag = userService.updateById(user);
 		if (flag) {
-			return R.ok(this.returnLoginInitParam(phone));
+			return R.ok(this.returnLoginInitParam(username));
 		}
 		return R.failed();
 	}

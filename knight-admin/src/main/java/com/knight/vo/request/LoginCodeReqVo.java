@@ -6,24 +6,25 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 /**
- * 登录密码请求参数vo
+ * 验证码登录请求参数vo
  *
  * @author knight
- * @since 2023/01/15
+ * @since 2023/07/09
  */
 @Data
-@ApiModel(value = "密码登陆请求参数")
-public class LoginPasswordReqVo {
+@ApiModel(value = "验证码登陆请求参数")
+public class LoginCodeReqVo {
 
 	@PhoneNumber
-	@NotEmpty(message = "用户名不能为空")
 	@ApiModelProperty(value = "用户名", required = true)
 	private String username;
 
-	@NotEmpty(message = "密码不能为空")
-	@ApiModelProperty(value = "密码", required = true)
-	private String password;
+	@Size(min = 4, max = 4)
+	@NotEmpty(message = "验证码不能为空")
+	@ApiModelProperty(value = "验证码", required = true)
+	private String code;
 
 }

@@ -8,19 +8,23 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * 登录密码请求参数vo
+ * 登录密码更新请求参数vo
  *
  * @author knight
- * @since 2023/01/15
+ * @since 2023/07/12
  */
 @Data
-@ApiModel(value = "密码登陆请求参数")
-public class LoginPasswordReqVo {
+@ApiModel(value = "登录密码更新请求参数vo")
+public class LoginPasswordUpdateReqVo {
 
 	@PhoneNumber
 	@NotEmpty(message = "用户名不能为空")
 	@ApiModelProperty(value = "用户名", required = true)
 	private String username;
+
+	@NotEmpty(message = "验证码不能为空")
+	@ApiModelProperty(value = "密码", required = true)
+	private String code;
 
 	@NotEmpty(message = "密码不能为空")
 	@ApiModelProperty(value = "密码", required = true)
