@@ -14,7 +14,7 @@
 
     <!-- mybatis-plus
             https://github.com/baomidou/mybatis-plus/releases -->
-    <mybatis.plus.version>3.5.3.1</mybatis.plus.version>
+    <mybatis.plus.version>3.5.3.2</mybatis.plus.version>
 
     <!-- auth0-jwt
             https://github.com/auth0/java-jwt/tags -->
