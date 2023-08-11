@@ -19,6 +19,28 @@
 * spring-javaformat https://github.com/spring-io/spring-javaformat/releases
 * reflections https://github.com/ronmamo/reflections/releases
 
+#### 其它项目
+
+* 配套前端项目 https://gitee.com/knightdreams/vue3-mobile-login-demo
+* 微服务架构项目 https://gitee.com/knightdreams/spring-cloud-alibaba-2022
+
+#### 认证流程
+
+```mermaid
+flowchart TD
+    Subject.login --> SecurityManager.login
+    SecurityManager.login --> Authenticator.authenticate
+    Authenticator.authenticate --> CustomModularRealmAuthenticator.doMultiRealmAuthentication
+    CustomModularRealmAuthenticator.doMultiRealmAuthentication -- 根据AuthenticationToken匹配Realm --> ModularRealmAuthenticator.doSingleRealmAuthentication
+    ModularRealmAuthenticator.doSingleRealmAuthentication -- 执行匹配到的realm --> Realm.getAuthenticationInfo
+    Realm.getAuthenticationInfo -- 返回AuthenticationInfo --> AuthenticationInfo
+    AuthenticationInfo --> DefaultSecurityManager.createSubject
+    DefaultSecurityManager.createSubject -- 返回subject --> Subject
+
+```
+
+
+
 #### 使用说明
 
 使用遇到问题可以加QQ群： [![加入QQ群](https://img.shields.io/badge/689932210-blue.svg)](https://jq.qq.com/?_wv=1027&k=5x1EdC8)
