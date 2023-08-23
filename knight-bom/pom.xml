@@ -26,7 +26,7 @@
 
     <!-- SpringBoot
             https://github.com/spring-projects/spring-boot/releases -->
-    <springboot.version>2.7.13</springboot.version>
+    <springboot.version>2.7.14</springboot.version>
 
     <!-- mica-auto
             https://github.com/lets-mica/mica-auto/releases -->
