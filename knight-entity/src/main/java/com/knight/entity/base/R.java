@@ -142,4 +142,8 @@ public class R<T> implements Serializable {
 		return apiResult;
 	}
 
+	public boolean isSuccess() {
+		return Objects.equals(CommonResultConstants.SUCCESS.code(), this.getCode());
+	}
+
 }

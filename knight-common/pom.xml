@@ -19,6 +19,7 @@
     <module>common-i18n</module>
     <module>common-websocket</module>
     <module>common-storage</module>
+    <module>common-message</module>
   </modules>
 
   <artifactId>knight-common</artifactId>
