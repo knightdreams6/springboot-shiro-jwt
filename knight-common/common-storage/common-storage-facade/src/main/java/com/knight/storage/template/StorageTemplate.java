@@ -50,12 +50,21 @@ public class StorageTemplate implements InitializingBean {
 	private final MultipartUploadService multipartUploadService;
 
 	/**
+	 * 文件路径生成
+	 * @param originalFilename 原始文件名
+	 * @return {@link String}
+	 */
+	public String filePathGenerate(String originalFilename) {
+		return IdWorker.getIdStr() + StringPool.SLASH + originalFilename;
+	}
+
+	/**
 	 * 对象名称生成
 	 * @param originalFilename 原始文件名
 	 * @return {@link String}
 	 */
 	private String objectNameGenerate(String originalFilename) {
-		return IdWorker.getIdStr() + StringPool.SLASH + originalFilename;
+		return filePathGenerate(originalFilename);
 	}
 
 	/**
@@ -64,7 +73,7 @@ public class StorageTemplate implements InitializingBean {
 	 * @return {@link R}<{@link Object}>
 	 */
 	public R<OssUploadR> upload(MultipartFile multipartFile) {
-		return upload(objectNameGenerate(multipartFile.getOriginalFilename()), multipartFile);
+		return upload(filePathGenerate(multipartFile.getOriginalFilename()), multipartFile);
 	}
 
 	/**
@@ -151,6 +160,25 @@ public class StorageTemplate implements InitializingBean {
 	public R<Object> remove(String bucketName, String objectName) {
 		ossClient.remove(bucketName, objectName);
 		return R.ok();
+	}
+
+	/**
+	 * 下载
+	 * @param objectName 对象名称
+	 * @param destFilePath 目标文件路径
+	 */
+	public void download(String objectName, String destFilePath) {
+		ossClient.download(ossProperties.getDefaultBucket(), objectName, destFilePath);
+	}
+
+	/**
+	 * 下载
+	 * @param bucketName bucket名称
+	 * @param objectName 对象名称
+	 * @param destFilePath 目标文件路径
+	 */
+	public void download(String bucketName, String objectName, String destFilePath) {
+		ossClient.download(bucketName, objectName, destFilePath);
 	}
 
 	/**

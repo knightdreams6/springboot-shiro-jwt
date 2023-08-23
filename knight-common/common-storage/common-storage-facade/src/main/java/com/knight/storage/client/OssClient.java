@@ -53,6 +53,14 @@ public interface OssClient {
 	void remove(String bucketName, String objectName);
 
 	/**
+	 * 下载
+	 * @param bucketName bucket名称
+	 * @param objectName 对象名称
+	 * @param destPath 下载到的目标路径
+	 */
+	void download(String bucketName, String objectName, String destPath);
+
+	/**
 	 * 启动分片上传
 	 * @param bucketName bucket名称
 	 * @param objectName 对象名称

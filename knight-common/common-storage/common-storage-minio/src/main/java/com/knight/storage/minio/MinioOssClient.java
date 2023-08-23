@@ -1,5 +1,6 @@
 package com.knight.storage.minio;
 
+import cn.hutool.core.io.FileUtil;
 import com.knight.storage.client.OssClient;
 import com.knight.storage.enums.OssPlatformTypeEnums;
 import com.knight.storage.properties.OssProperties;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * minio oss客户端
@@ -88,6 +90,15 @@ public class MinioOssClient implements OssClient {
 	@Override
 	public void remove(String bucketName, String objectName) {
 		minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucketName).object(objectName).build()).get();
+	}
+
+	@SneakyThrows
+	@Override
+	public void download(String bucketName, String objectName, String destPath) {
+		CompletableFuture<GetObjectResponse> completableFuture = minioClient
+			.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
+		GetObjectResponse getObjectResponse = completableFuture.get();
+		FileUtil.writeFromStream(getObjectResponse, destPath);
 	}
 
 	@SneakyThrows

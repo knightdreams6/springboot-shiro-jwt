@@ -71,6 +71,12 @@ public class AliYunOssClient implements OssClient {
 	}
 
 	@Override
+	public void download(String bucketName, String objectName, String destPath) {
+		GetObjectRequest getObjectRequest = new GetObjectRequest(bucketName, objectName, destPath);
+		ossClient.getObject(getObjectRequest);
+	}
+
+	@Override
 	public String initiateMultipartUpload(String bucketName, String objectName) {
 		InitiateMultipartUploadResult initiateMultipartUploadResult = ossClient
 			.initiateMultipartUpload(new InitiateMultipartUploadRequest(bucketName, objectName));
