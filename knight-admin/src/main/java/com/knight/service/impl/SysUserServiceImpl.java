@@ -40,10 +40,28 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	private final TransactionTemplate transactionTemplate;
 
 	@Override
+	public SysUser selectUserBySubjectName(String subjectName) {
+		LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.<SysUser>lambdaQuery()
+			.eq(SysUser::getSuPhone, subjectName)
+			.or()
+			.eq(SysUser::getSuMail, subjectName)
+			.last("limit 1");
+		return this.getOne(queryWrapper);
+	}
+
+	@Override
 	public SysUser selectUserByPhone(String phone) {
 		LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.<SysUser>lambdaQuery()
 			// 根据手机号过滤
 			.eq(SysUser::getSuPhone, phone)
+			.last("limit 1");
+		return this.getOne(queryWrapper);
+	}
+
+	@Override
+	public SysUser selectUserByMail(String mail) {
+		LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.<SysUser>lambdaQuery()
+			.eq(SysUser::getSuMail, mail)
 			.last("limit 1");
 		return this.getOne(queryWrapper);
 	}

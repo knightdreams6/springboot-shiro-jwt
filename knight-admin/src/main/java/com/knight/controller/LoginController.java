@@ -5,6 +5,7 @@ import com.knight.interceptor.annotation.RequestLimit;
 import com.knight.shiro.service.LoginService;
 import com.knight.valid.annotation.PhoneNumber;
 import com.knight.vo.request.LoginCodeReqVo;
+import com.knight.vo.request.LoginMailCodeReqVo;
 import com.knight.vo.request.LoginPasswordReqVo;
 import com.knight.vo.request.LoginPasswordUpdateReqVo;
 import io.swagger.annotations.Api;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 /**
@@ -35,6 +37,18 @@ import javax.validation.constraints.NotEmpty;
 public class LoginController {
 
 	private final LoginService loginService;
+
+	@ApiOperation("发送邮箱登陆验证码")
+	@GetMapping("/mail/code")
+	public R<Object> sendLoginMailCode(@Email @ApiParam(value = "邮箱") @RequestParam String mail) {
+		return R.bool(loginService.sendLoginMailCode(mail));
+	}
+
+	@ApiOperation("邮箱验证码登录")
+	@PostMapping("/mail/code")
+	public R<Object> loginByMailCode(@Validated @RequestBody LoginMailCodeReqVo reqVo) {
+		return loginService.loginByMailCode(reqVo.getMail(), reqVo.getCode());
+	}
 
 	@RequestLimit(second = 60 * 60, maxCount = 10)
 	@ApiOperation(value = "发送登录验证码")

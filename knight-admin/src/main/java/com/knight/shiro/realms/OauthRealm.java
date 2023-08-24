@@ -1,10 +1,6 @@
 package com.knight.shiro.realms;
 
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.knight.entity.base.LoginUser;
-import com.knight.entity.orm.SysUser;
-import com.knight.service.ISysUserService;
 import com.knight.shiro.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
@@ -34,12 +30,6 @@ public class OauthRealm extends AuthorizingRealm {
 	@Resource
 	private TokenService tokenService;
 
-	/**
-	 * 用户服务
-	 */
-	@Resource
-	private ISysUserService userService;
-
 	@Override
 	public boolean supports(AuthenticationToken token) {
 		return token instanceof BearerToken;
@@ -65,22 +55,14 @@ public class OauthRealm extends AuthorizingRealm {
 		BearerToken bearerToken = (BearerToken) authenticationToken;
 		// 获取jwtToken
 		String token = bearerToken.getToken();
-		// 获得phone
-		String phone = tokenService.getSubject(token);
-		log.info(phone + " - token auth start...");
-		// 如果获取到的手机号为空
-		if (StrUtil.isBlank(phone)) {
-			throw new IncorrectCredentialsException();
-		}
-		SysUser user = userService.selectUserByPhone(phone);
-		if (ObjectUtil.isNull(user)) {
-			throw new IncorrectCredentialsException();
-		}
+		// 获得username
+		String username = tokenService.getSubject(token);
+		log.info(username + " - token auth start...");
 		boolean verify = tokenService.verify(token);
 		if (!verify) {
 			throw new IncorrectCredentialsException();
 		}
-		return new SimpleAuthenticationInfo(phone, token, getName());
+		return new SimpleAuthenticationInfo(username, token, getName());
 	}
 
 }

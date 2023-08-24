@@ -94,6 +94,7 @@
           <include>**/*.yml</include>
           <include>**/*.properties</include>
           <include>**/*.xml</include>
+          <include>**/*.html</include>
           <include>static/*</include>
         </includes>
       </resource>

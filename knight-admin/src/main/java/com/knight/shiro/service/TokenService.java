@@ -8,16 +8,13 @@ import com.auth0.jwt.interfaces.JWTVerifier;
 import com.knight.config.ProjectConfigurationProperties;
 import com.knight.entity.base.LoginUser;
 import com.knight.entity.base.UserInfo;
-import com.knight.entity.constans.RedisKey;
 import com.knight.entity.orm.SysUser;
 import com.knight.service.ISysUserService;
 import com.knight.utils.OauthUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.security.NoSuchAlgorithmException;
@@ -26,7 +23,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
-import java.util.concurrent.TimeUnit;
+import java.util.Objects;
 
 /**
  * 令牌服务
@@ -54,12 +51,6 @@ public class TokenService {
 	private final ProjectConfigurationProperties projectProperties;
 
 	/**
-	 * redis模板
-	 */
-	@Resource
-	private RedisTemplate<String, LoginUser> redisTemplate;
-
-	/**
 	 * hmac秘钥生成
 	 * @return {@link String}
 	 * @throws NoSuchAlgorithmException 未找到算法异常
@@ -78,26 +69,16 @@ public class TokenService {
 	 * @return User
 	 */
 	public LoginUser getLoginUser() {
-		// 获取token
-		String token = getAccessToken();
-		// 获取手机号
-		String phone = getSubject(token);
-		// 获取缓存loginUserKey
-		String loginUserKey = RedisKey.getLoginUserKey(phone);
-		// 获取缓存loginUser
-		LoginUser cacheObject = redisTemplate.opsForValue().get(loginUserKey);
-		if (cacheObject == null) {
-			LoginUser loginUser = new LoginUser();
-			// 获取当前登录用户
-			SysUser user = userService.selectUserByPhone(phone);
-			loginUser.setUser(new UserInfo(user));
-			// 填充角色与权限
-			permissionsService.addRoleAndPerms(loginUser);
-			// 缓存当前登录用户
-			redisTemplate.opsForValue().set(loginUserKey, loginUser, 15, TimeUnit.MINUTES);
-			return loginUser;
+		// 获取当前登录用户
+		SysUser user = userService.selectUserBySubjectName(getSubject(getAccessToken()));
+		if (Objects.isNull(user)) {
+			return null;
 		}
-		return cacheObject;
+		LoginUser loginUser = new LoginUser();
+		loginUser.setUser(new UserInfo(user));
+		// 填充角色与权限
+		permissionsService.addRoleAndPerms(loginUser);
+		return loginUser;
 	}
 
 	/**

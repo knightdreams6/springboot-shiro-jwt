@@ -84,6 +84,11 @@ public enum CommonResultConstants implements IResultConstants {
 	 */
 	ILLEGAL_PARAM_EXCEPTION(1011, "非法参数异常", "Illegal parameter exception"),
 
+	/**
+	 * 用户名不存在
+	 */
+	USERNAME_CODE_NOT_EXIST(1012, "用户名或验证码错误", "用户名不存在", "wrong username or code"),
+
 	;
 
 	private final Integer code;

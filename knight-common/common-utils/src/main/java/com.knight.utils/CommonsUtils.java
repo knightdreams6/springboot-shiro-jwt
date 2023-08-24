@@ -27,7 +27,17 @@ public class CommonsUtils {
 	 * @return 返回加密后的密码
 	 */
 	public static String encryptPassword(String password, String salt) {
-		return String.valueOf(new Sha256Hash(password, salt, 1024));
+		return new Sha256Hash(password, salt, 1024).toHex();
+	}
+
+	/**
+	 * 验证码加密
+	 * @param code 验证码
+	 * @param salt 盐
+	 * @return {@link String}
+	 */
+	public static String encryptCode(String code, String salt) {
+		return new Sha256Hash(code, salt).toString();
 	}
 
 }

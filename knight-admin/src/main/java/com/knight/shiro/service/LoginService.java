@@ -1,25 +1,34 @@
 package com.knight.shiro.service;
 
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.knight.entity.base.R;
 import com.knight.entity.constans.Constant;
 import com.knight.entity.constans.RedisKey;
 import com.knight.entity.enums.CommonResultConstants;
 import com.knight.entity.orm.SysUser;
+import com.knight.message.enums.MessageContentTypeEnums;
+import com.knight.message.mail.MailMessage;
+import com.knight.message.support.MessageBuilder;
+import com.knight.message.support.MessageTemplate;
 import com.knight.service.ISysUserService;
+import com.knight.shiro.token.MailCodeToken;
 import com.knight.shiro.token.PhoneCodeToken;
 import com.knight.utils.CommonsUtils;
 import com.knight.vo.request.LoginPasswordReqVo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.ExpiredCredentialsException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -29,6 +38,7 @@ import java.util.concurrent.TimeUnit;
  * @author lixiao
  * @since 2020/4/15 16:50
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LoginService {
@@ -49,6 +59,62 @@ public class LoginService {
 	private final TokenService tokenService;
 
 	/**
+	 * 消息模板
+	 */
+	private final MessageTemplate messageTemplate;
+
+	/**
+	 * mailCode登录
+	 * @param mail mail
+	 * @param code mailCode
+	 * @return {@link R}<{@link Object}>
+	 */
+	public R<Object> loginByMailCode(String mail, String code) {
+		// 1.获取Subject
+		Subject subject = SecurityUtils.getSubject();
+		// 2.封装用户数据
+		MailCodeToken token = new MailCodeToken(mail, code);
+		// 3.执行登录方法
+		subject.login(token);
+		return R.ok(returnLoginInitParam(mail));
+	}
+
+	/**
+	 * 发送登录验证码
+	 * @param mail 邮箱
+	 * @return boolean
+	 */
+	public boolean sendLoginMailCode(String mail) {
+		// 验证码
+		String verifyCode = String.valueOf(CommonsUtils.getCode());
+
+		ClassPathResource classPathResource = new ClassPathResource("/mail/loginCodeEmail.html");
+		String content;
+		try {
+			content = IoUtil.read(classPathResource.getInputStream(), Charset.defaultCharset());
+		}
+		catch (IOException e) {
+			log.error("邮件发送失败: {}", e.getLocalizedMessage());
+			return false;
+		}
+
+		content = StrUtil.replace(content, "${verifyCode}", verifyCode);
+		MailMessage mailMessage = MailMessage.builder()
+			.receiver(Collections.singleton(mail))
+			.subject("Login Code")
+			.content(content)
+			.contentType(MessageContentTypeEnums.HTML)
+			.build();
+		messageTemplate.send(MessageBuilder.withPayload(mailMessage).build());
+
+		// 将验证码加密后存储到redis中
+		String encryptCode = CommonsUtils.encryptCode(verifyCode, mail);
+		stringRedisTemplate.opsForValue()
+			.set(RedisKey.getLoginCodeKey(mail), encryptCode, Constant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
+		return true;
+	}
+
+	/**
 	 * 发送登录验证码
 	 * @param phone 电话
 	 * @return boolean
@@ -59,7 +125,7 @@ public class LoginService {
 		// todo 此处为发送验证码代码
 
 		// 将验证码加密后存储到redis中
-		String encryptCode = CommonsUtils.encryptPassword(String.valueOf(code), phone);
+		String encryptCode = CommonsUtils.encryptCode(String.valueOf(code), phone);
 		stringRedisTemplate.opsForValue()
 			.set(RedisKey.getLoginCodeKey(phone), encryptCode, Constant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
 		return true;
@@ -81,16 +147,8 @@ public class LoginService {
 		// 2.封装用户数据
 		UsernamePasswordToken token = new UsernamePasswordToken(reqVo.getUsername(), reqVo.getPassword());
 		// 3.执行登录方法
-		try {
-			subject.login(token);
-			return R.ok(returnLoginInitParam(reqVo.getUsername()));
-		}
-		catch (UnknownAccountException e) {
-			return R.failed(CommonResultConstants.USERNAME_NOT_EXIST);
-		}
-		catch (IncorrectCredentialsException e) {
-			return R.failed(CommonResultConstants.PASSWORD_ERROR);
-		}
+		subject.login(token);
+		return R.ok(returnLoginInitParam(reqVo.getUsername()));
 	}
 
 	/**
@@ -111,19 +169,8 @@ public class LoginService {
 		// 3.封装用户数据
 		PhoneCodeToken token = new PhoneCodeToken(phone, code);
 		// 4.执行登录方法
-		try {
-			subject.login(token);
-			return R.ok(returnLoginInitParam(phone));
-		}
-		catch (UnknownAccountException e) {
-			return R.failed(CommonResultConstants.USERNAME_NOT_EXIST);
-		}
-		catch (ExpiredCredentialsException e) {
-			return R.failed(CommonResultConstants.CODE_EXPIRE);
-		}
-		catch (IncorrectCredentialsException e) {
-			return R.failed(CommonResultConstants.CODE_ERROR);
-		}
+		subject.login(token);
+		return R.ok(returnLoginInitParam(phone));
 	}
 
 	/**

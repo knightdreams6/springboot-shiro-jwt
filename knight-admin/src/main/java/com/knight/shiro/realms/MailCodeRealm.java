@@ -4,7 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.knight.entity.constans.RedisKey;
 import com.knight.entity.orm.SysUser;
 import com.knight.service.ISysUserService;
-import com.knight.shiro.token.PhoneCodeToken;
+import com.knight.shiro.token.MailCodeToken;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -21,11 +21,12 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import javax.annotation.Resource;
 
 /**
+ * 邮箱验证码
+ *
  * @author lixiao
- * @since 2019/7/31 11:40
  */
 @Slf4j
-public class CodeRealm extends AuthorizingRealm {
+public class MailCodeRealm extends AuthorizingRealm {
 
 	/**
 	 * 用户服务
@@ -41,7 +42,7 @@ public class CodeRealm extends AuthorizingRealm {
 
 	@Override
 	public boolean supports(AuthenticationToken token) {
-		return token instanceof PhoneCodeToken;
+		return token instanceof MailCodeToken;
 	}
 
 	/**
@@ -63,17 +64,17 @@ public class CodeRealm extends AuthorizingRealm {
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
 			throws AuthenticationException {
-		PhoneCodeToken token = (PhoneCodeToken) authenticationToken;
-		log.info(token.getPhone() + " - code auth start...");
-		// 根据手机号查询用户
-		SysUser user = userService.selectUserByPhone(token.getPhone());
+		MailCodeToken token = (MailCodeToken) authenticationToken;
+		log.info(token.getMail() + " - mail code auth start...");
+		// 根据邮箱查询用户
+		SysUser user = userService.selectUserByMail(token.getMail());
 		if (ObjectUtil.isNull(user)) {
 			// 抛出账号不存在异常
-			throw new UnknownAccountException();
+			throw new UnknownAccountException(MailCodeToken.class.getName());
 		}
 		// 1.principal：认证的实体信息，可以是手机号，也可以是数据表对应的用户的实体类对象
 		// 2.从redis中获取登录验证码
-		String loginCodeKey = RedisKey.getLoginCodeKey(user.getSuPhone());
+		String loginCodeKey = RedisKey.getLoginCodeKey(user.getSuMail());
 		Object credentials = stringRedisTemplate.opsForValue().get(loginCodeKey);
 		if (credentials == null) {
 			throw new ExpiredCredentialsException();
@@ -83,7 +84,7 @@ public class CodeRealm extends AuthorizingRealm {
 		// 3.realmName：当前realm对象的name，调用父类的getName()方法即可
 		String realmName = super.getName();
 		// 4.盐,取用户信息中唯一的字段来生成盐值，避免由于两个用户原始密码相同，加密后的密码也相同
-		ByteSource credentialsSalt = ByteSource.Util.bytes(token.getPhone());
+		ByteSource credentialsSalt = ByteSource.Util.bytes(token.getMail());
 		return new SimpleAuthenticationInfo(user, credentials, credentialsSalt, realmName);
 	}
 

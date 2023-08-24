@@ -97,6 +97,11 @@
     </dependency>
 
     <dependency>
+      <artifactId>common-message</artifactId>
+      <groupId>com.knight</groupId>
+    </dependency>
+
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
       <optional>true</optional>
@@ -113,6 +118,7 @@
         </exclusion>
       </exclusions>
     </dependency>
+
   </dependencies>
 
   <build>

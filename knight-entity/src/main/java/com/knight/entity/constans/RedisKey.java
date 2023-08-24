@@ -14,8 +14,4 @@ public class RedisKey {
 		return "MODIFY:PWD:CODE:" + phone;
 	}
 
-	public static String getLoginUserKey(String phone) {
-		return "LOGIN:USER:" + phone;
-	}
-
 }

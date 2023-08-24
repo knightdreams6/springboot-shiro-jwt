@@ -1,8 +1,9 @@
 package com.knight.shiro.config;
 
 import com.knight.shiro.filter.OauthFilter;
-import com.knight.shiro.realms.CodeRealm;
+import com.knight.shiro.realms.PhoneCodeRealm;
 import com.knight.shiro.realms.CustomModularRealmAuthenticator;
+import com.knight.shiro.realms.MailCodeRealm;
 import com.knight.shiro.realms.OauthRealm;
 import com.knight.shiro.realms.PasswordRealm;
 import org.apache.shiro.authc.Authenticator;
@@ -63,6 +64,16 @@ public class ShiroConfig {
 		return matcher;
 	}
 
+	@Bean
+	public HashedCredentialsMatcher codeCredentialsMatcher() {
+		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher();
+		// 设置哈希算法名称
+		matcher.setHashAlgorithmName("SHA-256");
+		// 设置存储凭证十六进制编码
+		matcher.setStoredCredentialsHexEncoded(true);
+		return matcher;
+	}
+
 	/**
 	 * 密码登录Realm
 	 * @param matcher 密码匹配器
@@ -77,14 +88,26 @@ public class ShiroConfig {
 
 	/**
 	 * 验证码登录Realm
-	 * @param matcher 密码匹配器
+	 * @param codeCredentialsMatcher 验证码凭据匹配器
 	 * @return CodeRealm
 	 */
 	@Bean
-	public CodeRealm codeRealm(@Qualifier("hashedCredentialsMatcher") HashedCredentialsMatcher matcher) {
-		CodeRealm codeRealm = new CodeRealm();
-		codeRealm.setCredentialsMatcher(matcher);
+	public PhoneCodeRealm codeRealm(HashedCredentialsMatcher codeCredentialsMatcher) {
+		PhoneCodeRealm codeRealm = new PhoneCodeRealm();
+		codeRealm.setCredentialsMatcher(codeCredentialsMatcher);
 		return codeRealm;
+	}
+
+	/**
+	 * 邮箱验证码登录Realm
+	 * @param codeCredentialsMatcher 验证码凭据匹配器
+	 * @return {@link MailCodeRealm}
+	 */
+	@Bean
+	public MailCodeRealm mailCodeRealm(HashedCredentialsMatcher codeCredentialsMatcher) {
+		MailCodeRealm mailCodeRealm = new MailCodeRealm();
+		mailCodeRealm.setCredentialsMatcher(codeCredentialsMatcher);
+		return mailCodeRealm;
 	}
 
 	/**
@@ -147,9 +170,8 @@ public class ShiroConfig {
 	 * SecurityManager 是 Shiro 架构的核心，通过它来链接Realm和用户(文档中称之为Subject.)
 	 */
 	@Bean
-	public SessionsSecurityManager sessionsSecurityManager(@Qualifier("passwordRealm") PasswordRealm passwordRealm,
-			@Qualifier("codeRealm") CodeRealm codeRealm, @Qualifier("oauthRealm") OauthRealm oauthRealm,
-			@Qualifier("authenticator") Authenticator authenticator) {
+	public SessionsSecurityManager sessionsSecurityManager(PasswordRealm passwordRealm, PhoneCodeRealm codeRealm,
+			MailCodeRealm mailCodeRealm, OauthRealm oauthRealm, Authenticator authenticator) {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 		// 设置realm
 		securityManager.setAuthenticator(authenticator);
@@ -158,6 +180,7 @@ public class ShiroConfig {
 		realms.add(passwordRealm);
 		realms.add(codeRealm);
 		realms.add(oauthRealm);
+		realms.add(mailCodeRealm);
 		securityManager.setRealms(realms);
 
 		/*

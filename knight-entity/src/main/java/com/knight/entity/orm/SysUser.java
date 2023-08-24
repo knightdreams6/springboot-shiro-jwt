@@ -50,4 +50,7 @@ public class SysUser extends BaseBean {
 	@ApiModelProperty("出生日期")
 	private LocalDate suBirth;
 
+	@ApiModelProperty(value = "邮箱")
+	private String suMail;
+
 }
