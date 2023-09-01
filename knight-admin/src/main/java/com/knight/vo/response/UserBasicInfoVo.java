@@ -23,6 +23,11 @@ public class UserBasicInfoVo {
 	private String phone;
 
 	/**
+	 * 邮箱
+	 */
+	private String mail;
+
+	/**
 	 * 头像
 	 */
 	private String avatar;
@@ -45,6 +50,7 @@ public class UserBasicInfoVo {
 	public UserBasicInfoVo(LoginUser loginUser) {
 		UserInfo userInfo = loginUser.getUser();
 		this.phone = userInfo.getPhone();
+		this.mail = userInfo.getMail();
 		this.avatar = userInfo.getAvatar();
 		this.name = userInfo.getName();
 		this.gender = userInfo.getGender();

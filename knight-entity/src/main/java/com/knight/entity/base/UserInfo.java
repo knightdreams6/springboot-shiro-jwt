@@ -32,6 +32,11 @@ public class UserInfo implements Serializable {
 	private String phone;
 
 	/**
+	 * 邮箱
+	 */
+	private String mail;
+
+	/**
 	 * 头像
 	 */
 	private String avatar;
@@ -54,6 +59,7 @@ public class UserInfo implements Serializable {
 	public UserInfo(SysUser user) {
 		this.id = user.getId();
 		this.phone = user.getSuPhone();
+		this.mail = user.getSuMail();
 		this.avatar = user.getSuAvatar();
 		this.name = user.getSuName();
 		this.gender = user.getSuSex();
