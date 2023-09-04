@@ -105,7 +105,7 @@ public class LoginService {
 			.content(content)
 			.contentType(MessageContentTypeEnums.HTML)
 			.build();
-		messageTemplate.send(MessageBuilder.withPayload(mailMessage).build());
+		messageTemplate.sendAsync(MessageBuilder.withPayload(mailMessage).build());
 
 		// 将验证码加密后存储到redis中
 		String encryptCode = CommonsUtils.encryptCode(verifyCode, mail);

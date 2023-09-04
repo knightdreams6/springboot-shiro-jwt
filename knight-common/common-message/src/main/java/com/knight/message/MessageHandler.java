@@ -8,6 +8,6 @@ package com.knight.message;
 @FunctionalInterface
 public interface MessageHandler {
 
-	void handleMessage(Message<?> message) throws MessagingException;
+	void handleMessage(Message<?> message, boolean async) throws MessagingException;
 
 }

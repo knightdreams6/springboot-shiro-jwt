@@ -9,17 +9,18 @@ import com.knight.message.enums.MessageContentTypeEnums;
 import com.knight.storage.template.StorageTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 邮件消息处理
@@ -46,8 +47,13 @@ public class MailMessageHandler implements MessageHandler {
 	 */
 	private final StorageTemplate storageTemplate;
 
+	/**
+	 * 线程池任务执行器
+	 */
+	private final ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
 	@Override
-	public void handleMessage(Message<?> message) throws MessagingException {
+	public void handleMessage(Message<?> message, boolean async) throws MessagingException {
 		Object payload = message.getPayload();
 		if (!(payload instanceof MailMessage)) {
 			return;
@@ -60,10 +66,20 @@ public class MailMessageHandler implements MessageHandler {
 
 		if (CollUtil.isEmpty(mailMessage.getAttachmentList())
 				&& Objects.equals(mailMessage.getContentType(), MessageContentTypeEnums.TEXT)) {
-			sendSimpleMailMessage(mailMessage);
+			if (async) {
+				CompletableFuture.runAsync(() -> sendSimpleMailMessage(mailMessage), threadPoolTaskExecutor);
+			}
+			else {
+				sendSimpleMailMessage(mailMessage);
+			}
 		}
 		else {
-			sendMimeMessage(mailMessage);
+			if (async) {
+				CompletableFuture.runAsync(() -> sendMimeMessage(mailMessage), threadPoolTaskExecutor);
+			}
+			else {
+				sendMimeMessage(mailMessage);
+			}
 		}
 	}
 

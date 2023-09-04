@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class SmsMessageHandler implements MessageHandler {
 
 	@Override
-	public void handleMessage(Message<?> message) throws MessagingException {
+	public void handleMessage(Message<?> message, boolean async) throws MessagingException {
 		Object payload = message.getPayload();
 		if (!(payload instanceof SmsMessage)) {
 			return;
