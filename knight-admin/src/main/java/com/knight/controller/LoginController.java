@@ -8,6 +8,8 @@ import com.knight.vo.request.LoginCodeReqVo;
 import com.knight.vo.request.LoginMailCodeReqVo;
 import com.knight.vo.request.LoginPasswordReqVo;
 import com.knight.vo.request.LoginPasswordUpdateReqVo;
+import com.knight.vo.request.LoginResetPwdMailReqVo;
+import com.knight.vo.request.LoginSendResetPwdMailReqVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -38,9 +40,21 @@ public class LoginController {
 
 	private final LoginService loginService;
 
+	@ApiOperation("根据邮箱验证码重置密码")
+	@PostMapping("/mail/reset-pwd")
+	public R<Object> resetPwdByMail(@Validated @RequestBody LoginResetPwdMailReqVo reqVo) {
+		return R.bool(loginService.resetPwdByMail(reqVo.getCode(), reqVo.getNewPassword()));
+	}
+
+	@ApiOperation("发送重置密码链接邮件")
+	@GetMapping("/mail/reset-pwd")
+	public R<Object> sendResetPwdLinkMail(@Validated LoginSendResetPwdMailReqVo reqVo) {
+		return R.bool(loginService.sendResetPwdLinkMail(reqVo.getUsername(), reqVo.getRedirectUri()));
+	}
+
 	@ApiOperation("发送邮箱登陆验证码")
 	@GetMapping("/mail/code")
-	public R<Object> sendLoginMailCode(@Email @ApiParam(value = "邮箱") @RequestParam String mail) {
+	public R<Object> sendLoginMailCode(@NotEmpty @Email @ApiParam(value = "邮箱") @RequestParam String mail) {
 		return R.bool(loginService.sendLoginMailCode(mail));
 	}
 

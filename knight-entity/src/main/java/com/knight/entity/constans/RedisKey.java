@@ -14,4 +14,8 @@ public class RedisKey {
 		return "MODIFY:PWD:CODE:" + phone;
 	}
 
+	public static String getResetPwdVerifyCodeKey(String mail) {
+		return "LOGIN:RESET:PWD:" + mail;
+	}
+
 }

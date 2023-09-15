@@ -89,6 +89,17 @@ public enum CommonResultConstants implements IResultConstants {
 	 */
 	USERNAME_CODE_NOT_EXIST(1012, "用户名或验证码错误", "用户名不存在", "wrong username or code"),
 
+	/**
+	 * 未找到邮箱用户
+	 */
+	USERNAME_OR_EMAIL_NOT_FOUND(1013, "当前用户不存在或未绑定邮箱", "用户不存在或未绑定邮箱",
+			"The user does not exist or is not bound to an email address"),
+
+	/**
+	 * 邮箱验证码无效
+	 */
+	MAIL_CODE_EXPIRE(1014, "验证码无效或已过期", "invalid verification code"),
+
 	;
 
 	private final Integer code;

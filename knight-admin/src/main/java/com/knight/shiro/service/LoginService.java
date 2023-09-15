@@ -2,12 +2,15 @@ package com.knight.shiro.service;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.knight.entity.base.R;
 import com.knight.entity.constans.Constant;
 import com.knight.entity.constans.RedisKey;
 import com.knight.entity.enums.CommonResultConstants;
 import com.knight.entity.orm.SysUser;
+import com.knight.exception.ServiceException;
 import com.knight.message.enums.MessageContentTypeEnums;
 import com.knight.message.mail.MailMessage;
 import com.knight.message.support.MessageBuilder;
@@ -77,6 +80,64 @@ public class LoginService {
 		// 3.执行登录方法
 		subject.login(token);
 		return R.ok(returnLoginInitParam(mail));
+	}
+
+	/**
+	 * 根据邮箱验证码重置密码
+	 */
+	public boolean resetPwdByMail(String code, String newPassword) {
+		String resetPwdVerifyCodeKey = RedisKey.getResetPwdVerifyCodeKey(code);
+		String username = stringRedisTemplate.opsForValue().get(resetPwdVerifyCodeKey);
+		if (StrUtil.isBlank(username)) {
+			throw new ServiceException(CommonResultConstants.MAIL_CODE_EXPIRE);
+		}
+		SysUser user = userService.selectUserByPhone(username);
+		if (ObjectUtil.isNull(user)) {
+			throw new ServiceException(CommonResultConstants.MAIL_CODE_EXPIRE);
+		}
+		// 加密所需盐值
+		String salt = IdUtil.simpleUUID();
+		// 加密后的密码
+		String encryptPassword = CommonsUtils.encryptPassword(newPassword, salt);
+		user.setSuSalt(salt);
+		user.setSuPassword(encryptPassword);
+		stringRedisTemplate.delete(resetPwdVerifyCodeKey);
+		return userService.updateById(user);
+	}
+
+	/**
+	 * 发送重置密码链接验
+	 */
+	public boolean sendResetPwdLinkMail(String username, String redirectUri) {
+		SysUser sysUser = userService.selectUserByPhone(username);
+		if (ObjectUtil.isNull(sysUser)) {
+			throw new ServiceException(CommonResultConstants.USERNAME_OR_EMAIL_NOT_FOUND);
+		}
+		ClassPathResource classPathResource = new ClassPathResource("/mail/resetPwdEmail.html");
+		String content;
+		try {
+			content = IoUtil.read(classPathResource.getInputStream(), Charset.defaultCharset());
+		}
+		catch (IOException e) {
+			log.error("邮件发送失败: {}", e.getLocalizedMessage());
+			return false;
+		}
+
+		// 验证码
+		String verifyCode = RandomUtil.randomString(8);
+
+		content = StrUtil.replace(content, "${username}", sysUser.getSuName());
+		content = StrUtil.replace(content, "${resetLink}", redirectUri + "?code=" + verifyCode);
+		MailMessage mailMessage = MailMessage.builder()
+			.receiver(Collections.singleton(sysUser.getSuMail()))
+			.subject("Retrieve password")
+			.content(content)
+			.contentType(MessageContentTypeEnums.HTML)
+			.build();
+		messageTemplate.sendAsync(MessageBuilder.withPayload(mailMessage).build());
+		stringRedisTemplate.opsForValue()
+			.set(RedisKey.getResetPwdVerifyCodeKey(verifyCode), username, Constant.CODE_EXPIRE_TIME, TimeUnit.MINUTES);
+		return true;
 	}
 
 	/**
