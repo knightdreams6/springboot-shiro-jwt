@@ -10,11 +10,11 @@
   <properties>
     <!-- hutool工具类
             https://github.com/dromara/hutool/releases -->
-    <hutool.version>5.8.20</hutool.version>
+    <hutool.version>5.8.22</hutool.version>
 
     <!-- mybatis-plus
             https://github.com/baomidou/mybatis-plus/releases -->
-    <mybatis.plus.version>3.5.3.2</mybatis.plus.version>
+    <mybatis.plus.version>3.5.4.1</mybatis.plus.version>
 
     <!-- auth0-jwt
             https://github.com/auth0/java-jwt/tags -->
@@ -22,19 +22,19 @@
 
     <!-- shiro
             https://github.com/apache/shiro/tags -->
-    <shiro-spring-boot.version>1.12.0</shiro-spring-boot.version>
+    <shiro-spring-boot.version>1.13.0</shiro-spring-boot.version>
 
     <!-- SpringBoot
             https://github.com/spring-projects/spring-boot/releases -->
-    <springboot.version>2.7.14</springboot.version>
+    <springboot.version>2.7.17</springboot.version>
 
     <!-- mica-auto
             https://github.com/lets-mica/mica-auto/releases -->
-    <mica.auto.version>2.3.2</mica.auto.version>
+    <mica.auto.version>2.3.3</mica.auto.version>
 
     <!-- minio
             https://github.com/minio/minio-java/releases -->
-    <minio.version>8.5.4</minio.version>
+    <minio.version>8.5.6</minio.version>
 
     <!-- knife4j
             https://gitee.com/xiaoym/knife4j/releases  -->
@@ -42,7 +42,7 @@
 
     <!-- aliyun oss
             https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss -->
-    <oss.aliyun.version>3.17.0</oss.aliyun.version>
+    <oss.aliyun.version>3.17.2</oss.aliyun.version>
 
     <!-- reflections
         https://github.com/ronmamo/reflections/releases -->
