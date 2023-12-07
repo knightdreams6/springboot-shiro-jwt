@@ -20,6 +20,7 @@
     <module>common-websocket</module>
     <module>common-storage</module>
     <module>common-message</module>
+    <module>common-api</module>
   </modules>
 
   <artifactId>knight-common</artifactId>

@@ -152,6 +152,12 @@
       </dependency>
 
       <dependency>
+        <artifactId>common-api</artifactId>
+        <groupId>com.knight</groupId>
+        <version>${knight.version}</version>
+      </dependency>
+
+      <dependency>
         <artifactId>common-websocket</artifactId>
         <groupId>com.knight</groupId>
         <version>${knight.version}</version>

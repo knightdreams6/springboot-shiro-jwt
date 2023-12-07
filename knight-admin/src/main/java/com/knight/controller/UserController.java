@@ -2,6 +2,7 @@ package com.knight.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.knight.api.version.annotation.ApiVersion;
 import com.knight.entity.base.R;
 import com.knight.entity.orm.SysUser;
 import com.knight.service.ISysUserService;
@@ -17,7 +18,13 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -30,6 +37,7 @@ import java.util.List;
  * @author knight
  * @since 2019-12-17
  */
+@ApiVersion
 @Api(tags = "【user】用户")
 @RestController
 @RequestMapping("/user")
@@ -51,6 +59,14 @@ public class UserController {
 	@ApiOperation(value = "获取当前用户基本信息")
 	@GetMapping("/info")
 	public R<UserBasicInfoVo> info() {
+		return R.vo(tokenService.getLoginUser(), UserBasicInfoVo::new);
+	}
+
+	@ApiVersion(2)
+	@RequiresUser
+	@ApiOperation(value = "获取当前用户基本信息V2")
+	@GetMapping("/info")
+	public R<UserBasicInfoVo> infoV2() {
 		return R.vo(tokenService.getLoginUser(), UserBasicInfoVo::new);
 	}
 

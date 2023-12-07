@@ -1,11 +1,11 @@
 package com.knight.shiro.config;
 
 import com.knight.shiro.filter.OauthFilter;
-import com.knight.shiro.realms.PhoneCodeRealm;
 import com.knight.shiro.realms.CustomModularRealmAuthenticator;
 import com.knight.shiro.realms.MailCodeRealm;
 import com.knight.shiro.realms.OauthRealm;
 import com.knight.shiro.realms.PasswordRealm;
+import com.knight.shiro.realms.PhoneCodeRealm;
 import org.apache.shiro.authc.Authenticator;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
@@ -139,7 +139,6 @@ public class ShiroConfig {
 		filterMap.put("/swagger-ui.html", "anon");
 		filterMap.put("/doc.html", "anon");
 		filterMap.put("/swagger-resources/**", "anon");
-		filterMap.put("/v2/**", "anon");
 		filterMap.put("/webjars/**", "anon");
 		filterMap.put("/images/**", "anon");
 		filterMap.put("/websocket/**", "anon");
