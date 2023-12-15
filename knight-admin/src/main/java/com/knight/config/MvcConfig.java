@@ -1,6 +1,7 @@
 package com.knight.config;
 
 import com.knight.api.limit.component.ApiLimitInterceptor;
+import com.knight.api.risk.component.ApiRiskInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -15,6 +16,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @RequiredArgsConstructor
 public class MvcConfig implements WebMvcConfigurer {
+
+	/**
+	 * api风险认证拦截器
+	 */
+	private final ApiRiskInterceptor apiRiskInterceptor;
 
 	/**
 	 * api限制拦截器
@@ -33,6 +39,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(apiRiskInterceptor).order(Ordered.LOWEST_PRECEDENCE);
 		registry.addInterceptor(apiLimitInterceptor).order(Ordered.LOWEST_PRECEDENCE - 1);
 	}
 
