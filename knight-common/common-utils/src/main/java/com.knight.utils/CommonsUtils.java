@@ -21,16 +21,6 @@ public class CommonsUtils {
 	}
 
 	/**
-	 * 使用SHA256加密
-	 * @param password 需要加密的密码
-	 * @param salt 盐
-	 * @return 返回加密后的密码
-	 */
-	public static String encryptPassword(String password, String salt) {
-		return new Sha256Hash(password, salt, 1024).toHex();
-	}
-
-	/**
 	 * 验证码加密
 	 * @param code 验证码
 	 * @param salt 盐

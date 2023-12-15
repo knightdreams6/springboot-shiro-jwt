@@ -7,7 +7,11 @@ import com.knight.shiro.realms.OauthRealm;
 import com.knight.shiro.realms.PasswordRealm;
 import com.knight.shiro.realms.PhoneCodeRealm;
 import org.apache.shiro.authc.Authenticator;
+import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.authc.credential.HashingPasswordService;
+import org.apache.shiro.authc.credential.PasswordMatcher;
+import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
@@ -49,19 +53,12 @@ public class ShiroConfig {
 	}
 
 	/**
-	 * 密码登录时使用该匹配器进行匹配
-	 * @return HashedCredentialsMatcher
+	 * Hash密码服务 默认使用 SHA-256 迭代 500000
+	 * @return HashingPasswordService
 	 */
-	@Bean("hashedCredentialsMatcher")
-	public HashedCredentialsMatcher hashedCredentialsMatcher() {
-		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher();
-		// 设置哈希算法名称
-		matcher.setHashAlgorithmName("SHA-256");
-		// 设置哈希迭代次数
-		matcher.setHashIterations(1024);
-		// 设置存储凭证十六进制编码
-		matcher.setStoredCredentialsHexEncoded(true);
-		return matcher;
+	@Bean
+	public HashingPasswordService passwordService() {
+		return new DefaultPasswordService();
 	}
 
 	@Bean
@@ -76,13 +73,15 @@ public class ShiroConfig {
 
 	/**
 	 * 密码登录Realm
-	 * @param matcher 密码匹配器
+	 * @param passwordService 密码服务
 	 * @return PasswordRealm
 	 */
 	@Bean
-	public PasswordRealm passwordRealm(@Qualifier("hashedCredentialsMatcher") HashedCredentialsMatcher matcher) {
+	public PasswordRealm passwordRealm(PasswordService passwordService) {
 		PasswordRealm userRealm = new PasswordRealm();
-		userRealm.setCredentialsMatcher(matcher);
+		PasswordMatcher passwordMatcher = new PasswordMatcher();
+		passwordMatcher.setPasswordService(passwordService);
+		userRealm.setCredentialsMatcher(passwordMatcher);
 		return userRealm;
 	}
 

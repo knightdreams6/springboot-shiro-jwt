@@ -1,7 +1,6 @@
 package com.knight.shiro.service;
 
 import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
@@ -24,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.credential.HashingPasswordService;
+import org.apache.shiro.crypto.hash.Hash;
 import org.apache.shiro.subject.Subject;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -67,6 +68,11 @@ public class LoginService {
 	private final MessageTemplate messageTemplate;
 
 	/**
+	 * 密码服务
+	 */
+	private final HashingPasswordService passwordService;
+
+	/**
 	 * mailCode登录
 	 * @param mail mail
 	 * @param code mailCode
@@ -95,12 +101,11 @@ public class LoginService {
 		if (ObjectUtil.isNull(user)) {
 			throw new ServiceException(CommonResultConstants.MAIL_CODE_EXPIRE);
 		}
-		// 加密所需盐值
-		String salt = IdUtil.simpleUUID();
+
 		// 加密后的密码
-		String encryptPassword = CommonsUtils.encryptPassword(newPassword, salt);
-		user.setSuSalt(salt);
-		user.setSuPassword(encryptPassword);
+		Hash encryptPassword = passwordService.hashPassword(newPassword);
+		user.setSuSalt(encryptPassword.getSalt().toBase64());
+		user.setSuPassword(encryptPassword.toHex());
 		stringRedisTemplate.delete(resetPwdVerifyCodeKey);
 		return userService.updateById(user);
 	}
@@ -262,12 +267,11 @@ public class LoginService {
 				return R.failed();
 			}
 		}
-		// 加密所需盐值
-		String salt = IdUtil.simpleUUID();
+
 		// 加密后的密码
-		String encryptPassword = CommonsUtils.encryptPassword(password, salt);
-		user.setSuSalt(salt);
-		user.setSuPassword(encryptPassword);
+		Hash encryptPassword = passwordService.hashPassword(password);
+		user.setSuSalt(encryptPassword.getSalt().toBase64());
+		user.setSuPassword(encryptPassword.toHex());
 		// 删除缓存
 		stringRedisTemplate.delete(RedisKey.getModifyPasswordCodeKey(username));
 		boolean flag = userService.updateById(user);

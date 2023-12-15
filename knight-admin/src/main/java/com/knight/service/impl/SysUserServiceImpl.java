@@ -1,6 +1,5 @@
 package com.knight.service.impl;
 
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -12,8 +11,9 @@ import com.knight.exception.ServiceException;
 import com.knight.mapper.SysUserMapper;
 import com.knight.service.ISysUserService;
 import com.knight.shiro.service.PermissionsService;
-import com.knight.utils.CommonsUtils;
 import lombok.RequiredArgsConstructor;
+import org.apache.shiro.authc.credential.HashingPasswordService;
+import org.apache.shiro.crypto.hash.Hash;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -38,6 +38,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	 * 事务模板
 	 */
 	private final TransactionTemplate transactionTemplate;
+
+	/**
+	 * 密码服务
+	 */
+	private final HashingPasswordService passwordService;
 
 	@Override
 	public SysUser selectUserBySubjectName(String subjectName) {
@@ -80,16 +85,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		SysUser user = new SysUser();
 		user.setSuPhone(phone);
 		// 如果有密码，则使用用户输入的密码
-		String salt = IdUtil.simpleUUID();
-		String encryptPassword;
+		Hash encryptPasswordHash;
 		if (args.length > 0) {
-			encryptPassword = CommonsUtils.encryptPassword(args[0], salt);
+			encryptPasswordHash = passwordService.hashPassword(args[0]);
 		}
 		else {
-			encryptPassword = CommonsUtils.encryptPassword(phone.substring(5, 11), salt);
+			encryptPasswordHash = passwordService.hashPassword(phone.substring(5, 11));
 		}
-		user.setSuPassword(encryptPassword);
-		user.setSuSalt(salt);
+		user.setSuPassword(encryptPasswordHash.toBase64());
+		user.setSuSalt(encryptPasswordHash.getSalt().toBase64());
 		return transactionTemplate.execute(status -> {
 			try {
 				this.save(user);
