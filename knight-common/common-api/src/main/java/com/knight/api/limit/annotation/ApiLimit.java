@@ -1,5 +1,6 @@
-package com.knight.interceptor.annotation;
+package com.knight.api.limit.annotation;
 
+import com.knight.api.limit.component.LimitKeyGenerator;
 import com.knight.entity.enums.CommonResultConstants;
 
 import java.lang.annotation.Documented;
@@ -20,7 +21,7 @@ import java.lang.annotation.Target;
 @Inherited
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RequestLimit {
+public @interface ApiLimit {
 
 	/**
 	 * 默认为5秒内可访问1次
@@ -36,7 +37,7 @@ public @interface RequestLimit {
 	String key() default "";
 
 	/**
-	 * 自定义limitKey生成器 {@link com.knight.interceptor.LimitKeyGenerator} 与key属性互斥
+	 * 自定义limitKey生成器 {@link LimitKeyGenerator} 与key属性互斥
 	 */
 	String keyGenerator() default "";
 

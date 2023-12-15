@@ -1,16 +1,15 @@
-package com.knight.interceptor.impl;
+package com.knight.api.limit.component;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONUtil;
+import com.knight.api.limit.annotation.ApiLimit;
 import com.knight.entity.base.R;
-import com.knight.interceptor.LimitKeyGenerator;
-import com.knight.interceptor.SimpleLimitKeyGenerator;
-import com.knight.interceptor.annotation.RequestLimit;
 import com.knight.utils.ServletUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.function.SingletonSupplier;
 import org.springframework.web.method.HandlerMethod;
@@ -30,7 +29,8 @@ import java.util.concurrent.TimeUnit;
  * @since 2020/6/22 9:30
  */
 @Slf4j
-public class RequestLimitInterceptor implements HandlerInterceptor {
+@Component
+public class ApiLimitInterceptor implements HandlerInterceptor {
 
 	/**
 	 * 限制键生成器
@@ -53,16 +53,16 @@ public class RequestLimitInterceptor implements HandlerInterceptor {
 			HandlerMethod handlerMethod = (HandlerMethod) handler;
 			Method method = handlerMethod.getMethod();
 			// 获取方法中是否包含注解
-			RequestLimit methodAnnotation = method.getAnnotation(RequestLimit.class);
+			ApiLimit methodAnnotation = method.getAnnotation(ApiLimit.class);
 			// 获取类中是否包含注解
-			RequestLimit classAnnotation = method.getDeclaringClass().getAnnotation(RequestLimit.class);
+			ApiLimit classAnnotation = method.getDeclaringClass().getAnnotation(ApiLimit.class);
 			// 如果方法上有注解就优先使用方法上的注解的参数，否则使用类上的
-			RequestLimit requestLimit = methodAnnotation != null ? methodAnnotation : classAnnotation;
-			if (requestLimit != null) {
-				log.info("接口请求限制拦截器执行了...");
-				if (isLimit(request, handlerMethod, requestLimit)) {
+			ApiLimit apiLimit = methodAnnotation != null ? methodAnnotation : classAnnotation;
+			if (apiLimit != null) {
+				log.debug("接口请求限制拦截器执行了...");
+				if (isLimit(request, handlerMethod, apiLimit)) {
 					// 返回请求限制错误
-					ServletUtils.renderString(response, JSONUtil.toJsonStr(R.failed(requestLimit.msg())));
+					ServletUtils.renderString(response, JSONUtil.toJsonStr(R.failed(apiLimit.msg())));
 					return false;
 				}
 			}
@@ -74,20 +74,20 @@ public class RequestLimitInterceptor implements HandlerInterceptor {
 	 * 判断是否超过次数限制
 	 * @param request HttpServletRequest
 	 * @param handlerMethod handlerMethod
-	 * @param requestLimit requestLimit
+	 * @param apiLimit apiLimit
 	 * @return boolean true表示超过
 	 */
-	public boolean isLimit(HttpServletRequest request, HandlerMethod handlerMethod, RequestLimit requestLimit) {
+	public boolean isLimit(HttpServletRequest request, HandlerMethod handlerMethod, ApiLimit apiLimit) {
 		String limitKey;
 		// 如果注解指定的key不为空
-		if (StrUtil.isNotEmpty(requestLimit.key())) {
-			limitKey = requestLimit.key();
+		if (StrUtil.isNotEmpty(apiLimit.key())) {
+			limitKey = apiLimit.key();
 		}
 		else {
 			// 如果指定的keyGenerator不为空
-			String customKeyGeneratorName = requestLimit.keyGenerator();
+			String customKeyGeneratorName = apiLimit.keyGenerator();
 			LimitKeyGenerator limitKeyGenerator;
-			if (StrUtil.isNotEmpty(requestLimit.keyGenerator())) {
+			if (StrUtil.isNotEmpty(apiLimit.keyGenerator())) {
 				limitKeyGenerator = SpringUtil.getBean(customKeyGeneratorName, LimitKeyGenerator.class);
 				Assert.notNull(limitKeyGenerator, String.format("指定的limitKey:%s生成器不存在", customKeyGeneratorName));
 			}
@@ -100,14 +100,14 @@ public class RequestLimitInterceptor implements HandlerInterceptor {
 		Integer count = redisTemplate.opsForValue().get(limitKey);
 		if (count == null) {
 			// 初始化次数
-			redisTemplate.opsForValue().set(limitKey, 1, requestLimit.second(), TimeUnit.SECONDS);
+			redisTemplate.opsForValue().set(limitKey, 1, apiLimit.second(), TimeUnit.SECONDS);
 		}
 		else {
-			if (count >= requestLimit.maxCount()) {
+			if (count >= apiLimit.maxCount()) {
 				return true;
 			}
 			// 次数自增
-			redisTemplate.opsForValue().set(limitKey, count + 1, requestLimit.second(), TimeUnit.SECONDS);
+			redisTemplate.opsForValue().set(limitKey, count + 1, apiLimit.second(), TimeUnit.SECONDS);
 		}
 		return false;
 	}

@@ -1,8 +1,9 @@
 package com.knight.config;
 
-import com.knight.interceptor.impl.RequestLimitInterceptor;
-import org.springframework.context.annotation.Bean;
+import com.knight.api.limit.component.ApiLimitInterceptor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -12,7 +13,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @since 2020/1/14 15:38
  */
 @Configuration
+@RequiredArgsConstructor
 public class MvcConfig implements WebMvcConfigurer {
+
+	/**
+	 * api限制拦截器
+	 */
+	private final ApiLimitInterceptor apiLimitInterceptor;
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
@@ -26,15 +33,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(requestLimitInterceptor())
-			.excludePathPatterns("/webjars/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/**", "/images/**")
-			.addPathPatterns("/**")
-			.order(Integer.MAX_VALUE - 1);
-	}
-
-	@Bean
-	public RequestLimitInterceptor requestLimitInterceptor() {
-		return new RequestLimitInterceptor();
+		registry.addInterceptor(apiLimitInterceptor).order(Ordered.LOWEST_PRECEDENCE - 1);
 	}
 
 }

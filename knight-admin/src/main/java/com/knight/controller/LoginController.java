@@ -1,7 +1,7 @@
 package com.knight.controller;
 
+import com.knight.api.limit.annotation.ApiLimit;
 import com.knight.entity.base.R;
-import com.knight.interceptor.annotation.RequestLimit;
 import com.knight.shiro.service.LoginService;
 import com.knight.valid.annotation.PhoneNumber;
 import com.knight.vo.request.LoginCodeReqVo;
@@ -64,14 +64,14 @@ public class LoginController {
 		return loginService.loginByMailCode(reqVo.getMail(), reqVo.getCode());
 	}
 
-	@RequestLimit(second = 60 * 60, maxCount = 10)
+	@ApiLimit(second = 60 * 60, maxCount = 10)
 	@ApiOperation(value = "发送登录验证码")
 	@GetMapping("/code")
 	public R<Object> sendLoginCode(@PhoneNumber @ApiParam(value = "手机号") @RequestParam String phone) {
 		return R.bool(loginService.sendLoginCode(phone));
 	}
 
-	@RequestLimit(second = 60 * 60 * 24, maxCount = 5)
+	@ApiLimit(second = 60 * 60 * 24, maxCount = 5)
 	@ApiOperation("发送修改密码验证码")
 	@GetMapping("/modify-pwd-code")
 	public R<Object> sendModifyPasswordCode(@PhoneNumber @ApiParam(value = "手机号") @RequestParam String phone) {

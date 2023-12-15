@@ -1,4 +1,4 @@
-package com.knight.interceptor;
+package com.knight.api.limit.component;
 
 import org.springframework.web.method.HandlerMethod;
 

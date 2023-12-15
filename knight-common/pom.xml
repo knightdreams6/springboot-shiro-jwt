@@ -12,7 +12,6 @@
 
   <modules>
     <module>common-valid</module>
-    <module>common-interceptor</module>
     <module>common-utils</module>
     <module>common-mybatis-plus</module>
     <module>common-swagger</module>

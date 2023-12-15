@@ -1,4 +1,4 @@
-package com.knight.interceptor;
+package com.knight.api.limit.component;
 
 import org.springframework.util.DigestUtils;
 import org.springframework.web.method.HandlerMethod;
@@ -18,7 +18,7 @@ public class SimpleLimitKeyGenerator implements LimitKeyGenerator {
 	/**
 	 * 限制key前缀
 	 */
-	private static final String LIMIT_KEY_PREFIX = "LIMIT:";
+	private static final String LIMIT_KEY_PREFIX = "API:LIMIT:";
 
 	@Override
 	public String generate(HttpServletRequest request, HandlerMethod handlerMethod) {
