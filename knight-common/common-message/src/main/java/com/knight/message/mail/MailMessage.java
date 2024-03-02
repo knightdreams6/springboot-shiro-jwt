@@ -25,6 +25,7 @@ public class MailMessage {
 	/**
 	 * 发送方
 	 */
+	@Builder.Default
 	private String sender = StringPool.EMPTY;
 
 	/**
@@ -45,21 +46,25 @@ public class MailMessage {
 	/**
 	 * 内容类型
 	 */
+	@Builder.Default
 	private MessageContentTypeEnums contentType = MessageContentTypeEnums.TEXT;
 
 	/**
 	 * 抄送人列表
 	 */
+	@Builder.Default
 	private List<String> ccList = Collections.emptyList();
 
 	/**
 	 * 秘密抄送人列表
 	 */
+	@Builder.Default
 	private List<String> bccList = Collections.emptyList();
 
 	/**
 	 * 附件列表
 	 */
+	@Builder.Default
 	private List<MailAttachmentVo> attachmentList = Collections.emptyList();
 
 }
