@@ -21,7 +21,8 @@
 
 #### 其它项目
 
-* 配套前端项目 https://gitee.com/knightdreams/vue3-mobile-login-demo
+* 配套web前端项目 https://gitee.com/knightdreams/vue3-mobile-login-demo
+* 配套android项目 https://gitee.com/knightdreams/android-login-demo
 * 配套管理端项目 https://gitee.com/knightdreams/knightdreams-admin
 * 微服务架构项目 https://gitee.com/knightdreams/spring-cloud-alibaba-2022
 
