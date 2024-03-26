@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.net.ConnectException;
-
 /**
  * 异常处理程序解析器
  *
@@ -25,13 +23,6 @@ public class ExceptionHandlerResolver {
 	@ResponseStatus(code = HttpStatus.OK)
 	public R<Object> handleMinioException(MinioException e) {
 		log.error("ExceptionHandlerResolver#handleMinioException: {}", e.getLocalizedMessage());
-		return R.failed(StorageResultConstants.OSS_EXCEPTION);
-	}
-
-	@ExceptionHandler(ConnectException.class)
-	@ResponseStatus(code = HttpStatus.OK)
-	public R<Object> handleConnectException(ConnectException e) {
-		log.error("ExceptionHandlerResolver#handleConnectException: {}", e.getLocalizedMessage());
 		return R.failed(StorageResultConstants.OSS_EXCEPTION);
 	}
 
