@@ -22,7 +22,7 @@
 
     <!-- shiro
             https://github.com/apache/shiro/tags -->
-    <shiro-spring-boot.version>1.13.0</shiro-spring-boot.version>
+    <shiro-spring-boot.version>2.0.0</shiro-spring-boot.version>
 
     <!-- SpringBoot
             https://github.com/spring-projects/spring-boot/releases -->

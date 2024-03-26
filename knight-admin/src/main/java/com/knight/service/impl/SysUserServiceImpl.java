@@ -12,8 +12,7 @@ import com.knight.mapper.SysUserMapper;
 import com.knight.service.ISysUserService;
 import com.knight.shiro.service.PermissionsService;
 import lombok.RequiredArgsConstructor;
-import org.apache.shiro.authc.credential.HashingPasswordService;
-import org.apache.shiro.crypto.hash.Hash;
+import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -42,7 +41,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	/**
 	 * 密码服务
 	 */
-	private final HashingPasswordService passwordService;
+	private final PasswordService passwordService;
 
 	@Override
 	public SysUser selectUserBySubjectName(String subjectName) {
@@ -85,15 +84,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		SysUser user = new SysUser();
 		user.setSuPhone(phone);
 		// 如果有密码，则使用用户输入的密码
-		Hash encryptPasswordHash;
+		String encryptPasswordHash;
 		if (args.length > 0) {
-			encryptPasswordHash = passwordService.hashPassword(args[0]);
+			encryptPasswordHash = passwordService.encryptPassword(args[0]);
 		}
 		else {
-			encryptPasswordHash = passwordService.hashPassword(phone.substring(5, 11));
+			encryptPasswordHash = passwordService.encryptPassword(phone.substring(5, 11));
 		}
-		user.setSuPassword(encryptPasswordHash.toBase64());
-		user.setSuSalt(encryptPasswordHash.getSalt().toBase64());
+		user.setSuPassword(encryptPasswordHash);
+		user.setSuSalt("");
 		return transactionTemplate.execute(status -> {
 			try {
 				this.save(user);

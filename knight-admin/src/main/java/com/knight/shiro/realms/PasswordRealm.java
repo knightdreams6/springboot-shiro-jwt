@@ -10,13 +10,9 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.codec.Base64;
-import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.ByteSource;
 
 import javax.annotation.Resource;
 
@@ -62,14 +58,7 @@ public class PasswordRealm extends AuthorizingRealm {
 			// 抛出账号不存在异常
 			throw new UnknownAccountException(UsernamePasswordToken.class.getName());
 		}
-		// 1.principal：认证的实体信息，可以是手机号，也可以是数据表对应的用户的实体类对象
-		// 2.credentials：密码
-		Sha256Hash credentials = Sha256Hash.fromHexString(user.getSuPassword());
-		credentials.setSalt(ByteSource.Util.bytes(Base64.decode(user.getSuSalt())));
-		credentials.setIterations(DefaultPasswordService.DEFAULT_HASH_ITERATIONS);
-		// 3.realmName：当前realm对象的name，调用父类的getName()方法即可
-		String realmName = super.getName();
-		return new SimpleAuthenticationInfo(user, credentials, realmName);
+		return new SimpleAuthenticationInfo(user, user.getSuPassword(), null, super.getName());
 	}
 
 }

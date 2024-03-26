@@ -23,8 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authc.credential.HashingPasswordService;
-import org.apache.shiro.crypto.hash.Hash;
+import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.subject.Subject;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -70,7 +69,7 @@ public class LoginService {
 	/**
 	 * 密码服务
 	 */
-	private final HashingPasswordService passwordService;
+	private final PasswordService passwordService;
 
 	/**
 	 * mailCode登录
@@ -103,9 +102,8 @@ public class LoginService {
 		}
 
 		// 加密后的密码
-		Hash encryptPassword = passwordService.hashPassword(newPassword);
-		user.setSuSalt(encryptPassword.getSalt().toBase64());
-		user.setSuPassword(encryptPassword.toHex());
+		String encryptPassword = passwordService.encryptPassword(newPassword);
+		user.setSuPassword(encryptPassword);
 		stringRedisTemplate.delete(resetPwdVerifyCodeKey);
 		return userService.updateById(user);
 	}
@@ -269,9 +267,7 @@ public class LoginService {
 		}
 
 		// 加密后的密码
-		Hash encryptPassword = passwordService.hashPassword(password);
-		user.setSuSalt(encryptPassword.getSalt().toBase64());
-		user.setSuPassword(encryptPassword.toHex());
+		user.setSuPassword(passwordService.encryptPassword(password));
 		// 删除缓存
 		stringRedisTemplate.delete(RedisKey.getModifyPasswordCodeKey(username));
 		boolean flag = userService.updateById(user);

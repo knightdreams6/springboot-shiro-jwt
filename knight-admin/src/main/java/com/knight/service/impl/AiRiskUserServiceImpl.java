@@ -4,11 +4,7 @@ import com.knight.api.risk.component.ApiRiskUserService;
 import com.knight.entity.orm.SysUser;
 import com.knight.service.ISysUserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.shiro.authc.credential.DefaultPasswordService;
-import org.apache.shiro.authc.credential.HashingPasswordService;
-import org.apache.shiro.codec.Base64;
-import org.apache.shiro.crypto.hash.Sha256Hash;
-import org.apache.shiro.util.ByteSource;
+import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -31,7 +27,7 @@ public class AiRiskUserServiceImpl implements ApiRiskUserService {
 	/**
 	 * 密码服务
 	 */
-	private final HashingPasswordService passwordService;
+	private final PasswordService passwordService;
 
 	@Override
 	public boolean passwordsMatch(String username, String password) {
@@ -39,11 +35,7 @@ public class AiRiskUserServiceImpl implements ApiRiskUserService {
 		if (Objects.isNull(user)) {
 			return false;
 		}
-
-		Sha256Hash sha256Hash = Sha256Hash.fromHexString(user.getSuPassword());
-		sha256Hash.setSalt(ByteSource.Util.bytes(Base64.decode(user.getSuSalt())));
-		sha256Hash.setIterations(DefaultPasswordService.DEFAULT_HASH_ITERATIONS);
-		return passwordService.passwordsMatch(password, sha256Hash);
+		return passwordService.passwordsMatch(password, user.getSuPassword());
 	}
 
 }

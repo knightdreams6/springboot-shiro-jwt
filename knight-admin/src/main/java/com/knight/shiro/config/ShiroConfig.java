@@ -9,10 +9,10 @@ import com.knight.shiro.realms.PhoneCodeRealm;
 import org.apache.shiro.authc.Authenticator;
 import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.authc.credential.HashingPasswordService;
 import org.apache.shiro.authc.credential.PasswordMatcher;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
@@ -34,8 +34,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author lixiao
- * @since 2019/10/3 15:39
+ * shiro配置类
+ *
+ * @author kinght
  */
 @Configuration
 @AutoConfigureBefore(value = ShiroAutoConfiguration.class)
@@ -53,21 +54,22 @@ public class ShiroConfig {
 	}
 
 	/**
-	 * Hash密码服务 默认使用 SHA-256 迭代 500000
+	 * Hash密码服务 默认使用 argon2id
 	 * @return HashingPasswordService
 	 */
 	@Bean
-	public HashingPasswordService passwordService() {
+	public PasswordService passwordService() {
 		return new DefaultPasswordService();
 	}
 
+	/**
+	 * HashedCredentialsMatcher
+	 * @return HashedCredentialsMatcher
+	 */
 	@Bean
 	public HashedCredentialsMatcher codeCredentialsMatcher() {
 		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher();
-		// 设置哈希算法名称
-		matcher.setHashAlgorithmName("SHA-256");
-		// 设置存储凭证十六进制编码
-		matcher.setStoredCredentialsHexEncoded(true);
+		matcher.setHashAlgorithmName(Sha256Hash.ALGORITHM_NAME);
 		return matcher;
 	}
 
