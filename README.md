@@ -6,12 +6,16 @@
 
 接口文档地址：http://localhost:8888/doc.html
 
+#### 新版的shiro默认使用Argon2密码哈希算法
+
+Argon2描述详见：https://argon2-cffi.readthedocs.io/en/stable/argon2.html
+
 #### 项目用到的框架/工具简介与其仓库地址
 
 * SpringBoot https://github.com/spring-projects/spring-boot/releases
 * jwt https://github.com/auth0/java-jwt/tags
 * mybatis-plus https://github.com/baomidou/mybatis-plus/releases
-* shiro https://github.com/apache/shiro/tags
+* shiro2 https://github.com/apache/shiro/tags
 * hutool https://github.com/dromara/hutool/releases
 * minio https://github.com/minio/minio-java/releases
 * knife4j https://gitee.com/xiaoym/knife4j/releases
