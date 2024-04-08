@@ -8,8 +8,7 @@ create table project.sys_user
   id          varchar(20) not null comment '用户id'
     primary key,
   su_phone    char(18)    not null comment '手机号',
-  su_salt     char(32)    not null comment '盐值',
-  su_password char(64)    not null comment '密码',
+  su_password char(200)   not null comment '密码',
   su_avatar   varchar(255) null comment '头像',
   su_name     char(20) null comment '用户名',
   su_sex      tinyint(1) default 0 null comment '性别0男1女',
@@ -114,10 +113,11 @@ create table project.multipart_chunk_files
 ) comment '分片块文件记录' row_format = DYNAMIC;
 
 
-INSERT INTO project.sys_user (id, su_phone, su_salt, su_password, su_avatar, su_name, su_sex, su_birth, su_mail,
+-- 默认密码 123456
+INSERT INTO project.sys_user (id, su_phone, su_password, su_avatar, su_name, su_sex, su_birth, su_mail,
                               create_date, update_date, delete_date, deleted)
-VALUES ('1', '18735182285', 'c4d5c68fbf60498fadcae8e99f391535',
-        'ac95929e73d1b057a701a3d3fb3e2f88a3be69cfa0ce8dcd2b6c6b1c7669f0c1',
+VALUES ('1', '18735182285',
+        '$shiro2$argon2id$v=19$t=1,m=65536,p=4$MPA60MRQhEogL3M/NNerFg$nePPF9Q0nTOKSjP8ncAyK7TjrGBSEylHV8Y9pPR2tZg',
         'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg', 'sweetBaby', 0, '1997-05-12', '',
         '2020-05-06 13:00:31', '2020-05-06 13:01:25', null, 0);
 

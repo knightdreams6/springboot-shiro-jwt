@@ -32,9 +32,6 @@ public class SysUser extends BaseBean {
 	@ApiModelProperty("手机号")
 	private String suPhone;
 
-	@ApiModelProperty("盐值")
-	private String suSalt;
-
 	@ApiModelProperty("密码")
 	private String suPassword;
 

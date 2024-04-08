@@ -92,7 +92,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			encryptPasswordHash = passwordService.encryptPassword(phone.substring(5, 11));
 		}
 		user.setSuPassword(encryptPasswordHash);
-		user.setSuSalt("");
 		return transactionTemplate.execute(status -> {
 			try {
 				this.save(user);
