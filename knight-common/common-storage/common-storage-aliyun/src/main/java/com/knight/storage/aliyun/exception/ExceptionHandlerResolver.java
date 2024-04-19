@@ -22,14 +22,14 @@ public class ExceptionHandlerResolver {
 
 	@ExceptionHandler(ServiceException.class)
 	@ResponseStatus(code = HttpStatus.OK)
-	public R<Object> handleServiceException(ServiceException e) {
+	public R<Void> handleServiceException(ServiceException e) {
 		log.error("ExceptionHandlerResolver#handleServiceException: {}", e.getLocalizedMessage());
 		return R.failed(StorageResultConstants.OSS_EXCEPTION);
 	}
 
 	@ExceptionHandler(ClientException.class)
 	@ResponseStatus(code = HttpStatus.OK)
-	public R<Object> handleClientException(ClientException e) {
+	public R<Void> handleClientException(ClientException e) {
 		log.error("ExceptionHandlerResolver#ClientException: {}", e.getLocalizedMessage());
 		return R.failed(StorageResultConstants.OSS_EXCEPTION);
 	}

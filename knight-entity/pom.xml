@@ -26,12 +26,6 @@
     </dependency>
 
     <dependency>
-      <groupId>io.swagger</groupId>
-      <artifactId>swagger-annotations</artifactId>
-      <scope>compile</scope>
-    </dependency>
-
-    <dependency>
       <groupId>com.knight</groupId>
       <artifactId>common-utils</artifactId>
     </dependency>

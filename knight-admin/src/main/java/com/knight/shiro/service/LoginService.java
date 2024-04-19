@@ -19,6 +19,7 @@ import com.knight.shiro.token.MailCodeToken;
 import com.knight.shiro.token.PhoneCodeToken;
 import com.knight.utils.CommonsUtils;
 import com.knight.vo.request.LoginPasswordReqVo;
+import com.knight.vo.response.LoginAuthDataVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -32,8 +33,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -75,16 +74,16 @@ public class LoginService {
 	 * mailCode登录
 	 * @param mail mail
 	 * @param code mailCode
-	 * @return {@link R}<{@link Object}>
+	 * @return {@link R}<{@link LoginAuthDataVo}>
 	 */
-	public R<Object> loginByMailCode(String mail, String code) {
+	public R<LoginAuthDataVo> loginByMailCode(String mail, String code) {
 		// 1.获取Subject
 		Subject subject = SecurityUtils.getSubject();
 		// 2.封装用户数据
 		MailCodeToken token = new MailCodeToken(mail, code);
 		// 3.执行登录方法
 		subject.login(token);
-		return R.ok(returnLoginInitParam(mail));
+		return R.ok(returnLoginAuthData(mail));
 	}
 
 	/**
@@ -97,7 +96,7 @@ public class LoginService {
 			throw new ServiceException(CommonResultConstants.MAIL_CODE_EXPIRE);
 		}
 		SysUser user = userService.selectUserByPhone(username);
-		if (ObjectUtil.isNull(user)) {
+		if (Objects.isNull(user)) {
 			throw new ServiceException(CommonResultConstants.MAIL_CODE_EXPIRE);
 		}
 
@@ -205,14 +204,14 @@ public class LoginService {
 		return true;
 	}
 
-	public R<Object> loginByPassword(LoginPasswordReqVo reqVo) {
+	public R<LoginAuthDataVo> loginByPassword(LoginPasswordReqVo reqVo) {
 		// 1.获取Subject
 		Subject subject = SecurityUtils.getSubject();
 		// 2.封装用户数据
 		UsernamePasswordToken token = new UsernamePasswordToken(reqVo.getUsername(), reqVo.getPassword());
 		// 3.执行登录方法
 		subject.login(token);
-		return R.ok(returnLoginInitParam(reqVo.getUsername()));
+		return R.ok(returnLoginAuthData(reqVo.getUsername()));
 	}
 
 	/**
@@ -221,7 +220,7 @@ public class LoginService {
 	 * @param code 代码
 	 * @return {@link R}
 	 */
-	public R<Object> loginByCode(String phone, String code) {
+	public R<LoginAuthDataVo> loginByCode(String phone, String code) {
 		// 1.获取Subject
 		Subject subject = SecurityUtils.getSubject();
 		SysUser sysUser = userService.selectUserByPhone(phone);
@@ -234,7 +233,7 @@ public class LoginService {
 		PhoneCodeToken token = new PhoneCodeToken(phone, code);
 		// 4.执行登录方法
 		subject.login(token);
-		return R.ok(returnLoginInitParam(phone));
+		return R.ok(returnLoginAuthData(phone));
 	}
 
 	/**
@@ -244,7 +243,7 @@ public class LoginService {
 	 * @param password 密码
 	 * @return {@link R}
 	 */
-	public R<Object> modifyPassword(String username, String code, String password) {
+	public R<LoginAuthDataVo> modifyPassword(String username, String code, String password) {
 		String modifyCode = stringRedisTemplate.opsForValue().get(RedisKey.getModifyPasswordCodeKey(username));
 		// 判断redis中是否存在验证码
 		if (Objects.isNull(modifyCode)) {
@@ -258,8 +257,8 @@ public class LoginService {
 		// 如果用户不存在，执行注册
 		if (Objects.isNull(user)) {
 			Boolean flag = userService.register(username, password);
-			if (flag) {
-				return R.ok(this.returnLoginInitParam(username));
+			if (Boolean.TRUE.equals(flag)) {
+				return R.ok(this.returnLoginAuthData(username));
 			}
 			else {
 				return R.failed();
@@ -272,49 +271,50 @@ public class LoginService {
 		stringRedisTemplate.delete(RedisKey.getModifyPasswordCodeKey(username));
 		boolean flag = userService.updateById(user);
 		if (flag) {
-			return R.ok(this.returnLoginInitParam(username));
+			return R.ok(this.returnLoginAuthData(username));
 		}
 		return R.failed();
 	}
 
 	/**
-	 * 返回登录后初始化参数
+	 * 返回登录授权数据
 	 * @param username 用户名
-	 * @return Map<String, Object>
+	 * @return LoginAuthDataVo
 	 */
-	private Map<String, Object> returnLoginInitParam(String username) {
-		Map<String, Object> data = new HashMap<>(4);
+	private LoginAuthDataVo returnLoginAuthData(String username) {
+		LoginAuthDataVo data = new LoginAuthDataVo();
 		// 生成访问Token
 		String token = tokenService.createAccessToken(username);
 		// 生成刷新token
 		String refreshToken = tokenService.createRefreshToken(username);
 		// token
-		data.put("token", token);
+		data.setToken(token);
 		// 刷新时所需token
-		data.put("refreshToken", refreshToken);
+		data.setRefreshToken(refreshToken);
 		return data;
 	}
 
 	/**
 	 * 令牌刷新
 	 * @param refreshToken 刷新令牌
-	 * @return {@link R}<{@link Object}>
+	 * @return {@link R}<{@link LoginAuthDataVo}>
 	 */
-	public R<Object> tokenRefresh(String refreshToken) {
+	public R<LoginAuthDataVo> tokenRefresh(String refreshToken) {
 		boolean verify = tokenService.verify(refreshToken);
 		if (!verify) {
 			return R.failed(CommonResultConstants.REFRESH_TOKEN_INVALID);
 		}
 		String subject = tokenService.getSubject(refreshToken);
-		Map<String, Object> data = new HashMap<>(4);
+
+		LoginAuthDataVo data = new LoginAuthDataVo();
 		// 生成访问Token
 		String token = tokenService.createAccessToken(subject);
 		// 生成刷新token
 		String newRefreshToken = tokenService.createRefreshToken(subject);
-		// toke
-		data.put("token", token);
+		// token
+		data.setToken(token);
 		// 刷新时所需token
-		data.put("refreshToken", newRefreshToken);
+		data.setToken(newRefreshToken);
 		return R.ok(data);
 	}
 

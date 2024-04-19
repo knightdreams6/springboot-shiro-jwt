@@ -21,7 +21,7 @@ public class ExceptionHandlerResolver {
 
 	@ExceptionHandler(MinioException.class)
 	@ResponseStatus(code = HttpStatus.OK)
-	public R<Object> handleMinioException(MinioException e) {
+	public R<Void> handleMinioException(MinioException e) {
 		log.error("ExceptionHandlerResolver#handleMinioException: {}", e.getLocalizedMessage());
 		return R.failed(StorageResultConstants.OSS_EXCEPTION);
 	}

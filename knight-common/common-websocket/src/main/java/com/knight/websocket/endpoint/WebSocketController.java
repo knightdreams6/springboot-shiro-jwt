@@ -1,7 +1,6 @@
 package com.knight.websocket.endpoint;
 
 import com.knight.entity.base.R;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -40,7 +39,10 @@ public class WebSocketController {
 	 */
 	private final SimpUserRegistry simpUserRegistry;
 
-	@ApiOperation(value = "获取连接的用户列表")
+	/**
+	 * 获取连接的用户列表
+	 * @return R<Set < Principal>>
+	 */
 	@RequiresRoles("admin")
 	@GetMapping("/ws/user/list")
 	@ResponseBody
@@ -55,10 +57,15 @@ public class WebSocketController {
 		return String.format("Application responded to your message: \"%s\"", message.getMessage());
 	}
 
-	@ApiOperation(value = "给指定的用户发送消息")
+	/**
+	 * 给指定的用户发送消息
+	 * @param user 用户
+	 * @param payload 消息
+	 * @return R<Void>
+	 */
 	@GetMapping("/ws/send")
 	@ResponseBody
-	public R<Object> sendUser(@RequestParam String user, @RequestParam String payload) {
+	public R<Void> sendUser(@RequestParam String user, @RequestParam String payload) {
 		simpMessagingTemplate.convertAndSendToUser(user, "/queue/specified", payload);
 		return R.ok();
 	}

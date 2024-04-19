@@ -2,9 +2,8 @@ package com.knight.valid.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.knight.valid.annotation.PhoneNumber;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 /**
  * @author lixiao
@@ -17,7 +16,7 @@ public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, St
 		if (StrUtil.isBlank(phoneField)) {
 			return false;
 		}
-		return phoneField.matches("^1[0-9]{10}$");
+		return phoneField.matches("^1\\d{10}$");
 	}
 
 }

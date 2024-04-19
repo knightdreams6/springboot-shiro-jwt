@@ -7,8 +7,6 @@ import com.knight.storage.vo.response.OssUploadR;
 import com.knight.storage.vo.response.UploadPartVo;
 import com.knight.vo.request.MultipartStartReqVo;
 import com.knight.vo.request.UploadPartReqVo;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
  * @author knight
  * @since 2023/01/15
  */
-@Api(tags = "【attachment】附件")
 @RestController
 @RequestMapping("/attachment")
 @RequiredArgsConstructor
@@ -31,28 +28,44 @@ public class AttachmentController {
 	 */
 	private final StorageTemplate storageTemplate;
 
-	@ApiOperation(value = "上传附件")
+	/**
+	 * 上传附件
+	 * @param attachment 附件
+	 * @return R<OssUploadR>
+	 */
 	@PostMapping
 	@RequiresPermissions(value = "attachment:insert")
 	public R<OssUploadR> upload(@RequestPart MultipartFile attachment) {
 		return storageTemplate.upload(attachment);
 	}
 
-	@ApiOperation(value = "下载附件")
+	/**
+	 * 下载附件
+	 * @param objectName objectName
+	 * @return R<String>
+	 */
 	@GetMapping
 	@RequiresPermissions(value = "attachment:get")
 	public R<String> download(@RequestParam String objectName) {
 		return storageTemplate.getUrl(objectName);
 	}
 
-	@ApiOperation(value = "删除附件")
+	/**
+	 * 删除附件
+	 * @param objectName objectName
+	 * @return R<Void>
+	 */
 	@DeleteMapping
 	@RequiresPermissions(value = "attachment:remove")
-	public R<Object> delete(@RequestParam String objectName) {
+	public R<Void> delete(@RequestParam String objectName) {
 		return storageTemplate.remove(objectName);
 	}
 
-	@ApiOperation(value = "开始分片上传")
+	/**
+	 * 开始分片上传
+	 * @param multipartStartReqVo MultipartStartReqVo
+	 * @return R<CreateMultipartUploadVo>
+	 */
 	@PostMapping("/multipart/start")
 	@RequiresPermissions(value = "attachment:insert")
 	public R<CreateMultipartUploadVo> multipartStart(@RequestBody MultipartStartReqVo multipartStartReqVo) {
@@ -60,7 +73,11 @@ public class AttachmentController {
 				multipartStartReqVo.getFileHash(), multipartStartReqVo.getChunks(), multipartStartReqVo.getSize());
 	}
 
-	@ApiOperation(value = "分片上传")
+	/**
+	 * 分片上传
+	 * @param uploadPartReqVo UploadPartReqVo
+	 * @return R<UploadPartVo>
+	 */
 	@PostMapping("/multipart/part")
 	@RequiresPermissions(value = "attachment:insert")
 	public R<UploadPartVo> multipartUpload(UploadPartReqVo uploadPartReqVo) {
@@ -68,10 +85,14 @@ public class AttachmentController {
 				uploadPartReqVo.getPartFile());
 	}
 
-	@ApiOperation(value = "完成分片上传")
+	/**
+	 * 完成分片上传
+	 * @param uploadId 上传id
+	 * @return R<UploadPartVo>
+	 */
 	@PostMapping("/multipart/complete")
 	@RequiresPermissions(value = "attachment:insert")
-	public R<Object> multipartComplete(@RequestParam String uploadId) {
+	public R<Void> multipartComplete(@RequestParam String uploadId) {
 		return storageTemplate.completeMultipartUpload(uploadId);
 	}
 

@@ -1,12 +1,14 @@
 package com.knight.api.risk.component;
 
-import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.knight.api.constants.ApiResultConstants;
 import com.knight.api.risk.api.ApiRisk;
 import com.knight.api.risk.api.dto.ApiRiskInfoDto;
 import com.knight.api.risk.api.vo.response.ApiRiskVo;
 import com.knight.entity.base.R;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -15,9 +17,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * api风险认证接口
@@ -75,12 +74,12 @@ public class ApiRiskInterceptor implements HandlerInterceptor {
 			.saveRiskInfo(new ApiRiskInfoDto(principal.toString(), apiPath, apiRisk.expired(), apiRisk.expiredUnit()));
 
 		// 返回需要认证 并返回认证类型
-		R<Object> failedR = R.failed(ApiResultConstants.API_RISK);
+		R<ApiRiskVo> failedR = R.failed(ApiResultConstants.API_RISK);
 		ApiRiskVo vo = new ApiRiskVo();
 		vo.setType(apiRisk.verifyType());
 		vo.setCode(code);
 		failedR.setData(vo);
-		ServletUtil.write(response, objectMapper.writeValueAsString(failedR), MediaType.APPLICATION_JSON_UTF8_VALUE);
+		JakartaServletUtil.write(response, objectMapper.writeValueAsString(failedR), MediaType.APPLICATION_JSON_VALUE);
 		return false;
 	}
 

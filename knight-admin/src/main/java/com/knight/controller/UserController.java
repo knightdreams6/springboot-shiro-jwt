@@ -10,35 +10,22 @@ import com.knight.shiro.service.TokenService;
 import com.knight.valid.annotation.PhoneNumber;
 import com.knight.vo.response.SysUserVo;
 import com.knight.vo.response.UserBasicInfoVo;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * <p>
- * 用户前端控制器
- * </p>
+ * 用户
  *
  * @author knight
- * @since 2019-12-17
  */
 @ApiVersion
-@Api(tags = "【user】用户")
 @RestController
 @RequestMapping("/user")
 @Validated
@@ -55,51 +42,76 @@ public class UserController {
 	 */
 	private final TokenService tokenService;
 
+	/**
+	 * 获取当前用户基本信息
+	 * @return R<UserBasicInfoVo>
+	 */
 	@RequiresUser
-	@ApiOperation(value = "获取当前用户基本信息")
 	@GetMapping("/info")
 	public R<UserBasicInfoVo> info() {
 		return R.vo(tokenService.getLoginUser(), UserBasicInfoVo::new);
 	}
 
+	/**
+	 * 获取当前用户基本信息V2
+	 * @return R<UserBasicInfoVo>
+	 */
 	@ApiVersion(2)
 	@RequiresUser
-	@ApiOperation(value = "获取当前用户基本信息V2")
 	@GetMapping("/info")
 	public R<UserBasicInfoVo> infoV2() {
 		return R.vo(tokenService.getLoginUser(), UserBasicInfoVo::new);
 	}
 
-	@ApiOperation("添加用户")
-	@ApiImplicitParam(name = "phone", value = "手机号", paramType = "query", dataTypeClass = String.class)
+	/**
+	 * 注册
+	 * @param phone 手机号
+	 * @return R<Void>
+	 */
 	@PostMapping("/register")
-	public R<Object> register(@PhoneNumber String phone) {
+	public R<Void> register(@PhoneNumber String phone) {
 		return R.bool(userService.register(phone));
 	}
 
+	/**
+	 * 删除用户
+	 * @param userId 用户id
+	 * @return R<Void>
+	 */
 	@RequiresPermissions("system:user:remove")
-	@ApiOperation("删除用户")
 	@DeleteMapping("/{userId}")
-	public R<Object> deleted(@PathVariable @NotNull(message = "userId不能为空") Integer userId) {
+	public R<Void> deleted(@PathVariable @NotNull(message = "userId不能为空") Integer userId) {
 		return R.bool(userService.removeById(userId));
 	}
 
+	/**
+	 * 修改用户
+	 * @param user SysUser
+	 * @return R<Void>
+	 */
 	@RequiresPermissions("system:user:update")
-	@ApiOperation("修改用户")
 	@PutMapping
-	public R<Object> update(SysUser user) {
+	public R<Void> update(@RequestBody SysUser user) {
 		return R.bool(userService.updateById(user));
 	}
 
+	/**
+	 * 获取所有用户 [system:user:list]权限
+	 * @return R<List<SysUserVo>>
+	 */
 	@RequiresPermissions(value = { "system:user:list" })
-	@ApiOperation(value = "获取所有用户 [system:user:list]权限")
 	@GetMapping
 	public R<List<SysUserVo>> users() {
 		return R.list(userService.list(), SysUserVo::new);
 	}
 
+	/**
+	 * 分页获取用户 [admin]角色权限
+	 * @param pageNum 页数
+	 * @param pageSize 每页数量
+	 * @return R<IPage<SysUserVo>>
+	 */
 	@RequiresRoles(value = { "admin" })
-	@ApiOperation(value = "分页获取用户 [admin]角色权限")
 	@GetMapping("/page")
 	public R<IPage<SysUserVo>> user(@NotNull Integer pageNum, @NotNull Integer pageSize) {
 		IPage<SysUser> page = new Page<>(pageNum, pageSize);

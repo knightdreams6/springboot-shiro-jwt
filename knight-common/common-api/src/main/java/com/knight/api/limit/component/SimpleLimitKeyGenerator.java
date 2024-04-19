@@ -1,9 +1,9 @@
 package com.knight.api.limit.component;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.method.HandlerMethod;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 

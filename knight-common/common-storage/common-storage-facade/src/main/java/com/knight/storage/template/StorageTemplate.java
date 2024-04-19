@@ -70,7 +70,7 @@ public class StorageTemplate implements InitializingBean {
 	/**
 	 * 上传
 	 * @param multipartFile multipartFile
-	 * @return {@link R}<{@link Object}>
+	 * @return {@link R}<{@link OssUploadR}>
 	 */
 	public R<OssUploadR> upload(MultipartFile multipartFile) {
 		return upload(filePathGenerate(multipartFile.getOriginalFilename()), multipartFile);
@@ -80,7 +80,7 @@ public class StorageTemplate implements InitializingBean {
 	 * 上传
 	 * @param objectName 对象名称
 	 * @param multipartFile multipartFile
-	 * @return {@link R}<{@link Object}>
+	 * @return {@link R}<{@link OssUploadR}>
 	 */
 	public R<OssUploadR> upload(String objectName, MultipartFile multipartFile) {
 		try (InputStream inputStream = multipartFile.getInputStream()) {
@@ -96,7 +96,7 @@ public class StorageTemplate implements InitializingBean {
 	 * 上传
 	 * @param objectName 对象名称
 	 * @param inputStream 输入流
-	 * @return {@link R}<{@link Object}>
+	 * @return {@link R}<{@link OssUploadR}>
 	 */
 	public R<OssUploadR> upload(String objectName, InputStream inputStream) {
 		return upload(ossProperties.getDefaultBucket(), objectName, inputStream);
@@ -106,7 +106,7 @@ public class StorageTemplate implements InitializingBean {
 	 * 上传
 	 * @param objectName 对象名称
 	 * @param inputStream 输入流
-	 * @return {@link R}<{@link Object}>
+	 * @return {@link R}<{@link OssUploadR}>
 	 */
 	public R<OssUploadR> upload(String bucketName, String objectName, InputStream inputStream) {
 		return R.ok(ossClient.upload(bucketName, objectName, inputStream));
@@ -145,9 +145,9 @@ public class StorageTemplate implements InitializingBean {
 	/**
 	 * 删除
 	 * @param objectName 对象名称
-	 * @return {@link R}<{@link Object}>
+	 * @return {@link R}<{@link Void}>
 	 */
-	public R<Object> remove(String objectName) {
+	public R<Void> remove(String objectName) {
 		return remove(ossProperties.getDefaultBucket(), objectName);
 	}
 
@@ -157,7 +157,7 @@ public class StorageTemplate implements InitializingBean {
 	 * @param objectName 对象名称
 	 * @return {@link R}<{@link Object}>
 	 */
-	public R<Object> remove(String bucketName, String objectName) {
+	public R<Void> remove(String bucketName, String objectName) {
 		ossClient.remove(bucketName, objectName);
 		return R.ok();
 	}
@@ -248,7 +248,7 @@ public class StorageTemplate implements InitializingBean {
 	 * 完成分片上传
 	 * @param uploadId 上传id
 	 */
-	public R<Object> completeMultipartUpload(String uploadId) {
+	public R<Void> completeMultipartUpload(String uploadId) {
 		String objectName = multipartUploadService.selectObjectNameByUploadId(uploadId);
 		if (StrUtil.isEmpty(objectName)) {
 			return R.failed();

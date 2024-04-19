@@ -3,7 +3,6 @@ package com.knight.entity.orm;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.knight.entity.base.BaseBean;
-import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +17,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("multipart_chunk_files")
-@ApiModel(value = "MultipartChunkFiles对象", description = "分片块文件记录")
 public class MultipartChunkFiles extends BaseBean {
 
 	/** id */

@@ -3,18 +3,12 @@ package com.knight.shiro.realms;
 import cn.hutool.core.util.ObjectUtil;
 import com.knight.entity.orm.SysUser;
 import com.knight.service.ISysUserService;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-
-import javax.annotation.Resource;
 
 /**
  * @author lixiao
@@ -51,7 +45,7 @@ public class PasswordRealm extends AuthorizingRealm {
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
 			throws AuthenticationException {
 		UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-		log.info(token.getUsername() + " - password auth start...");
+		log.info("{} - password auth start...", token.getUsername());
 		// 根据手机号查询用户
 		SysUser user = userService.selectUserByPhone(token.getUsername());
 		if (ObjectUtil.isNull(user)) {

@@ -16,7 +16,26 @@
     <!-- 接口文档 -->
     <dependency>
       <groupId>com.github.xiaoymin</groupId>
-      <artifactId>knife4j-spring-boot-starter</artifactId>
+      <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.therapi</groupId>
+      <artifactId>therapi-runtime-javadoc</artifactId>
+      <version>0.15.0</version>
+    </dependency>
+
+    <!-- Annotation processor -->
+    <dependency>
+      <groupId>com.github.therapi</groupId>
+      <artifactId>therapi-runtime-javadoc-scribe</artifactId>
+      <version>0.15.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>cn.hutool</groupId>
+      <artifactId>hutool-all</artifactId>
+      <scope>provided</scope>
     </dependency>
 
   </dependencies>

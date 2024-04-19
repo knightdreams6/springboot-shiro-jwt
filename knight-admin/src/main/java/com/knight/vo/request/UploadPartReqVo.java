@@ -1,6 +1,5 @@
 package com.knight.vo.request;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,13 +12,19 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 public class UploadPartReqVo {
 
-	@ApiModelProperty(value = "上传id", required = true)
+	/**
+	 * 上传id
+	 */
 	private String uploadId;
 
-	@ApiModelProperty(value = "分片数", required = true)
+	/**
+	 * 分片数
+	 */
 	private Integer partNumber;
 
-	@ApiModelProperty(value = "分片文件", required = true)
+	/**
+	 * 分片文件
+	 */
 	private MultipartFile partFile;
 
 }

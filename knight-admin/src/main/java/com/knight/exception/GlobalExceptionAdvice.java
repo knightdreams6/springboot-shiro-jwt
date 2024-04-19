@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.knight.entity.base.R;
 import com.knight.entity.enums.CommonResultConstants;
 import com.knight.entity.enums.IResultConstants;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.ExpiredCredentialsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -18,8 +19,6 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.ConstraintViolationException;
-
 /**
  * @author lixiao
  * @since 2019/8/7 11:09
@@ -33,7 +32,7 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(UnknownAccountException.class)
-	public ResponseEntity<R<Object>> handleUnknownAccountException(UnknownAccountException e) {
+	public ResponseEntity<R<Void>> handleUnknownAccountException(UnknownAccountException e) {
 		String message = e.getLocalizedMessage();
 		IResultConstants resultConstants;
 		if (StrUtil.equals(message, UsernamePasswordToken.class.getName())) {
@@ -50,10 +49,10 @@ public class GlobalExceptionAdvice {
 	/**
 	 * 处理Credentials错误异常
 	 * @param e e
-	 * @return {@link ResponseEntity}<{@link R}<{@link Object}>>
+	 * @return {@link ResponseEntity}<{@link R}<{@link Void}>>
 	 */
 	@ExceptionHandler(IncorrectCredentialsException.class)
-	public ResponseEntity<R<Object>> handleIncorrectCredentialsException(IncorrectCredentialsException e) {
+	public ResponseEntity<R<Void>> handleIncorrectCredentialsException(IncorrectCredentialsException e) {
 		String message = e.getLocalizedMessage();
 		IResultConstants resultConstants;
 		if (StrUtil.contains(message, UsernamePasswordToken.class.getName())) {
@@ -70,10 +69,10 @@ public class GlobalExceptionAdvice {
 	/**
 	 * 处理Credentials过期异常
 	 * @param e e
-	 * @return {@link ResponseEntity}<{@link R}<{@link Object}>>
+	 * @return {@link ResponseEntity}<{@link R}<{@link Void}>>
 	 */
 	@ExceptionHandler(ExpiredCredentialsException.class)
-	public ResponseEntity<R<Object>> handleExpiredCredentialsException(ExpiredCredentialsException e) {
+	public ResponseEntity<R<Void>> handleExpiredCredentialsException(ExpiredCredentialsException e) {
 		return ResponseEntity.status(HttpStatus.OK)
 			.contentType(MediaType.APPLICATION_JSON)
 			.body(R.failed(CommonResultConstants.CODE_EXPIRE));
@@ -85,7 +84,7 @@ public class GlobalExceptionAdvice {
 	 * @see org.springframework.util.Assert
 	 */
 	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<R<Object>> handleIllegalArgumentException(IllegalArgumentException e) {
+	public ResponseEntity<R<Void>> handleIllegalArgumentException(IllegalArgumentException e) {
 		log.error("IllegalArgumentException: {}", e.getLocalizedMessage());
 		return ResponseEntity.status(HttpStatus.OK)
 			.contentType(MediaType.APPLICATION_JSON)
@@ -98,7 +97,7 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(ServiceException.class)
-	public ResponseEntity<R<Object>> handleServiceException(ServiceException e) {
+	public ResponseEntity<R<Void>> handleServiceException(ServiceException e) {
 		return ResponseEntity.status(HttpStatus.OK)
 			.contentType(MediaType.APPLICATION_JSON)
 			.body(R.failed(e.getErrorState()));
@@ -110,7 +109,7 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<R<Object>> handleConstraintViolationException(ConstraintViolationException e) {
+	public ResponseEntity<R<Void>> handleConstraintViolationException(ConstraintViolationException e) {
 		return ResponseEntity.status(HttpStatus.OK)
 			.contentType(MediaType.APPLICATION_JSON)
 			.body(R.failed(e.getLocalizedMessage()));
@@ -122,7 +121,7 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(BindException.class)
-	public ResponseEntity<R<Object>> handleBindException(BindException e) {
+	public ResponseEntity<R<Void>> handleBindException(BindException e) {
 		return ResponseEntity.status(HttpStatus.OK)
 			.contentType(MediaType.APPLICATION_JSON)
 			.body(R.failed(e.getAllErrors().get(0).getDefaultMessage()));
@@ -133,7 +132,7 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(AuthorizationException.class)
-	public ResponseEntity<R<Object>> handleShiroException(AuthorizationException e) {
+	public ResponseEntity<R<Void>> handleShiroException(AuthorizationException e) {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 			.contentType(MediaType.APPLICATION_JSON)
 			.body(R.failed(CommonResultConstants.NOT_AUTH));
@@ -144,7 +143,7 @@ public class GlobalExceptionAdvice {
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(MissingServletRequestParameterException.class)
-	public ResponseEntity<R<Object>> handleMissingParameterException() {
+	public ResponseEntity<R<Void>> handleMissingParameterException() {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 			.contentType(MediaType.APPLICATION_JSON)
 			.body(R.failed(CommonResultConstants.MISSING_PARAMETER));

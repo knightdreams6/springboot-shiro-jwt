@@ -1,8 +1,7 @@
 package com.knight.api.limit.component;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.method.HandlerMethod;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 限制key生成器

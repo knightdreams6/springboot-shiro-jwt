@@ -3,7 +3,6 @@ package com.knight.vo.response;
 import com.knight.api.version.annotation.ApiVersionFiled;
 import com.knight.entity.base.LoginUser;
 import com.knight.entity.base.UserInfo;
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -16,7 +15,6 @@ import java.util.Set;
  * @since 2022/12/24
  */
 @Data
-@ApiModel(value = "用户基本信息vo")
 public class UserBasicInfoVo {
 
 	/**

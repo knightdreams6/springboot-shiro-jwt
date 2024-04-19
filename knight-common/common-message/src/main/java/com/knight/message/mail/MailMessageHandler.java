@@ -7,6 +7,7 @@ import com.knight.message.MessageHandler;
 import com.knight.message.MessagingException;
 import com.knight.message.enums.MessageContentTypeEnums;
 import com.knight.storage.template.StorageTemplate;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
@@ -17,7 +18,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
-import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;

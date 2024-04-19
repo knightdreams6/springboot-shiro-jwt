@@ -29,7 +29,8 @@
     <dependency>
       <groupId>org.apache.shiro</groupId>
       <artifactId>shiro-core</artifactId>
-      <scope>compile</scope>
+      <classifier>jakarta</classifier>
+      <scope>provided</scope>
     </dependency>
 
   </dependencies>

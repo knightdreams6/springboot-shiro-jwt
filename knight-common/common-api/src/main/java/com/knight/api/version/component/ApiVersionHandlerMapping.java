@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public class ApiVersionHandlerMapping extends RequestMappingHandlerMapping {
 
-	public static Pattern API_VERSION_PATTERN = Pattern.compile("v(\\d+)");
+	public static final Pattern API_VERSION_PATTERN = Pattern.compile("v(\\d+)");
 
 	/**
 	 * 使用方法和类型级 @RequestMapping 创建 RequestMappingInfo。
@@ -39,8 +39,16 @@ public class ApiVersionHandlerMapping extends RequestMappingHandlerMapping {
 		if (apiVersion == null) {
 			return requestMappingInfo;
 		}
+
+		String prefix = "v" + apiVersion.value();
+
+		String[] paths = requestMappingInfo.getPatternValues()
+			.stream()
+			.map(path -> prefix + path)
+			.toArray(String[]::new);
+
 		// 组合RequestMappingInfo 添加版本前缀
-		return RequestMappingInfo.paths("v" + apiVersion.value()).build().combine(requestMappingInfo);
+		return requestMappingInfo.mutate().paths(paths).build();
 	}
 
 }

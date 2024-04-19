@@ -5,6 +5,7 @@ import com.knight.entity.constans.RedisKey;
 import com.knight.entity.orm.SysUser;
 import com.knight.service.ISysUserService;
 import com.knight.shiro.token.MailCodeToken;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -17,8 +18,6 @@ import org.apache.shiro.lang.util.ByteSource;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.data.redis.core.StringRedisTemplate;
-
-import javax.annotation.Resource;
 
 /**
  * 邮箱验证码

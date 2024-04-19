@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.knight.entity.base.BaseBean;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,32 +20,47 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @TableName("sys_user")
-@ApiModel(value = "SysUser对象", description = "用户信息")
 public class SysUser extends BaseBean {
 
-	@ApiModelProperty("用户id")
+	/**
+	 * 用户id
+	 */
 	@TableId(value = "id", type = IdType.ASSIGN_ID)
 	private String id;
 
-	@ApiModelProperty("手机号")
+	/**
+	 * 手机号
+	 */
 	private String suPhone;
 
-	@ApiModelProperty("密码")
+	/**
+	 * 密码
+	 */
 	private String suPassword;
 
-	@ApiModelProperty("头像")
+	/**
+	 * 头像
+	 */
 	private String suAvatar;
 
-	@ApiModelProperty("用户名")
+	/**
+	 * 用户名
+	 */
 	private String suName;
 
-	@ApiModelProperty("性别0女1男")
+	/**
+	 * 性别0女1男
+	 */
 	private Integer suSex;
 
-	@ApiModelProperty("出生日期")
+	/**
+	 * 出生日期
+	 */
 	private LocalDate suBirth;
 
-	@ApiModelProperty(value = "邮箱")
+	/**
+	 * 邮箱
+	 */
 	private String suMail;
 
 }

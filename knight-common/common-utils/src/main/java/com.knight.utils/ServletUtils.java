@@ -1,13 +1,13 @@
 package com.knight.utils;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.experimental.UtilityClass;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -17,31 +17,30 @@ import java.nio.charset.StandardCharsets;
  *
  * @author lixiao
  */
+@UtilityClass
 public class ServletUtils {
 
 	/**
-	 * 获取request
+	 * 获取当前上下文中的 HttpServletResponse
+	 * @return ServletRequestAttributes
 	 */
-	public static HttpServletRequest getRequest() {
+	public HttpServletRequest getRequest() {
 		return getRequestAttributes().getRequest();
 	}
 
 	/**
-	 * 获取response
+	 * 获取当前上下文中的 HttpServletResponse
+	 * @return HttpServletResponse
 	 */
-	public static HttpServletResponse getResponse() {
+	public HttpServletResponse getResponse() {
 		return getRequestAttributes().getResponse();
 	}
 
 	/**
-	 * 获取session
+	 * 获取当前上下文中的 ServletRequestAttributes
+	 * @return ServletRequestAttributes
 	 */
-	public static HttpSession getSession() {
-
-		return getRequest().getSession();
-	}
-
-	public static ServletRequestAttributes getRequestAttributes() {
+	public ServletRequestAttributes getRequestAttributes() {
 		RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
 		return (ServletRequestAttributes) attributes;
 	}

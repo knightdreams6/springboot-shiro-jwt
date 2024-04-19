@@ -6,6 +6,9 @@ import cn.hutool.json.JSONUtil;
 import com.knight.api.limit.annotation.ApiLimit;
 import com.knight.entity.base.R;
 import com.knight.utils.ServletUtils;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.lang.NonNull;
@@ -15,9 +18,6 @@ import org.springframework.util.function.SingletonSupplier;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 

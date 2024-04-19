@@ -7,7 +7,6 @@ import com.knight.entity.enums.IResultConstants;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -19,9 +18,7 @@ import java.util.stream.Collectors;
  */
 @Data
 @NoArgsConstructor
-public class R<T> implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class R<T> {
 
 	/**
 	 * 状态码
@@ -52,9 +49,9 @@ public class R<T> implements Serializable {
 	/**
 	 * 根据boolean值返回正确或错误消息
 	 * @param flag 标识
-	 * @return {@link R}<{@link Object}>
+	 * @return {@link R}<{@link Void}>
 	 */
-	public static R<Object> bool(boolean flag) {
+	public static R<Void> bool(boolean flag) {
 		return flag ? R.ok() : R.failed();
 	}
 

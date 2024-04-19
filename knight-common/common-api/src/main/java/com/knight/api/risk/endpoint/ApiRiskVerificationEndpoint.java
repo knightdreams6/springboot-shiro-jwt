@@ -5,8 +5,6 @@ import com.knight.api.risk.api.dto.ApiRiskInfoDto;
 import com.knight.api.risk.component.ApiRiskUserService;
 import com.knight.api.risk.component.ApiRiskVerificationCache;
 import com.knight.entity.base.R;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @author knight
  * @since 2023/12/14
  */
-@Api(tags = "api风险认证端点")
 @RequestMapping("/api/risk/verify")
 @RestController
 @RequiredArgsConstructor
@@ -36,10 +33,15 @@ public class ApiRiskVerificationEndpoint {
 	 */
 	private final ApiRiskVerificationCache apiRiskVerificationCache;
 
-	@ApiOperation("密码验证")
+	/**
+	 * 密码验证
+	 * @param code code
+	 * @param password 密码
+	 * @return R<Void>
+	 */
 	@RequiresUser
 	@PostMapping(params = "type=PASSWORD")
-	public R<Object> passwordVerify(@RequestParam String code, @RequestParam String password) {
+	public R<Void> passwordVerify(@RequestParam String code, @RequestParam String password) {
 		ApiRiskInfoDto riskInfo = apiRiskVerificationCache.getRiskInfo(code);
 		if (riskInfo == null) {
 			return R.failed(ApiResultConstants.API_RISK_INFO_NOT_FOUND);
@@ -56,7 +58,7 @@ public class ApiRiskVerificationEndpoint {
 
 	@RequiresUser
 	@PostMapping(params = "type=MAIL_CODE")
-	public R<Object> mailCodeVerify() {
+	public R<Void> mailCodeVerify() {
 		return R.ok();
 	}
 

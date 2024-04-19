@@ -3,26 +3,22 @@ spring:
     host: smtp.163.com
     username: knightdreams6@163.com
     password: 邮箱授权码
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
   profiles:
     active: dev
   data:
     redis:
       repositories:
         enabled: false
-  redis: # 连接超时时间（毫秒）
-    timeout: 5000
-    lettuce:
-      pool:
-        max-active: 8
-        # 连接池阻塞等待时间（负值表示没有限制）
-        max-wait: -1ms
-        # 连接池中的最大空闲连接
-        max-idle: 8
-        # 连接池中最小空闲连接
-        min-idle: 0
+      timeout: 5000
+      lettuce:
+        pool:
+          max-active: 8
+          # 连接池阻塞等待时间（负值表示没有限制）
+          max-wait: -1ms
+          # 连接池中的最大空闲连接
+          max-idle: 8
+          # 连接池中最小空闲连接
+          min-idle: 0
   cache:
     type: redis
   servlet:
@@ -33,13 +29,23 @@ spring:
       # 请求体最大限制
       max-request-size: 15MB
 
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
 mybatis-plus:
   global-config:
     db-config:
       id-type: ASSIGN_ID
       logic-delete-field: deleted
 
-  configuration: # 配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
+  configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
 
@@ -52,9 +58,9 @@ spring:
       on-profile: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.50.228:3306/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://192.168.3.60:3306/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true
     username: root
-    password: F7FPfW-HBG2Dxwav
+    password: 123
     hikari: # 此属性控制从池返回的连接的默认自动提交行为。 默认值：真
       auto-commit: true
       # 此属性控制客户端（即您）将等待来自池的连接的最大毫秒数。
@@ -91,17 +97,19 @@ spring:
       #      health-check-properties:
       # 此属性表示连接池的用户定义名称，主要出现在日志记录和 JMX 管理控制台中，以识别池和池配置。 默认值：自动生成
       pool-name: hikari-pool
-  redis:
-    host: 192.168.50.228
-    database: 1
-    port: 6379
+  data:
+    redis:
+      host: 192.168.3.60
+      database: 1
+      port: 6379
+      password: 123
 
 # 日志
 logging:
   config: classpath:conf/logback-spring-dev.xml
 
 storage:
-  endpoint: 'http://192.168.50.228:9000'
+  endpoint: 'http://192.168.3.60:9000'
   access-key: 'minioadmin'
   secret-key: 'minioadmin'
   default-bucket: 'default-bucket'
@@ -125,11 +133,12 @@ spring:
     url: jdbc:mysql://192.168.0.134:3307/project?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
     password: 123
-  redis:
-    host: 192.168.0.134
-    database: 0
-    port: 6380
-    password: 123
+  data:
+    redis:
+      host: 192.168.0.134
+      database: 0
+      port: 6380
+      password: 123
 
 
 # 日志

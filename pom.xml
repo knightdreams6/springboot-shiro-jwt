@@ -19,22 +19,27 @@
 
   <properties>
     <!-- jdk版本 -->
-    <java.version>11</java.version>
+    <java.version>17</java.version>
     <!-- SpringFormat版本
             https://github.com/spring-io/spring-javaformat/releases -->
     <javaformat.plugin.version>0.0.41</javaformat.plugin.version>
+    <!-- maven-compiler版本
+            https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+    <maven-compiler.plugin.version>3.13.0</maven-compiler.plugin.version>
 
     <knight.version>0.0.1-SNAPSHOT</knight.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
+
     <!--  lombok -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <optional>true</optional>
     </dependency>
+
   </dependencies>
 
   <dependencyManagement>
@@ -57,8 +62,11 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
+        <version>${maven-compiler.plugin.version}</version>
         <configuration>
+          <compilerArgs>
+            <arg>-parameters</arg>
+          </compilerArgs>
           <source>${java.version}</source>
           <target>${java.version}</target>
           <encoding>${project.build.sourceEncoding}</encoding>

@@ -1,11 +1,8 @@
 package com.knight.shiro.config;
 
 import com.knight.shiro.filter.OauthFilter;
-import com.knight.shiro.realms.CustomModularRealmAuthenticator;
-import com.knight.shiro.realms.MailCodeRealm;
-import com.knight.shiro.realms.OauthRealm;
-import com.knight.shiro.realms.PasswordRealm;
-import com.knight.shiro.realms.PhoneCodeRealm;
+import com.knight.shiro.realms.*;
+import jakarta.servlet.Filter;
 import org.apache.shiro.authc.Authenticator;
 import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -13,22 +10,17 @@ import org.apache.shiro.authc.credential.PasswordMatcher;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
 import org.apache.shiro.crypto.hash.Sha256Hash;
-import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
-import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.mgt.SessionsSecurityManager;
+import org.apache.shiro.mgt.*;
 import org.apache.shiro.realm.Realm;
-import org.apache.shiro.spring.boot.autoconfigure.ShiroAutoConfiguration;
+import org.apache.shiro.spring.config.web.autoconfigure.ShiroWebAutoConfiguration;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.Filter;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,9 +29,10 @@ import java.util.Map;
  * shiro配置类
  *
  * @author kinght
+ * @see org.apache.shiro.spring.config.web.autoconfigure.ShiroWebAutoConfiguration
  */
 @Configuration
-@AutoConfigureBefore(value = ShiroAutoConfiguration.class)
+@AutoConfigureBefore(value = ShiroWebAutoConfiguration.class)
 public class ShiroConfig {
 
 	/**
@@ -48,7 +41,7 @@ public class ShiroConfig {
 	 */
 	@Bean
 	public DefaultAdvisorAutoProxyCreator creator() {
-		DefaultAdvisorAutoProxyCreator creator = new DefaultAdvisorAutoProxyCreator();
+		var creator = new DefaultAdvisorAutoProxyCreator();
 		creator.setProxyTargetClass(true);
 		return creator;
 	}
@@ -68,7 +61,7 @@ public class ShiroConfig {
 	 */
 	@Bean
 	public HashedCredentialsMatcher codeCredentialsMatcher() {
-		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher();
+		var matcher = new HashedCredentialsMatcher();
 		matcher.setHashAlgorithmName(Sha256Hash.ALGORITHM_NAME);
 		return matcher;
 	}
@@ -80,7 +73,7 @@ public class ShiroConfig {
 	 */
 	@Bean
 	public PasswordRealm passwordRealm(PasswordService passwordService) {
-		PasswordRealm userRealm = new PasswordRealm();
+		var userRealm = new PasswordRealm();
 		PasswordMatcher passwordMatcher = new PasswordMatcher();
 		passwordMatcher.setPasswordService(passwordService);
 		userRealm.setCredentialsMatcher(passwordMatcher);
@@ -94,7 +87,7 @@ public class ShiroConfig {
 	 */
 	@Bean
 	public PhoneCodeRealm codeRealm(HashedCredentialsMatcher codeCredentialsMatcher) {
-		PhoneCodeRealm codeRealm = new PhoneCodeRealm();
+		var codeRealm = new PhoneCodeRealm();
 		codeRealm.setCredentialsMatcher(codeCredentialsMatcher);
 		return codeRealm;
 	}
@@ -106,7 +99,7 @@ public class ShiroConfig {
 	 */
 	@Bean
 	public MailCodeRealm mailCodeRealm(HashedCredentialsMatcher codeCredentialsMatcher) {
-		MailCodeRealm mailCodeRealm = new MailCodeRealm();
+		var mailCodeRealm = new MailCodeRealm();
 		mailCodeRealm.setCredentialsMatcher(codeCredentialsMatcher);
 		return mailCodeRealm;
 	}
@@ -127,9 +120,8 @@ public class ShiroConfig {
 	 * @see org.apache.shiro.web.filter.mgt.DefaultFilter
 	 **/
 	@Bean
-	public ShiroFilterFactoryBean shiroFilterFactoryBean(
-			@Qualifier("sessionsSecurityManager") SecurityManager securityManager) {
-		ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
+	public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
+		var bean = new ShiroFilterFactoryBean();
 		// 设置 SecurityManager
 		bean.setSecurityManager(securityManager);
 
@@ -141,7 +133,7 @@ public class ShiroConfig {
 		filterMap.put("/doc.html", "anon");
 		filterMap.put("/swagger-resources/**", "anon");
 		filterMap.put("/webjars/**", "anon");
-		filterMap.put("/v2/api-docs", "anon");
+		filterMap.put("/v3/api-docs/**", "anon");
 		filterMap.put("/images/**", "anon");
 		filterMap.put("/websocket/**", "anon");
 		filterMap.put("/*.js", "anon");
@@ -159,38 +151,56 @@ public class ShiroConfig {
 		return bean;
 	}
 
+	/**
+	 * 身份验证器
+	 * @return Authenticator
+	 */
 	@Bean
 	public Authenticator authenticator() {
-		// 自己重写的ModularRealmAuthenticator
-		CustomModularRealmAuthenticator modularRealmAuthenticator = new CustomModularRealmAuthenticator();
+		var modularRealmAuthenticator = new CustomModularRealmAuthenticator();
 		modularRealmAuthenticator.setAuthenticationStrategy(new AtLeastOneSuccessfulStrategy());
 		return modularRealmAuthenticator;
 	}
 
 	/**
-	 * SecurityManager 是 Shiro 架构的核心，通过它来链接Realm和用户(文档中称之为Subject.)
+	 * session存储
+	 * @return SessionStorageEvaluator
 	 */
 	@Bean
-	public SessionsSecurityManager sessionsSecurityManager(PasswordRealm passwordRealm, PhoneCodeRealm codeRealm,
-			MailCodeRealm mailCodeRealm, OauthRealm oauthRealm, Authenticator authenticator) {
-		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-		// 设置realm
+	public SessionStorageEvaluator sessionStorageEvaluator() {
+		var defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
+		// 无状态应用不存储session
+		defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
+		return defaultSessionStorageEvaluator;
+	}
+
+	/**
+	 * SubjectDAO
+	 * @param sessionStorageEvaluator sessionStorageEvaluator
+	 * @return SubjectDAO
+	 */
+	@Bean
+	public SubjectDAO subjectDAO(SessionStorageEvaluator sessionStorageEvaluator) {
+		var defaultSubjectDAO = new DefaultSubjectDAO();
+		// 无状态应用不存储session
+		defaultSubjectDAO.setSessionStorageEvaluator(sessionStorageEvaluator);
+		return defaultSubjectDAO;
+	}
+
+	/**
+	 * SecurityManager
+	 * @return SessionsSecurityManager
+	 */
+	@Bean
+	public SessionsSecurityManager securityManager(List<Realm> realms, Authenticator authenticator,
+			SubjectDAO subjectDAO) {
+		var securityManager = new DefaultWebSecurityManager();
+		// 设置自定义的身份验证器
 		securityManager.setAuthenticator(authenticator);
-		List<Realm> realms = new ArrayList<>();
-		// 添加多个realm
-		realms.add(passwordRealm);
-		realms.add(codeRealm);
-		realms.add(oauthRealm);
-		realms.add(mailCodeRealm);
+
+		// 设置 realms
 		securityManager.setRealms(realms);
 
-		/*
-		 * 关闭shiro自带的session
-		 */
-		DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
-		DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
-		defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
-		subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
 		securityManager.setSubjectDAO(subjectDAO);
 		return securityManager;
 	}

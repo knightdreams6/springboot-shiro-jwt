@@ -8,6 +8,11 @@ import org.apache.shiro.realm.Realm;
 
 import java.util.Collection;
 
+/**
+ * 自定义多realm认证
+ *
+ * @author knight
+ */
 @Slf4j
 public class CustomModularRealmAuthenticator extends ModularRealmAuthenticator {
 
