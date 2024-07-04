@@ -198,6 +198,9 @@ public class ShiroConfig {
 		// 设置自定义的身份验证器
 		securityManager.setAuthenticator(authenticator);
 
+		// 移除rememberMe逻辑
+		securityManager.setRememberMeManager(null);
+
 		// 设置 realms
 		securityManager.setRealms(realms);
 
